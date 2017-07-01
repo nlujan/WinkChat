@@ -1,0 +1,638 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		2B1429BD1EFF86F700043D08 /* EmotionEndpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1429BC1EFF86F700043D08 /* EmotionEndpoint.swift */; };
+		2B1429BF1EFF872700043D08 /* EmotionAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1429BE1EFF872700043D08 /* EmotionAPI.swift */; };
+		2B1429C11EFF875E00043D08 /* GiphyEnpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1429C01EFF875E00043D08 /* GiphyEnpoint.swift */; };
+		2B1429C31EFF877E00043D08 /* GiphyAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1429C21EFF877E00043D08 /* GiphyAPI.swift */; };
+		2B1429C51EFF87D500043D08 /* UIImage+Resized.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1429C41EFF87D500043D08 /* UIImage+Resized.swift */; };
+		2B1429C81EFF881400043D08 /* Emotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1429C71EFF881400043D08 /* Emotion.swift */; };
+		2B1429CA1EFF882000043D08 /* Gif.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1429C91EFF882000043D08 /* Gif.swift */; };
+		2B1429CC1EFF884900043D08 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1429CB1EFF884900043D08 /* ViewModel.swift */; };
+		2B1429CE1F004F7B00043D08 /* UIImage+Gif.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1429CD1F004F7B00043D08 /* UIImage+Gif.swift */; };
+		2B4E10221F060F3500B93E89 /* URL+FileURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B4E10211F060F3500B93E89 /* URL+FileURL.swift */; };
+		2B8C17191E9DCDE10064CD27 /* CompactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B8C17181E9DCDE10064CD27 /* CompactViewController.swift */; };
+		2B8C171B1E9DCDFA0064CD27 /* ExpandedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B8C171A1E9DCDFA0064CD27 /* ExpandedViewController.swift */; };
+		2BB60BDC1E9A040C00AF7E6F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2BB60BDB1E9A040C00AF7E6F /* Assets.xcassets */; };
+		2BB60BE31E9A040C00AF7E6F /* MessagesExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 2BB60BE21E9A040C00AF7E6F /* MessagesExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		2BB60BE81E9A040C00AF7E6F /* Messages.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BB60BE71E9A040C00AF7E6F /* Messages.framework */; };
+		2BB60BEB1E9A040C00AF7E6F /* MessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BB60BEA1E9A040C00AF7E6F /* MessagesViewController.swift */; };
+		2BB60BEE1E9A040C00AF7E6F /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2BB60BEC1E9A040C00AF7E6F /* MainInterface.storyboard */; };
+		2BB60BF01E9A040C00AF7E6F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2BB60BEF1E9A040C00AF7E6F /* Assets.xcassets */; };
+		9411C8797FD720948EC714FA /* Pods_WinkChat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23A12148946307A725361625 /* Pods_WinkChat.framework */; };
+		CE6B0A8A085E5DB7A0E90611 /* Pods_MessagesExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AB6097E52CE0AAD852811F1 /* Pods_MessagesExtension.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		2BB60BE41E9A040C00AF7E6F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2BB60BD21E9A040C00AF7E6F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2BB60BE11E9A040C00AF7E6F;
+			remoteInfo = MessagesExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		2BB60BF71E9A040C00AF7E6F /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				2BB60BE31E9A040C00AF7E6F /* MessagesExtension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		009EEFCBBF7CDBED931A5714 /* Pods-WinkChat.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WinkChat.release.xcconfig"; path = "Pods/Target Support Files/Pods-WinkChat/Pods-WinkChat.release.xcconfig"; sourceTree = "<group>"; };
+		23A12148946307A725361625 /* Pods_WinkChat.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WinkChat.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2B1429BC1EFF86F700043D08 /* EmotionEndpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmotionEndpoint.swift; sourceTree = "<group>"; };
+		2B1429BE1EFF872700043D08 /* EmotionAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmotionAPI.swift; sourceTree = "<group>"; };
+		2B1429C01EFF875E00043D08 /* GiphyEnpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GiphyEnpoint.swift; sourceTree = "<group>"; };
+		2B1429C21EFF877E00043D08 /* GiphyAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GiphyAPI.swift; sourceTree = "<group>"; };
+		2B1429C41EFF87D500043D08 /* UIImage+Resized.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Resized.swift"; sourceTree = "<group>"; };
+		2B1429C71EFF881400043D08 /* Emotion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Emotion.swift; sourceTree = "<group>"; };
+		2B1429C91EFF882000043D08 /* Gif.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Gif.swift; sourceTree = "<group>"; };
+		2B1429CB1EFF884900043D08 /* ViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
+		2B1429CD1F004F7B00043D08 /* UIImage+Gif.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Gif.swift"; sourceTree = "<group>"; };
+		2B4E10211F060F3500B93E89 /* URL+FileURL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URL+FileURL.swift"; sourceTree = "<group>"; };
+		2B8C17181E9DCDE10064CD27 /* CompactViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompactViewController.swift; sourceTree = "<group>"; };
+		2B8C171A1E9DCDFA0064CD27 /* ExpandedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpandedViewController.swift; sourceTree = "<group>"; };
+		2B8C17251EA2E8910064CD27 /* MessagesExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MessagesExtension.entitlements; sourceTree = "<group>"; };
+		2BB60BD81E9A040C00AF7E6F /* WinkChat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WinkChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2BB60BDB1E9A040C00AF7E6F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		2BB60BDD1E9A040C00AF7E6F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2BB60BE21E9A040C00AF7E6F /* MessagesExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MessagesExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		2BB60BE71E9A040C00AF7E6F /* Messages.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Messages.framework; path = System/Library/Frameworks/Messages.framework; sourceTree = SDKROOT; };
+		2BB60BEA1E9A040C00AF7E6F /* MessagesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesViewController.swift; sourceTree = "<group>"; };
+		2BB60BED1E9A040C00AF7E6F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		2BB60BEF1E9A040C00AF7E6F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		2BB60BF11E9A040C00AF7E6F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4A23F8C20AFF741749F1769E /* Pods-WinkChat.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WinkChat.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WinkChat/Pods-WinkChat.debug.xcconfig"; sourceTree = "<group>"; };
+		8AB6097E52CE0AAD852811F1 /* Pods_MessagesExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MessagesExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A686F418B249C7E75EF59837 /* Pods-MessagesExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MessagesExtension.release.xcconfig"; path = "Pods/Target Support Files/Pods-MessagesExtension/Pods-MessagesExtension.release.xcconfig"; sourceTree = "<group>"; };
+		F3E01529958EFCE7035CC632 /* Pods-MessagesExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MessagesExtension.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MessagesExtension/Pods-MessagesExtension.debug.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		2BB60BDF1E9A040C00AF7E6F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2BB60BE81E9A040C00AF7E6F /* Messages.framework in Frameworks */,
+				CE6B0A8A085E5DB7A0E90611 /* Pods_MessagesExtension.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		32EEE9F8E702A49815260F61 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9411C8797FD720948EC714FA /* Pods_WinkChat.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		2B1429B11EFF82A800043D08 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				2B4E10211F060F3500B93E89 /* URL+FileURL.swift */,
+				2B1429C41EFF87D500043D08 /* UIImage+Resized.swift */,
+				2B1429CD1F004F7B00043D08 /* UIImage+Gif.swift */,
+			);
+			name = Extensions;
+			sourceTree = "<group>";
+		};
+		2B1429B41EFF832600043D08 /* EmotionAPI */ = {
+			isa = PBXGroup;
+			children = (
+				2B1429BC1EFF86F700043D08 /* EmotionEndpoint.swift */,
+				2B1429BE1EFF872700043D08 /* EmotionAPI.swift */,
+			);
+			name = EmotionAPI;
+			sourceTree = "<group>";
+		};
+		2B1429B71EFF859B00043D08 /* GiphyAPI */ = {
+			isa = PBXGroup;
+			children = (
+				2B1429C01EFF875E00043D08 /* GiphyEnpoint.swift */,
+				2B1429C21EFF877E00043D08 /* GiphyAPI.swift */,
+			);
+			name = GiphyAPI;
+			sourceTree = "<group>";
+		};
+		2B1429B81EFF85D300043D08 /* View Models */ = {
+			isa = PBXGroup;
+			children = (
+				2B1429CB1EFF884900043D08 /* ViewModel.swift */,
+			);
+			name = "View Models";
+			sourceTree = "<group>";
+		};
+		2B1429C61EFF87FC00043D08 /* Data Entities */ = {
+			isa = PBXGroup;
+			children = (
+				2B1429C71EFF881400043D08 /* Emotion.swift */,
+				2B1429C91EFF882000043D08 /* Gif.swift */,
+			);
+			name = "Data Entities";
+			sourceTree = "<group>";
+		};
+		2BB60BD11E9A040C00AF7E6F = {
+			isa = PBXGroup;
+			children = (
+				2BB60BDA1E9A040C00AF7E6F /* WinkChat */,
+				2BB60BE91E9A040C00AF7E6F /* MessagesExtension */,
+				2BB60BE61E9A040C00AF7E6F /* Frameworks */,
+				2BB60BD91E9A040C00AF7E6F /* Products */,
+				DE49953211AD1636E5004AEA /* Pods */,
+			);
+			sourceTree = "<group>";
+		};
+		2BB60BD91E9A040C00AF7E6F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2BB60BD81E9A040C00AF7E6F /* WinkChat.app */,
+				2BB60BE21E9A040C00AF7E6F /* MessagesExtension.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		2BB60BDA1E9A040C00AF7E6F /* WinkChat */ = {
+			isa = PBXGroup;
+			children = (
+				2B1429C61EFF87FC00043D08 /* Data Entities */,
+				2B1429B81EFF85D300043D08 /* View Models */,
+				2B1429B71EFF859B00043D08 /* GiphyAPI */,
+				2B1429B41EFF832600043D08 /* EmotionAPI */,
+				2B1429B11EFF82A800043D08 /* Extensions */,
+				2BB60BDB1E9A040C00AF7E6F /* Assets.xcassets */,
+				2BB60BDD1E9A040C00AF7E6F /* Info.plist */,
+			);
+			path = WinkChat;
+			sourceTree = "<group>";
+		};
+		2BB60BE61E9A040C00AF7E6F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2BB60BE71E9A040C00AF7E6F /* Messages.framework */,
+				8AB6097E52CE0AAD852811F1 /* Pods_MessagesExtension.framework */,
+				23A12148946307A725361625 /* Pods_WinkChat.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		2BB60BE91E9A040C00AF7E6F /* MessagesExtension */ = {
+			isa = PBXGroup;
+			children = (
+				2B8C17251EA2E8910064CD27 /* MessagesExtension.entitlements */,
+				2BB60BEA1E9A040C00AF7E6F /* MessagesViewController.swift */,
+				2B8C17181E9DCDE10064CD27 /* CompactViewController.swift */,
+				2B8C171A1E9DCDFA0064CD27 /* ExpandedViewController.swift */,
+				2BB60BEC1E9A040C00AF7E6F /* MainInterface.storyboard */,
+				2BB60BEF1E9A040C00AF7E6F /* Assets.xcassets */,
+				2BB60BF11E9A040C00AF7E6F /* Info.plist */,
+			);
+			path = MessagesExtension;
+			sourceTree = "<group>";
+		};
+		DE49953211AD1636E5004AEA /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				F3E01529958EFCE7035CC632 /* Pods-MessagesExtension.debug.xcconfig */,
+				A686F418B249C7E75EF59837 /* Pods-MessagesExtension.release.xcconfig */,
+				4A23F8C20AFF741749F1769E /* Pods-WinkChat.debug.xcconfig */,
+				009EEFCBBF7CDBED931A5714 /* Pods-WinkChat.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		2BB60BD71E9A040C00AF7E6F /* WinkChat */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2BB60BF81E9A040C00AF7E6F /* Build configuration list for PBXNativeTarget "WinkChat" */;
+			buildPhases = (
+				1FA2D236BBE74F168BB6A57B /* [CP] Check Pods Manifest.lock */,
+				2BB60BD61E9A040C00AF7E6F /* Resources */,
+				2BB60BF71E9A040C00AF7E6F /* Embed App Extensions */,
+				32EEE9F8E702A49815260F61 /* Frameworks */,
+				EE6819F9307BB781CFBF3DA8 /* [CP] Embed Pods Frameworks */,
+				075E9B321353AA990EE83665 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2BB60BE51E9A040C00AF7E6F /* PBXTargetDependency */,
+			);
+			name = WinkChat;
+			productName = WinkChat;
+			productReference = 2BB60BD81E9A040C00AF7E6F /* WinkChat.app */;
+			productType = "com.apple.product-type.application.messages";
+		};
+		2BB60BE11E9A040C00AF7E6F /* MessagesExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2BB60BF41E9A040C00AF7E6F /* Build configuration list for PBXNativeTarget "MessagesExtension" */;
+			buildPhases = (
+				61D9EA56C1A26D83852F6F8C /* [CP] Check Pods Manifest.lock */,
+				2BB60BDE1E9A040C00AF7E6F /* Sources */,
+				2BB60BDF1E9A040C00AF7E6F /* Frameworks */,
+				2BB60BE01E9A040C00AF7E6F /* Resources */,
+				37BE86CD7D732CC2C6F36E55 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MessagesExtension;
+			productName = MessagesExtension;
+			productReference = 2BB60BE21E9A040C00AF7E6F /* MessagesExtension.appex */;
+			productType = "com.apple.product-type.app-extension.messages";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		2BB60BD21E9A040C00AF7E6F /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0830;
+				LastUpgradeCheck = 0830;
+				ORGANIZATIONNAME = "Naim Lujan";
+				TargetAttributes = {
+					2BB60BD71E9A040C00AF7E6F = {
+						CreatedOnToolsVersion = 8.3.1;
+						DevelopmentTeam = X82HTQTSX4;
+						ProvisioningStyle = Automatic;
+					};
+					2BB60BE11E9A040C00AF7E6F = {
+						CreatedOnToolsVersion = 8.3.1;
+						DevelopmentTeam = X82HTQTSX4;
+						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 0;
+							};
+						};
+					};
+				};
+			};
+			buildConfigurationList = 2BB60BD51E9A040C00AF7E6F /* Build configuration list for PBXProject "WinkChat" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 2BB60BD11E9A040C00AF7E6F;
+			productRefGroup = 2BB60BD91E9A040C00AF7E6F /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				2BB60BD71E9A040C00AF7E6F /* WinkChat */,
+				2BB60BE11E9A040C00AF7E6F /* MessagesExtension */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		2BB60BD61E9A040C00AF7E6F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2BB60BDC1E9A040C00AF7E6F /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2BB60BE01E9A040C00AF7E6F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2BB60BF01E9A040C00AF7E6F /* Assets.xcassets in Resources */,
+				2BB60BEE1E9A040C00AF7E6F /* MainInterface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		075E9B321353AA990EE83665 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-WinkChat/Pods-WinkChat-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		1FA2D236BBE74F168BB6A57B /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		37BE86CD7D732CC2C6F36E55 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MessagesExtension/Pods-MessagesExtension-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		61D9EA56C1A26D83852F6F8C /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		EE6819F9307BB781CFBF3DA8 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-WinkChat/Pods-WinkChat-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2BB60BDE1E9A040C00AF7E6F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2B1429BD1EFF86F700043D08 /* EmotionEndpoint.swift in Sources */,
+				2B1429BF1EFF872700043D08 /* EmotionAPI.swift in Sources */,
+				2B8C171B1E9DCDFA0064CD27 /* ExpandedViewController.swift in Sources */,
+				2B1429CC1EFF884900043D08 /* ViewModel.swift in Sources */,
+				2B1429C31EFF877E00043D08 /* GiphyAPI.swift in Sources */,
+				2B4E10221F060F3500B93E89 /* URL+FileURL.swift in Sources */,
+				2B1429CA1EFF882000043D08 /* Gif.swift in Sources */,
+				2B1429CE1F004F7B00043D08 /* UIImage+Gif.swift in Sources */,
+				2B1429C11EFF875E00043D08 /* GiphyEnpoint.swift in Sources */,
+				2B1429C81EFF881400043D08 /* Emotion.swift in Sources */,
+				2B8C17191E9DCDE10064CD27 /* CompactViewController.swift in Sources */,
+				2BB60BEB1E9A040C00AF7E6F /* MessagesViewController.swift in Sources */,
+				2B1429C51EFF87D500043D08 /* UIImage+Resized.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		2BB60BE51E9A040C00AF7E6F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2BB60BE11E9A040C00AF7E6F /* MessagesExtension */;
+			targetProxy = 2BB60BE41E9A040C00AF7E6F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		2BB60BEC1E9A040C00AF7E6F /* MainInterface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2BB60BED1E9A040C00AF7E6F /* Base */,
+			);
+			name = MainInterface.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		2BB60BF21E9A040C00AF7E6F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		2BB60BF31E9A040C00AF7E6F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		2BB60BF51E9A040C00AF7E6F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F3E01529958EFCE7035CC632 /* Pods-MessagesExtension.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "iMessage App Icon";
+				DEVELOPMENT_TEAM = X82HTQTSX4;
+				INFOPLIST_FILE = MessagesExtension/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.capture.WinkChat.MessagesExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		2BB60BF61E9A040C00AF7E6F /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A686F418B249C7E75EF59837 /* Pods-MessagesExtension.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "iMessage App Icon";
+				DEVELOPMENT_TEAM = X82HTQTSX4;
+				INFOPLIST_FILE = MessagesExtension/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.capture.WinkChat.MessagesExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
+		2BB60BF91E9A040C00AF7E6F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4A23F8C20AFF741749F1769E /* Pods-WinkChat.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = X82HTQTSX4;
+				INFOPLIST_FILE = WinkChat/Info.plist;
+				PRODUCT_BUNDLE_IDENTIFIER = com.capture.WinkChat;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		2BB60BFA1E9A040C00AF7E6F /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 009EEFCBBF7CDBED931A5714 /* Pods-WinkChat.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = X82HTQTSX4;
+				INFOPLIST_FILE = WinkChat/Info.plist;
+				PRODUCT_BUNDLE_IDENTIFIER = com.capture.WinkChat;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2BB60BD51E9A040C00AF7E6F /* Build configuration list for PBXProject "WinkChat" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2BB60BF21E9A040C00AF7E6F /* Debug */,
+				2BB60BF31E9A040C00AF7E6F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2BB60BF41E9A040C00AF7E6F /* Build configuration list for PBXNativeTarget "MessagesExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2BB60BF51E9A040C00AF7E6F /* Debug */,
+				2BB60BF61E9A040C00AF7E6F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2BB60BF81E9A040C00AF7E6F /* Build configuration list for PBXNativeTarget "WinkChat" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2BB60BF91E9A040C00AF7E6F /* Debug */,
+				2BB60BFA1E9A040C00AF7E6F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 2BB60BD21E9A040C00AF7E6F /* Project object */;
+}

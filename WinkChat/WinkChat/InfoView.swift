@@ -33,7 +33,7 @@ class InfoView: UIView {
     sharedView.textLabel.text = message
 
     if sharedView?.superview == nil {
-      let y = displayVC.view.frame.height - sharedView.frame.size.height - 12
+//      let y = displayVC.view.frame.height - sharedView.frame.size.height - 12
       sharedView.frame = CGRect(x: 0, y: 0, width: displayVC.view.frame.size.width, height: sharedView.frame.size.height)
       sharedView.alpha = 0.0
 

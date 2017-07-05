@@ -55,8 +55,6 @@ extension EmotionEndpoint: TargetType {
         switch self {
         case .Recognize(let imageUrl):
             return .upload(UploadType.file(imageUrl))
-        default:
-            return .request
         }
     }
     

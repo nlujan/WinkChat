@@ -115,7 +115,6 @@ extension CompactViewController {
             guard let camera: AVCaptureDevice = AVCaptureDevice.defaultDevice(withDeviceType:
                 .builtInWideAngleCamera, mediaType: AVMediaTypeVideo, position: .front) else { return }
             
-            
             defer { self.captureSession.commitConfiguration() }
             
             self.captureSession.beginConfiguration()
@@ -164,23 +163,16 @@ extension CompactViewController {
             self.captureSession.stopRunning()
         }
     }
-
 }
 
 extension CompactViewController: AVCapturePhotoCaptureDelegate {
-    
-    func capture(_ captureOutput: AVCapturePhotoOutput, didFinishProcessingPhotoSampleBuffer photoSampleBuffer: CMSampleBuffer?, previewPhotoSampleBuffer: CMSampleBuffer?, resolvedSettings: AVCaptureResolvedPhotoSettings, bracketSettings: AVCaptureBracketedStillImageSettings?, error: Error?) {
-        
-        guard let sampleBuffer = photoSampleBuffer,
-            let previewBuffer = previewPhotoSampleBuffer,
-            let dataImage =  AVCapturePhotoOutput.jpegPhotoDataRepresentation(forJPEGSampleBuffer:  sampleBuffer, previewPhotoSampleBuffer: previewBuffer)
-            else {
-                print("Error capturing photo: \(String(describing: error))")
-                return
+    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
+        guard let dataImage = photo.fileDataRepresentation() else {
+            print("Error capturing photo: \(String(describing: error))")
+            return
         }
-        
         stopSession()
-    
+        
         let eventsFileURL = URL.cachedFileURL("image.png")
         
         do {
@@ -191,11 +183,7 @@ extension CompactViewController: AVCapturePhotoCaptureDelegate {
             print("Error saving captured photo to disk")
             startSession()
         }
-
-        
-        
     }
-    
 }
 
 protocol SendMessageDelegate {

@@ -14,16 +14,9 @@ class ViewModel {
     
     private let bag = DisposeBag()
     
-    // MARK: - Input
     let imageUrl = PublishSubject<URL>()
-    
-    // MARK: - Output
-    let gifSubject = PublishSubject<Gif>()
-    let emotionSubject = PublishSubject<Emotion>()
-    
-    
-    // MARK: - Init
-    
+    let gifSubject = PublishSubject<Gif?>()
+
     init() {
         bindOutput()
     }
@@ -34,16 +27,13 @@ class ViewModel {
             .flatMap { url in
                 EmotionAPI.getEmotion(from: url)
             }
+            .do(onNext: { emotionArray in
+                if emotionArray.count == 0 {
+                    self.gifSubject.onNext(nil)
+                }
+            })
             .filter { $0.count > 0 }
             .map { $0[0] }
-            .shareReplay(1)
-        
-        
-        urlSignal
-            .subscribe(onNext: {emotion in
-                self.emotionSubject.onNext(emotion)
-            })
-            .disposed(by: bag)
         
         urlSignal
             .map { $0.scores }
@@ -56,7 +46,6 @@ class ViewModel {
             .map { $0.first }
             .filterNil()
             .map { $0.0 }
-            .debug()
             .flatMap { searchText in
                 GiphyAPI.getGifFrom(text: searchText)
             }
@@ -66,4 +55,11 @@ class ViewModel {
             })
             .disposed(by: bag)
     }
+}
+
+enum EmotionError: Error {
+    case NoFaceDetected
+}
+
+enum GiphyError: Error {
 }

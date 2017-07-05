@@ -57,16 +57,15 @@ class CompactViewController: UIViewController {
     func bindViewModel() {
         
         viewModel
-            .emotionSubject
-            .subscribe(onNext: {emotion in
-//                print(self.getTopEmotion(emotion: emotion))
-//                self.delegate?.sendGifMessage(url: "")
-//                self.startSession()
-            })
-            .disposed(by: disposeBag)
-        
-        viewModel
             .gifSubject
+            .do(onNext: { gif in
+                if gif == nil {
+                    print("Face not detected")
+                    InfoView.showIn(viewController: self, message: "Face not detected, please try again")
+                    self.startSession()
+                }
+            })
+            .filterNil()
             .map { $0.image_url }
             .subscribe(onNext: {url in
                 self.delegate?.sendGifMessage(url: url)
@@ -179,14 +178,22 @@ extension CompactViewController: AVCapturePhotoCaptureDelegate {
                 print("Error capturing photo: \(String(describing: error))")
                 return
         }
+        
+        stopSession()
     
         let eventsFileURL = URL.cachedFileURL("image.png")
         
-        try? dataImage.write(to: eventsFileURL)
+        do {
+            try dataImage.write(to: eventsFileURL)
+            viewModel.imageUrl.onNext(eventsFileURL)
+        }
+        catch {
+            print("Error saving captured photo to disk")
+            startSession()
+        }
+
         
-        viewModel.imageUrl.onNext(eventsFileURL)
         
-        stopSession()
     }
     
 }

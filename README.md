@@ -1,3 +1,3 @@
 # WinkChat #
 
-IMessage extension that generates a gif from your emotion in a selfie!
+IMessage extension that generates a gif from your selfie!

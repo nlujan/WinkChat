@@ -148,8 +148,8 @@ extension CompactViewController {
             
             guard .authorized == self.authorizationStatus else { return }
             
-            guard let camera: AVCaptureDevice = AVCaptureDevice
-                .default(.builtInWideAngleCamera, for: AVMediaType.video, position: .front) else { return }
+            guard let camera: AVCaptureDevice = AVCaptureDevice.DiscoverySession(__deviceTypes: [.builtInWideAngleCamera],
+                 mediaType: AVMediaType.video, position: .front).devices.first else { return }
             
             defer { self.captureSession.commitConfiguration() }
             
@@ -174,7 +174,7 @@ extension CompactViewController {
     fileprivate func takePhoto() {
         queue.async { [unowned self] in
             let settings = AVCapturePhotoSettings()
-            let previewPixelType = settings.availablePreviewPhotoPixelFormatTypes.first!
+            let previewPixelType = settings.__availablePreviewPhotoPixelFormatTypes.first!
             let previewFormat = [kCVPixelBufferPixelFormatTypeKey as String: previewPixelType,
                                  kCVPixelBufferWidthKey as String: 160,
                                  kCVPixelBufferHeightKey as String: 160,

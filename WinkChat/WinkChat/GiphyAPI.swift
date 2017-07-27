@@ -22,7 +22,6 @@ struct GiphyAPI: GiphyProtocol {
     static func getGifFrom(text: String) -> Observable<Gif?> {
         return provider
             .request(Giphy.Random(searchText: text))
-            .debug()
             .mapObjectOptional(type: Gif.self, keyPath: "data")
     }
 }

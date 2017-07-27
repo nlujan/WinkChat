@@ -14,8 +14,9 @@ class ViewModel {
     
     private let bag = DisposeBag()
     
-    let imageUrl = PublishSubject<URL>()
-    let gifSubject = PublishSubject<Gif?>()
+    let imageUrlSubject = PublishSubject<URL>()
+    let gifSubject = PublishSubject<Gif>()
+    let errorSubject = PublishSubject<Error>()
 
     init() {
         bindOutput()
@@ -23,35 +24,33 @@ class ViewModel {
     
     func bindOutput() {
         
-        let urlSignal: Observable<Emotion> = imageUrl
+        let emotionSignal: Observable<Emotion> = imageUrlSubject
             .flatMap { url in
                 EmotionAPI.getEmotion(from: url)
             }
             .do(onNext: { emotionArray in
                 if emotionArray.count == 0 {
-                    self.gifSubject.onNext(nil)
+                    self.errorSubject.onNext(EmotionError.NoFaceDetected)
                 }
             })
             .filter { $0.count > 0 }
             .map { $0[0] }
         
-        urlSignal
+        emotionSignal
             .map { $0.scores }
-            .map { scores in
-                scores.keys.map { ($0, scores[$0]!) }
+            .map { scores -> String in
+                let max = scores.values.max()
+                return scores.filter { $0.1 == max }.first!.key
             }
-            .map { tupleArray in
-                tupleArray.sorted {$0.1 > $1.1}
-            }
-            .map { $0.first }
-            .filterNil()
-            .map { $0.0 }
             .flatMap { searchText in
                 GiphyAPI.getGifFrom(text: searchText)
             }
-            .filterNil()
             .subscribe(onNext: { gif in
-                self.gifSubject.onNext(gif)
+                if let g = gif {
+                    self.gifSubject.onNext(g)
+                } else {
+                    self.errorSubject.onNext(GiphyError.NoGifRecieved)
+                }
             })
             .disposed(by: bag)
     }
@@ -62,4 +61,9 @@ enum EmotionError: Error {
 }
 
 enum GiphyError: Error {
+    case NoGifRecieved
+}
+
+enum ReachabilityError: Error {
+    case NoInternectConnection
 }

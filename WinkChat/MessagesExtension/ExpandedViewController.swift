@@ -10,12 +10,8 @@ import UIKit
 
 class ExpandedViewController: UIViewController {
     
-    @IBOutlet var image: UIImageView!
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        image.image = UIImage.gif(url: "https://media.giphy.com/media/26FPx9SsBUO4J1isE/giphy.gif")
         // Do any additional setup after loading the view.
     }
     

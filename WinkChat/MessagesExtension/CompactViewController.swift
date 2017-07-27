@@ -19,17 +19,25 @@ class CompactViewController: UIViewController {
     fileprivate var captureDevice: AVCaptureDevice!
     fileprivate let queue = DispatchQueue(label: "AV Session Queue", attributes: [], target: nil)
     fileprivate var authorizationStatus: AVAuthorizationStatus {
-        return AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo)
+        return AVCaptureDevice.authorizationStatus(for: AVMediaType.video)
     }
     
     var delegate: SendMessageDelegate?
     @IBOutlet var cameraView: UIView!
+    @IBOutlet var activityIndicator: UIActivityIndicatorView!
     
+    @IBOutlet var cameraButton: UIButton!
     let disposeBag = DisposeBag()
     let viewModel = ViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        activityIndicator.isHidden = true
+        
+        if RxReachability.shared.startMonitor("giphy.com") == false {
+            print("Reachability failed!")
+        }
         
         configureViews()
         requestAuthorizationIfNeeded()
@@ -58,24 +66,52 @@ class CompactViewController: UIViewController {
         
         viewModel
             .gifSubject
-            .do(onNext: { gif in
-                if gif == nil {
-                    print("Face not detected")
-                    InfoView.showIn(viewController: self, message: "Face not detected, please try again")
-                    self.startSession()
-                }
-            })
-            .filterNil()
             .map { $0.image_url }
             .subscribe(onNext: {url in
+                self.updateActivityIndicator(isRunning: false)
                 self.delegate?.sendGifMessage(url: url)
                 self.startSession()
             })
             .disposed(by: disposeBag)
+        
+        
+        viewModel
+            .errorSubject
+            .subscribe(onNext: {error in
+                self.updateActivityIndicator(isRunning: false)
+                InfoView.showIn(viewController: self, message: "No face detected")
+                self.startSession()
+            })
+            .disposed(by: disposeBag)
+        
+        cameraButton.rx.tap
+            .subscribe(onNext: { _ in
+                self.updateActivityIndicator(isRunning: true)
+                self.takePhoto()
+            })
+            .disposed(by: disposeBag)
+        
     }
     
-    @IBAction func takePhoto(_ sender: Any) {
-        takePhoto()
+    func updateActivityIndicator(isRunning: Bool) {
+        
+        activityIndicator.isHidden = !isRunning
+        if isRunning {
+            self.activityIndicator.startAnimating()
+        } else {
+            self.activityIndicator.stopAnimating()
+        }
+        
+    }
+    
+    func notifyUpdatedImageUrl(imageUrl: URL) {
+        
+        guard RxReachability.shared.isOnline() else {
+            InfoView.showIn(viewController: self, message: "No internet connection found, please reconnect and try again")
+            startSession()
+            return
+        }
+        viewModel.imageUrlSubject.onNext(imageUrl)
     }
     
 }
@@ -84,24 +120,24 @@ extension CompactViewController {
     
     func configureViews() {
         
-        guard let preview = AVCaptureVideoPreviewLayer(session: self.captureSession) else { return }
+        let preview = AVCaptureVideoPreviewLayer(session: self.captureSession)
         
         previewLayer = preview
-        previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
-        cameraView.layer.addSublayer(self.previewLayer)
-        previewLayer.frame = self.cameraView.bounds
+        previewLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
+        cameraView.layer.addSublayer(previewLayer)
+        previewLayer.frame = cameraView.bounds
         
-        cameraView.layer.cornerRadius = self.cameraView.frame.size.width/2
+        cameraView.layer.cornerRadius = cameraView.frame.size.width/2
         cameraView.clipsToBounds = true
         
         cameraView.layer.borderColor = UIColor.green.cgColor
-        cameraView.layer.borderWidth = 5.0
+        cameraView.layer.borderWidth = 8.0
     }
     
     fileprivate func requestAuthorizationIfNeeded() {
         guard .notDetermined == authorizationStatus else { return }
         queue.suspend()
-        AVCaptureDevice.requestAccess(forMediaType: AVMediaTypeVideo) { [unowned self] granted in
+        AVCaptureDevice.requestAccess(for: AVMediaType.video) { [unowned self] granted in
             guard granted else { return }
             self.queue.resume()
         }
@@ -112,13 +148,13 @@ extension CompactViewController {
             
             guard .authorized == self.authorizationStatus else { return }
             
-            guard let camera: AVCaptureDevice = AVCaptureDevice.defaultDevice(withDeviceType:
-                .builtInWideAngleCamera, mediaType: AVMediaTypeVideo, position: .front) else { return }
+            guard let camera: AVCaptureDevice = AVCaptureDevice
+                .default(.builtInWideAngleCamera, for: AVMediaType.video, position: .front) else { return }
             
             defer { self.captureSession.commitConfiguration() }
             
             self.captureSession.beginConfiguration()
-            self.captureSession.sessionPreset = AVCaptureSessionPresetMedium
+            self.captureSession.sessionPreset = AVCaptureSession.Preset.medium
             
             do {
                 let captureDeviceInput = try AVCaptureDeviceInput(device: camera)
@@ -177,7 +213,7 @@ extension CompactViewController: AVCapturePhotoCaptureDelegate {
         
         do {
             try dataImage.write(to: eventsFileURL)
-            viewModel.imageUrl.onNext(eventsFileURL)
+            notifyUpdatedImageUrl(imageUrl: eventsFileURL)
         }
         catch {
             print("Error saving captured photo to disk")

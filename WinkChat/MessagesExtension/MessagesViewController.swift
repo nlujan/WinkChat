@@ -8,8 +8,31 @@
 
 import UIKit
 import Messages
+import AVFoundation
+import RxSwift
+import RxCocoa
 
 class MessagesViewController: MSMessagesAppViewController {
+    
+    fileprivate let captureSession = AVCaptureSession()
+    fileprivate var previewLayer = AVCaptureVideoPreviewLayer()
+    fileprivate var cameraOutput = AVCapturePhotoOutput()
+    fileprivate var captureDevice: AVCaptureDevice!
+    fileprivate let queue = DispatchQueue(label: "AV Session Queue", attributes: [], target: nil)
+    fileprivate var authorizationStatus: AVAuthorizationStatus {
+        return AVCaptureDevice.authorizationStatus(for: AVMediaType.video)
+    }
+    fileprivate let disposeBag = DisposeBag()
+    fileprivate let viewModel = ViewModel()
+    
+    @IBOutlet var cameraView: UIView!
+    @IBOutlet var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet var collectionView: UICollectionView!
+    @IBOutlet var cameraButton: UIButton!
+    
+    fileprivate let gifImages = Variable<[Gif]>([])
+    
+    @IBOutlet var mainCameraControlsView: UIView!
     
     // MARK: - Conversation Handling
     
@@ -21,7 +44,13 @@ class MessagesViewController: MSMessagesAppViewController {
         
         super.willBecomeActive(with: conversation)
         
-        presentVC(for: conversation, with: presentationStyle)
+//        if presentationStyle == .compact {
+//            view.bottomAnchor.constraint(equalTo: self.bottomLayoutGuide.topAnchor).isActive = false
+//        } else {
+//            view.bottomAnchor.constraint(equalTo: self.bottomLayoutGuide.topAnchor).isActive = true
+//        }
+        
+//        presentVC(for: conversation, with: presentationStyle)
     }
     
     override func didResignActive(with conversation: MSConversation) {
@@ -44,7 +73,6 @@ class MessagesViewController: MSMessagesAppViewController {
     override func didStartSending(_ message: MSMessage, conversation: MSConversation) {
         // Called when the user taps the send button.
         
-        print("message was sent")
     }
     
     override func didCancelSending(_ message: MSMessage, conversation: MSConversation) {
@@ -58,64 +86,24 @@ class MessagesViewController: MSMessagesAppViewController {
     
         // Use this method to prepare for the change in presentation style.
         
-        guard let conversation = activeConversation else {
-            fatalError("Expected the active conversation")
-        }
-        
-        presentVC(for: conversation, with: presentationStyle)
+//        if presentationStyle == .compact {
+//            view.bottomAnchor.
+//        } else {
+//            view.bottomAnchor.constraint(equalTo: self.bottomLayoutGuide.topAnchor).isActive = true
+//        }
     }
     
     override func didTransition(to presentationStyle: MSMessagesAppPresentationStyle) {
         // Called after the extension transitions to a new presentation style.
     
         // Use this method to finalize any behaviors associated with the change in presentation style.
-    }
+        
     
-    
-    private func presentVC(for conversation: MSConversation, with presentationStyle: MSMessagesAppPresentationStyle) {
-        let controller: UIViewController
-        
-        if presentationStyle == .compact {
-            controller = instantiateCompactVC()
-        } else {
-            controller = instantiateExpandedVC()
-        }
-        
-        addChildViewController(controller)
-        controller.view.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(controller.view)
-        
-        NSLayoutConstraint.activate([
-            controller.view.leftAnchor.constraint(equalTo: view.leftAnchor),
-            controller.view.rightAnchor.constraint(equalTo: view.rightAnchor),
-            controller.view.topAnchor.constraint(equalTo: view.topAnchor),
-            controller.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            ])
-        
-        controller.didMove(toParentViewController: self)
-    }
-    
-    private func instantiateCompactVC() -> UIViewController {
-        guard let compactVC = storyboard?.instantiateViewController(withIdentifier: "CompactVC") as? CompactViewController else {
-            fatalError("Can't instantiate CompactViewController")
-        }
-        
-        compactVC.delegate = self
-        
-        return compactVC
-    }
-    
-    private func instantiateExpandedVC() -> UIViewController {
-        guard let expandedVC = storyboard?.instantiateViewController(withIdentifier: "ExpandedVC") as? ExpandedViewController else {
-            fatalError("Can't instantiate ExpandedViewController")
-        }
-        
-        return expandedVC
     }
 }
 
 
-extension MessagesViewController: SendMessageDelegate {
+extension MessagesViewController {
     
     func sendGifMessage(url: String) {
         
@@ -141,6 +129,245 @@ extension MessagesViewController: SendMessageDelegate {
             }
         }
     }
+}
+
+extension MessagesViewController {
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        activityIndicator.isHidden = true
+        
+        if RxReachability.shared.startMonitor("giphy.com") == false {
+            print("Reachability failed!")
+        }
+        
+        configureViews()
+        
+        
+        collectionView.setCollectionViewLayout(GifCollectionViewLayout(), animated: false)
+        if let layout = collectionView?.collectionViewLayout as? GifCollectionViewLayout {
+            layout.delegate = self
+        }
+        
+        
+        
+        bindCollectionView()
+        
+        
+        
+        requestAuthorizationIfNeeded()
+        configureSession()
+        bindViewModel()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        startSession()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        stopSession()
+        super.viewWillDisappear(animated)
+    }
+    
+    func bindViewModel() {
+        
+        viewModel
+            .randomGifSubject
+            .map { $0.image_url }
+            .subscribe(onNext: {url in
+                self.updateActivityIndicator(isRunning: false)
+                self.sendGifMessage(url: url)
+                self.startSession()
+            })
+            .disposed(by: disposeBag)
+        
+        viewModel
+            .searchGifsSubject
+            .subscribe(onNext: {gifs in
+                
+                self.gifImages.value = gifs
+                
+                self.updateActivityIndicator(isRunning: false)
+                self.startSession()
+            })
+            .disposed(by: disposeBag)
+        
+        
+        viewModel
+            .errorSubject
+            .subscribe(onNext: {error in
+                self.updateActivityIndicator(isRunning: false)
+                InfoView.showIn(viewController: self, message: "No face detected")
+                self.startSession()
+            })
+            .disposed(by: disposeBag)
+        
+        cameraButton.rx.tap
+            .subscribe(onNext: { _ in
+                self.updateActivityIndicator(isRunning: true)
+                self.takePhoto()
+            })
+            .disposed(by: disposeBag)
+        
+    }
+    
+    func updateActivityIndicator(isRunning: Bool) {
+        
+        activityIndicator.isHidden = !isRunning
+        if isRunning {
+            self.activityIndicator.startAnimating()
+        } else {
+            self.activityIndicator.stopAnimating()
+        }
+        
+    }
+    
+    func notifyUpdatedImageUrl(imageUrl: URL) {
+        
+        guard RxReachability.shared.isOnline() else {
+            InfoView.showIn(viewController: self, message: "No internet connection found, please reconnect and try again")
+            startSession()
+            return
+        }
+        if presentationStyle == .compact {
+            viewModel.randomUrlSubject.onNext(imageUrl)
+        } else {
+            viewModel.searchUrlSubject.onNext(imageUrl)
+        }
+    }
     
 }
+
+extension MessagesViewController {
+    
+    func configureViews() {
+        
+        let preview = AVCaptureVideoPreviewLayer(session: self.captureSession)
+        
+        previewLayer = preview
+        previewLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
+        cameraView.layer.addSublayer(previewLayer)
+        previewLayer.frame = cameraView.bounds
+        
+        cameraView.layer.cornerRadius = cameraView.frame.size.width/2
+        cameraView.clipsToBounds = true
+        
+        cameraView.layer.borderColor = UIColor.green.cgColor
+        cameraView.layer.borderWidth = 8.0
+    }
+    
+    fileprivate func requestAuthorizationIfNeeded() {
+        guard .notDetermined == authorizationStatus else { return }
+        queue.suspend()
+        AVCaptureDevice.requestAccess(for: AVMediaType.video) { [unowned self] granted in
+            guard granted else { return }
+            self.queue.resume()
+        }
+    }
+    
+    fileprivate func configureSession() {
+        queue.async {
+            
+            guard .authorized == self.authorizationStatus else { return }
+            
+            guard let camera: AVCaptureDevice = AVCaptureDevice.DiscoverySession(__deviceTypes: [.builtInWideAngleCamera],
+                 mediaType: AVMediaType.video, position: .front).devices.first else { return }
+            
+            defer { self.captureSession.commitConfiguration() }
+            
+            self.captureSession.beginConfiguration()
+            self.captureSession.sessionPreset = AVCaptureSession.Preset.medium
+            
+            do {
+                let captureDeviceInput = try AVCaptureDeviceInput(device: camera)
+                self.captureSession.addInput(captureDeviceInput)
+                
+            } catch {
+                print(error.localizedDescription)
+                return
+            }
+            
+            guard self.captureSession.canAddOutput(self.cameraOutput) else { return }
+            self.captureSession.addOutput(self.cameraOutput)
+            
+        }
+    }
+    
+    fileprivate func takePhoto() {
+        queue.async { [unowned self] in
+            let settings = AVCapturePhotoSettings()
+            let previewPixelType = settings.__availablePreviewPhotoPixelFormatTypes.first!
+            let previewFormat = [kCVPixelBufferPixelFormatTypeKey as String: previewPixelType,
+                                 kCVPixelBufferWidthKey as String: 160,
+                                 kCVPixelBufferHeightKey as String: 160,
+                                 ]
+            settings.previewPhotoFormat = previewFormat
+            self.cameraOutput.capturePhoto(with: settings, delegate: self)
+        }
+    }
+    
+    fileprivate func startSession() {
+        queue.async {
+            guard self.authorizationStatus == .authorized else { return }
+            guard !self.captureSession.isRunning else { return }
+            self.captureSession.startRunning()
+        }
+    }
+    
+    fileprivate func stopSession() {
+        queue.async {
+            guard self.authorizationStatus == .authorized else { return }
+            guard self.captureSession.isRunning else { return }
+            self.captureSession.stopRunning()
+        }
+    }
+}
+
+extension MessagesViewController: AVCapturePhotoCaptureDelegate {
+    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
+        guard let dataImage = photo.fileDataRepresentation() else {
+            print("Error capturing photo: \(String(describing: error))")
+            return
+        }
+        stopSession()
+        
+        let eventsFileURL = URL.cachedFileURL("image.png")
+        
+        do {
+            try dataImage.write(to: eventsFileURL)
+            notifyUpdatedImageUrl(imageUrl: eventsFileURL)
+        }
+        catch {
+            print("Error saving captured photo to disk")
+            startSession()
+        }
+    }
+}
+
+extension MessagesViewController {
+    
+    func bindCollectionView() {
+        gifImages.asObservable().bindTo(collectionView.rx.items(cellIdentifier: "gifCell", cellType: GifCell.self))
+            { row, data, cell in
+                cell.gifImage.sd_setImage(with: URL(string: data.image_url))
+            }.addDisposableTo(disposeBag)
+    }
+}
+
+extension MessagesViewController : GifCollectionViewLayoutDelegate {
+    func collectionView(collectionView:UICollectionView, heightForPhotoAtIndexPath indexPath: NSIndexPath, withWidth width: CGFloat) -> CGFloat {
+        let gif = gifImages.value[indexPath.item]
+        let boundingRect =  CGRect(x: 0, y: 0, width: width, height: CGFloat(MAXFLOAT))
+        let rect  = AVMakeRect(aspectRatio: CGSize.init(width: Int(gif.width)!, height: Int(gif.height)!), insideRect: boundingRect)
+        return rect.size.height
+    }
+}
+
+
+

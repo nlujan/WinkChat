@@ -14,8 +14,11 @@ class ViewModel {
     
     private let bag = DisposeBag()
     
-    let imageUrlSubject = PublishSubject<URL>()
-    let gifSubject = PublishSubject<Gif>()
+    let randomUrlSubject = PublishSubject<URL>()
+    let searchUrlSubject = PublishSubject<URL>()
+    
+    let randomGifSubject = PublishSubject<Gif>()
+    let searchGifsSubject = PublishSubject<[Gif]>()
     let errorSubject = PublishSubject<Error>()
 
     init() {
@@ -24,7 +27,41 @@ class ViewModel {
     
     func bindOutput() {
         
-        let emotionSignal: Observable<Emotion> = imageUrlSubject
+        randomUrlSubject
+            .flatMap { url in
+                self.getEmotionString(url: url)
+            }
+            .flatMap { searchText in
+                GiphyAPI.getRandomGifFrom(text: searchText)
+            }
+            .subscribe(onNext: { gif in
+                if let g = gif {
+                    self.randomGifSubject.onNext(g)
+                } else {
+                    self.errorSubject.onNext(GiphyError.NoGifRecieved)
+                }
+            })
+            .disposed(by: bag)
+        
+        searchUrlSubject
+            .flatMap { url in
+                self.getEmotionString(url: url)
+            }
+            .flatMap { searchText in
+                GiphyAPI.getSearchGifsFrom(text: searchText)
+            }
+            .subscribe(onNext: { gif in
+                if let g = gif {
+                    self.searchGifsSubject.onNext(g)
+                } else {
+                    self.errorSubject.onNext(GiphyError.NoGifRecieved)
+                }
+            })
+            .disposed(by: bag)
+    }
+    
+    func getEmotionString(url: URL) -> Observable<String> {
+        return Observable.from(optional: url)
             .flatMap { url in
                 EmotionAPI.getEmotion(from: url)
             }
@@ -35,25 +72,13 @@ class ViewModel {
             })
             .filter { $0.count > 0 }
             .map { $0[0] }
-        
-        emotionSignal
             .map { $0.scores }
             .map { scores -> String in
                 let max = scores.values.max()
                 return scores.filter { $0.1 == max }.first!.key
             }
-            .flatMap { searchText in
-                GiphyAPI.getGifFrom(text: searchText)
-            }
-            .subscribe(onNext: { gif in
-                if let g = gif {
-                    self.gifSubject.onNext(g)
-                } else {
-                    self.errorSubject.onNext(GiphyError.NoGifRecieved)
-                }
-            })
-            .disposed(by: bag)
     }
+    
 }
 
 enum EmotionError: Error {

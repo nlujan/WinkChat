@@ -47,7 +47,7 @@ extension Giphy: TargetType {
     var parameters: [String: Any]? {
         switch self {
         case .Search(let searchText):
-            return ["api_key": "dc6zaTOxFJmzC", "q": searchText.URLEscapedString]
+            return ["api_key": "dc6zaTOxFJmzC", "q": searchText.URLEscapedString, "limit": "20", "offset": String(arc4random_uniform(50))]
         case .Trending:
             return ["api_key": "dc6zaTOxFJmzC"]
         case .Random(let searchText):

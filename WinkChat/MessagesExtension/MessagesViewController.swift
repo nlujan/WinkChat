@@ -24,14 +24,12 @@ class MessagesViewController: MSMessagesAppViewController {
     }
     fileprivate let disposeBag = DisposeBag()
     fileprivate let viewModel = ViewModel()
+    fileprivate let gifImages = Variable<[Gif]>([])
     
     @IBOutlet var cameraView: UIView!
     @IBOutlet var activityIndicator: UIActivityIndicatorView!
     @IBOutlet var collectionView: UICollectionView!
     @IBOutlet var cameraButton: UIButton!
-    
-    fileprivate let gifImages = Variable<[Gif]>([])
-    
     @IBOutlet var mainCameraControlsView: UIView!
     
     // MARK: - Conversation Handling
@@ -43,14 +41,6 @@ class MessagesViewController: MSMessagesAppViewController {
         // Use this method to configure the extension and restore previously stored state.
         
         super.willBecomeActive(with: conversation)
-        
-//        if presentationStyle == .compact {
-//            view.bottomAnchor.constraint(equalTo: self.bottomLayoutGuide.topAnchor).isActive = false
-//        } else {
-//            view.bottomAnchor.constraint(equalTo: self.bottomLayoutGuide.topAnchor).isActive = true
-//        }
-        
-//        presentVC(for: conversation, with: presentationStyle)
     }
     
     override func didResignActive(with conversation: MSConversation) {
@@ -72,7 +62,6 @@ class MessagesViewController: MSMessagesAppViewController {
     
     override func didStartSending(_ message: MSMessage, conversation: MSConversation) {
         // Called when the user taps the send button.
-        
     }
     
     override func didCancelSending(_ message: MSMessage, conversation: MSConversation) {
@@ -85,49 +74,12 @@ class MessagesViewController: MSMessagesAppViewController {
         // Called before the extension transitions to a new presentation style.
     
         // Use this method to prepare for the change in presentation style.
-        
-//        if presentationStyle == .compact {
-//            view.bottomAnchor.
-//        } else {
-//            view.bottomAnchor.constraint(equalTo: self.bottomLayoutGuide.topAnchor).isActive = true
-//        }
     }
     
     override func didTransition(to presentationStyle: MSMessagesAppPresentationStyle) {
         // Called after the extension transitions to a new presentation style.
     
         // Use this method to finalize any behaviors associated with the change in presentation style.
-        
-    
-    }
-}
-
-
-extension MessagesViewController {
-    
-    func sendGifMessage(url: String) {
-        
-        guard let conversation = activeConversation else { fatalError("Expected a conversation") }
-        
-        guard let bundleURL = URL(string: url) else {
-            print("Error: This image named \"\(url)\" does not exist")
-            return
-        }
-        
-        guard let imageData = try? Data(contentsOf: bundleURL) else {
-            print("Error: Cannot turn image named \"\(url)\" into NSData")
-            return
-        }
-        
-        let eventsFileURL = URL.cachedFileURL("test.gif")
-        
-        try? imageData.write(to: eventsFileURL)
-        
-        conversation.insertAttachment(eventsFileURL, withAlternateFilename: "test.gif") { error in
-            if let error = error {
-                print(error)
-            }
-        }
     }
 }
 
@@ -182,7 +134,7 @@ extension MessagesViewController {
             .map { $0.image_url }
             .subscribe(onNext: {url in
                 self.updateActivityIndicator(isRunning: false)
-                self.sendGifMessage(url: url)
+                self.addGifToInputField(url: url)
                 self.startSession()
             })
             .disposed(by: disposeBag)
@@ -190,20 +142,23 @@ extension MessagesViewController {
         viewModel
             .searchGifsSubject
             .subscribe(onNext: {gifs in
-                
                 self.gifImages.value = gifs
-                
                 self.updateActivityIndicator(isRunning: false)
                 self.startSession()
             })
             .disposed(by: disposeBag)
         
-        
         viewModel
             .errorSubject
-            .subscribe(onNext: {error in
+            .subscribe(onNext: { error in
                 self.updateActivityIndicator(isRunning: false)
-                InfoView.showIn(viewController: self, message: "No face detected")
+                
+                switch error as! APIError {
+                    case .NoFaceDetected:
+                        InfoView.showIn(viewController: self, message: "No face detected, please try again")
+                    case .NoGifRecieved:
+                        InfoView.showIn(viewController: self, message: "Unable to retreive Gif, please try again")
+                }
                 self.startSession()
             })
             .disposed(by: disposeBag)
@@ -228,20 +183,67 @@ extension MessagesViewController {
         
     }
     
-    func notifyUpdatedImageUrl(imageUrl: URL) {
+    func notifyViewModelOfImageUrl(imageUrl: URL) {
         
         guard RxReachability.shared.isOnline() else {
+            updateActivityIndicator(isRunning: false)
             InfoView.showIn(viewController: self, message: "No internet connection found, please reconnect and try again")
             startSession()
             return
         }
         if presentationStyle == .compact {
             viewModel.randomUrlSubject.onNext(imageUrl)
+            viewModel.searchUrlSubject.onNext(imageUrl)
         } else {
             viewModel.searchUrlSubject.onNext(imageUrl)
         }
     }
     
+    func addGifToInputField(url: String) {
+        
+        guard let conversation = activeConversation else { fatalError("Expected a conversation") }
+        
+        guard let bundleURL = URL(string: url) else {
+            print("Error: This image named \"\(url)\" does not exist")
+            return
+        }
+        
+        guard let imageData = try? Data(contentsOf: bundleURL) else {
+            print("Error: Cannot turn image named \"\(url)\" into NSData")
+            return
+        }
+        
+        let eventsFileURL = URL.cachedFileURL("test.gif")
+        
+        try? imageData.write(to: eventsFileURL)
+        
+        if presentationStyle == .expanded {
+            requestPresentationStyle(.compact)
+        }
+        
+        conversation.insertAttachment(eventsFileURL, withAlternateFilename: "test.gif") { error in
+            if let error = error {
+                print(error)
+            }
+        }
+    }
+    
+    func bindCollectionView() {
+        
+        gifImages.asObservable().bindTo(collectionView.rx.items(cellIdentifier: "gifCell", cellType: GifCell.self))
+        { row, data, cell in
+            cell.gifImage.sd_setImage(with: URL(string: data.image_url))
+            }.addDisposableTo(disposeBag)
+        
+        collectionView.rx
+            .itemSelected
+            .subscribe(onNext: { indexPath in
+                print(indexPath.row)
+                let gif = self.gifImages.value[indexPath.row]
+                self.addGifToInputField(url: gif.image_url)
+            })
+            .disposed(by: disposeBag)
+    }
 }
 
 extension MessagesViewController {
@@ -329,6 +331,8 @@ extension MessagesViewController {
     }
 }
 
+// MARK: - AVCapturePhotoCaptureDelegate
+
 extension MessagesViewController: AVCapturePhotoCaptureDelegate {
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
         guard let dataImage = photo.fileDataRepresentation() else {
@@ -341,22 +345,12 @@ extension MessagesViewController: AVCapturePhotoCaptureDelegate {
         
         do {
             try dataImage.write(to: eventsFileURL)
-            notifyUpdatedImageUrl(imageUrl: eventsFileURL)
+            notifyViewModelOfImageUrl(imageUrl: eventsFileURL)
         }
         catch {
             print("Error saving captured photo to disk")
             startSession()
         }
-    }
-}
-
-extension MessagesViewController {
-    
-    func bindCollectionView() {
-        gifImages.asObservable().bindTo(collectionView.rx.items(cellIdentifier: "gifCell", cellType: GifCell.self))
-            { row, data, cell in
-                cell.gifImage.sd_setImage(with: URL(string: data.image_url))
-            }.addDisposableTo(disposeBag)
     }
 }
 
@@ -368,6 +362,3 @@ extension MessagesViewController : GifCollectionViewLayoutDelegate {
         return rect.size.height
     }
 }
-
-
-

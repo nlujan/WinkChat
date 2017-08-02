@@ -38,7 +38,7 @@ class ViewModel {
                 if let g = gif {
                     self.randomGifSubject.onNext(g)
                 } else {
-                    self.errorSubject.onNext(GiphyError.NoGifRecieved)
+                    self.errorSubject.onNext(APIError.NoGifRecieved)
                 }
             })
             .disposed(by: bag)
@@ -54,7 +54,7 @@ class ViewModel {
                 if let g = gif {
                     self.searchGifsSubject.onNext(g)
                 } else {
-                    self.errorSubject.onNext(GiphyError.NoGifRecieved)
+                    self.errorSubject.onNext(APIError.NoGifRecieved)
                 }
             })
             .disposed(by: bag)
@@ -67,7 +67,7 @@ class ViewModel {
             }
             .do(onNext: { emotionArray in
                 if emotionArray.count == 0 {
-                    self.errorSubject.onNext(EmotionError.NoFaceDetected)
+                    self.errorSubject.onNext(APIError.NoFaceDetected)
                 }
             })
             .filter { $0.count > 0 }
@@ -81,14 +81,7 @@ class ViewModel {
     
 }
 
-enum EmotionError: Error {
+enum APIError: Error {
     case NoFaceDetected
-}
-
-enum GiphyError: Error {
     case NoGifRecieved
-}
-
-enum ReachabilityError: Error {
-    case NoInternectConnection
 }

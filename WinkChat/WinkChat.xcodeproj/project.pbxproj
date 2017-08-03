@@ -30,6 +30,7 @@
 		2BDF7B011F326C1A009F3103 /* UIColor+Random.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BDF7B001F326C1A009F3103 /* UIColor+Random.swift */; };
 		2BDF7B031F328E57009F3103 /* SpinningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BDF7B021F328E57009F3103 /* SpinningView.swift */; };
 		2BDF7B061F32E820009F3103 /* Constants.swift in Resources */ = {isa = PBXBuildFile; fileRef = 2BDF7B041F32E81A009F3103 /* Constants.swift */; };
+		2BDF7B071F33E231009F3103 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BDF7B041F32E81A009F3103 /* Constants.swift */; };
 		9411C8797FD720948EC714FA /* Pods_WinkChat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23A12148946307A725361625 /* Pods_WinkChat.framework */; };
 		CE6B0A8A085E5DB7A0E90611 /* Pods_MessagesExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AB6097E52CE0AAD852811F1 /* Pods_MessagesExtension.framework */; };
 /* End PBXBuildFile section */
@@ -431,6 +432,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2B1429BD1EFF86F700043D08 /* EmotionEndpoint.swift in Sources */,
+				2BDF7B071F33E231009F3103 /* Constants.swift in Sources */,
 				2B1429BF1EFF872700043D08 /* EmotionAPI.swift in Sources */,
 				2B1429CC1EFF884900043D08 /* ViewModel.swift in Sources */,
 				2B1429C31EFF877E00043D08 /* GiphyAPI.swift in Sources */,

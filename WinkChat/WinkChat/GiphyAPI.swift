@@ -18,7 +18,7 @@ protocol GiphyProtocol {
 
 struct GiphyAPI: GiphyProtocol {
     
-    static let provider: RxMoyaProvider<Giphy> = RxMoyaProvider<Giphy>()
+    private static let provider: RxMoyaProvider<Giphy> = RxMoyaProvider<Giphy>()
     
     static func getRandomGifFrom(text: String) -> Observable<Gif?> {
         return provider

@@ -24,7 +24,7 @@ class MessagesViewController: MSMessagesAppViewController {
     }
     fileprivate let disposeBag = DisposeBag()
     fileprivate let viewModel = ViewModel()
-    fileprivate let gifImages = Variable<[Gif]>([])
+    fileprivate let gifs = Variable<[Gif]>([])
     
     @IBOutlet var cameraView: SpinningView!
     @IBOutlet var collectionView: UICollectionView!
@@ -88,7 +88,7 @@ extension MessagesViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if RxReachability.shared.startMonitor("giphy.com") == false {
+        if RxReachability.shared.startMonitor(Constants.Giphy.Url) == false {
             print("Reachability failed!")
         }
         
@@ -146,7 +146,7 @@ extension MessagesViewController {
         viewModel
             .searchGifsSubject
             .subscribe(onNext: {gifs in
-                self.gifImages.value = gifs
+                self.gifs.value = gifs
                 self.updateActivityIndicator(isRunning: false)
                 self.startSession()
             })
@@ -219,10 +219,15 @@ extension MessagesViewController {
             return
         }
         
-        let eventsFileURL = URL.cachedFileURL("test.gif")
-        try? imageData.write(to: eventsFileURL)
+        let gifFileURL = URL.cachedFileURL(Constants.GifFilename)
         
-        conversation.insertAttachment(eventsFileURL, withAlternateFilename: "test.gif") { error in
+        do {
+            try imageData.write(to: gifFileURL)
+        } catch {
+            print("Error saving gif to disk")
+        }
+        
+        conversation.insertAttachment(gifFileURL, withAlternateFilename: nil) { error in
             if let error = error {
                 print(error)
             }
@@ -233,7 +238,7 @@ extension MessagesViewController {
     
     func bindCollectionView() {
         
-        gifImages.asObservable().bindTo(collectionView.rx.items(cellIdentifier: "gifCell", cellType: GifCell.self))
+        gifs.asObservable().bindTo(collectionView.rx.items(cellIdentifier: "gifCell", cellType: GifCell.self))
         { row, data, cell in
             cell.backgroundColor = UIColor().getRandom()
             cell.gif.sd_setImage(with: URL(string: data.image_url))
@@ -244,7 +249,7 @@ extension MessagesViewController {
             .subscribe(onNext: { indexPath in
                 self.collectionView.isUserInteractionEnabled = false
                 
-                let gif = self.gifImages.value[indexPath.row]
+                let gif = self.gifs.value[indexPath.row]
                 
                 guard let cell = self.collectionView.cellForItem(at: indexPath) else {
                     return
@@ -360,13 +365,12 @@ extension MessagesViewController: AVCapturePhotoCaptureDelegate {
         }
         stopSession()
         
-        let eventsFileURL = URL.cachedFileURL("image.png")
+        let imageFileURL = URL.cachedFileURL(Constants.ImageFilename)
         
         do {
-            try dataImage.write(to: eventsFileURL)
-            notifyViewModelOfImageUrl(imageUrl: eventsFileURL)
-        }
-        catch {
+            try dataImage.write(to: imageFileURL)
+            notifyViewModelOfImageUrl(imageUrl: imageFileURL)
+        } catch {
             print("Error saving captured photo to disk")
             startSession()
         }
@@ -375,7 +379,7 @@ extension MessagesViewController: AVCapturePhotoCaptureDelegate {
 
 extension MessagesViewController : GifCollectionViewLayoutDelegate {
     func collectionView(collectionView:UICollectionView, heightForPhotoAtIndexPath indexPath: NSIndexPath, withWidth width: CGFloat) -> CGFloat {
-        let gif = gifImages.value[indexPath.item]
+        let gif = gifs.value[indexPath.item]
         let boundingRect =  CGRect(x: 0, y: 0, width: width, height: CGFloat(MAXFLOAT))
         let rect  = AVMakeRect(aspectRatio: CGSize.init(width: Int(gif.width)!, height: Int(gif.height)!), insideRect: boundingRect)
         return rect.size.height

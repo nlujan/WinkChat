@@ -16,13 +16,6 @@ enum Giphy {
     case Random(searchText: String)
 }
 
-
-private extension String {
-    var URLEscapedString: String {
-        return self.lowercased().replacingOccurrences(of: " ", with: "+")
-    }
-}
-
 extension Giphy: TargetType {
     
     var baseURL: URL {
@@ -47,11 +40,11 @@ extension Giphy: TargetType {
     var parameters: [String: Any]? {
         switch self {
         case .Search(let searchText):
-            return ["api_key": "dc6zaTOxFJmzC", "q": searchText.URLEscapedString, "offset": String(arc4random_uniform(50))]
+            return ["api_key": Constants.Giphy.Key, "q": searchText, "offset": String(arc4random_uniform(50))]
         case .Trending:
-            return ["api_key": "dc6zaTOxFJmzC"]
+            return ["api_key": Constants.Giphy.Key]
         case .Random(let searchText):
-            return ["api_key": "dc6zaTOxFJmzC", "tag": searchText.URLEscapedString]
+            return ["api_key": Constants.Giphy.Key, "tag": searchText]
         }
     }
     

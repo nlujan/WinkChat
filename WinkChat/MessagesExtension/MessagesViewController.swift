@@ -26,12 +26,12 @@ class MessagesViewController: MSMessagesAppViewController {
     fileprivate let viewModel = ViewModel()
     fileprivate let gifImages = Variable<[Gif]>([])
     
-    @IBOutlet var cameraView: UIView!
-    @IBOutlet var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet var cameraView: SpinningView!
     @IBOutlet var collectionView: UICollectionView!
     @IBOutlet var cameraButton: UIButton!
     @IBOutlet var mainCameraControlsView: UIView!
     
+    @IBOutlet var activityContainer: UIView!
     // MARK: - Conversation Handling
     
     override func willBecomeActive(with conversation: MSConversation) {
@@ -88,14 +88,11 @@ extension MessagesViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        activityIndicator.isHidden = true
-        
         if RxReachability.shared.startMonitor("giphy.com") == false {
             print("Reachability failed!")
         }
         
         configureViews()
-        
         
         collectionView.setCollectionViewLayout(GifCollectionViewLayout(), animated: false)
         if let layout = collectionView?.collectionViewLayout as? GifCollectionViewLayout {
@@ -116,10 +113,17 @@ extension MessagesViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         startSession()
+        
+        mainCameraControlsView.alpha = 0
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        
+        UIView.animate(withDuration: 2.0) {
+            self.mainCameraControlsView.alpha = 1.0
+        }
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -174,13 +178,11 @@ extension MessagesViewController {
     
     func updateActivityIndicator(isRunning: Bool) {
         
-        activityIndicator.isHidden = !isRunning
         if isRunning {
-            self.activityIndicator.startAnimating()
+            cameraView.animating = true
         } else {
-            self.activityIndicator.stopAnimating()
+            cameraView.animating = false
         }
-        
     }
     
     func notifyViewModelOfImageUrl(imageUrl: URL) {
@@ -201,6 +203,10 @@ extension MessagesViewController {
     
     func addGifToInputField(url: String) {
         
+        if presentationStyle == .expanded {
+            requestPresentationStyle(.compact)
+        }
+        
         guard let conversation = activeConversation else { fatalError("Expected a conversation") }
         
         guard let bundleURL = URL(string: url) else {
@@ -214,33 +220,46 @@ extension MessagesViewController {
         }
         
         let eventsFileURL = URL.cachedFileURL("test.gif")
-        
         try? imageData.write(to: eventsFileURL)
-        
-        if presentationStyle == .expanded {
-            requestPresentationStyle(.compact)
-        }
         
         conversation.insertAttachment(eventsFileURL, withAlternateFilename: "test.gif") { error in
             if let error = error {
                 print(error)
             }
         }
+        
+        collectionView.isUserInteractionEnabled = true
     }
     
     func bindCollectionView() {
         
         gifImages.asObservable().bindTo(collectionView.rx.items(cellIdentifier: "gifCell", cellType: GifCell.self))
         { row, data, cell in
-            cell.gifImage.sd_setImage(with: URL(string: data.image_url))
+            cell.backgroundColor = UIColor().getRandom()
+            cell.gif.sd_setImage(with: URL(string: data.image_url))
             }.addDisposableTo(disposeBag)
         
         collectionView.rx
             .itemSelected
             .subscribe(onNext: { indexPath in
-                print(indexPath.row)
+                self.collectionView.isUserInteractionEnabled = false
+                
                 let gif = self.gifImages.value[indexPath.row]
-                self.addGifToInputField(url: gif.image_url)
+                
+                guard let cell = self.collectionView.cellForItem(at: indexPath) else {
+                    return
+                }
+                
+                UIView.animate(withDuration: 0.1, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 5, options: [],
+                   animations: { cell.transform = CGAffineTransform(scaleX: 0.9, y: 0.9) },
+                   completion: { finished in
+                        UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.2, initialSpringVelocity: 5, options: .curveEaseInOut,
+                           animations: { cell.transform = CGAffineTransform(scaleX: 1, y: 1) },
+                           completion: { finished in
+                                self.addGifToInputField(url: gif.image_url)
+                        }) }
+                )
+                
             })
             .disposed(by: disposeBag)
     }
@@ -255,13 +274,13 @@ extension MessagesViewController {
         previewLayer = preview
         previewLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
         cameraView.layer.addSublayer(previewLayer)
-        previewLayer.frame = cameraView.bounds
+        previewLayer.frame = cameraView.bounds.insetBy(dx: cameraView.lineWidth, dy: cameraView.lineWidth)
         
         cameraView.layer.cornerRadius = cameraView.frame.size.width/2
-        cameraView.clipsToBounds = true
+        previewLayer.cornerRadius = previewLayer.frame.size.width/2
         
-        cameraView.layer.borderColor = UIColor.green.cgColor
-        cameraView.layer.borderWidth = 8.0
+//        cameraView.layer.borderColor = UIColor.green.cgColor
+//        cameraView.layer.borderWidth = 8.0
     }
     
     fileprivate func requestAuthorizationIfNeeded() {

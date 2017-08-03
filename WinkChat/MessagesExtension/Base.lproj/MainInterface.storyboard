@@ -23,9 +23,8 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3Aq-kc-cNt" userLabel="Main Camera View">
                                 <rect key="frame" x="0.0" y="305" width="320" height="223"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iO2-tb-tZZ">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iO2-tb-tZZ" customClass="SpinningView" customModule="MessagesExtension" customModuleProvider="target">
                                         <rect key="frame" x="72.5" y="24" width="175" height="175"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="175" id="4Fh-9o-uFg"/>
                                             <constraint firstAttribute="height" constant="175" id="x4Q-0h-cJf"/>
@@ -48,16 +47,7 @@
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4cT-iH-Ppv" userLabel="Activity Container">
                                         <rect key="frame" x="0.0" y="0.0" width="72.5" height="223"/>
-                                        <subviews>
-                                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="kHl-IP-qVp">
-                                                <rect key="frame" x="26.5" y="101" width="20" height="20"/>
-                                            </activityIndicatorView>
-                                        </subviews>
                                         <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstItem="kHl-IP-qVp" firstAttribute="centerX" secondItem="4cT-iH-Ppv" secondAttribute="centerX" id="QOV-eB-PTX"/>
-                                            <constraint firstItem="kHl-IP-qVp" firstAttribute="centerY" secondItem="4cT-iH-Ppv" secondAttribute="centerY" id="kMM-TS-Bog"/>
-                                        </constraints>
                                     </view>
                                 </subviews>
                                 <constraints>
@@ -109,7 +99,7 @@
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                         <connections>
-                                            <outlet property="gifImage" destination="qNN-aJ-B0K" id="6jw-xW-Lst"/>
+                                            <outlet property="gif" destination="qNN-aJ-B0K" id="fhe-La-9sS"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
@@ -129,7 +119,7 @@
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="320" height="528"/>
                     <connections>
-                        <outlet property="activityIndicator" destination="kHl-IP-qVp" id="kjz-hm-F8q"/>
+                        <outlet property="activityContainer" destination="4cT-iH-Ppv" id="qpY-Xo-IcT"/>
                         <outlet property="cameraButton" destination="gLr-kG-lQ2" id="905-VC-L2V"/>
                         <outlet property="cameraView" destination="iO2-tb-tZZ" id="539-yV-bKS"/>
                         <outlet property="collectionView" destination="0ht-eF-YGh" id="BQd-ym-7pO"/>

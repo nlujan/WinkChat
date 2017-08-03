@@ -27,6 +27,9 @@
 		2BB60BEB1E9A040C00AF7E6F /* MessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BB60BEA1E9A040C00AF7E6F /* MessagesViewController.swift */; };
 		2BB60BEE1E9A040C00AF7E6F /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2BB60BEC1E9A040C00AF7E6F /* MainInterface.storyboard */; };
 		2BB60BF01E9A040C00AF7E6F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2BB60BEF1E9A040C00AF7E6F /* Assets.xcassets */; };
+		2BDF7B011F326C1A009F3103 /* UIColor+Random.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BDF7B001F326C1A009F3103 /* UIColor+Random.swift */; };
+		2BDF7B031F328E57009F3103 /* SpinningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BDF7B021F328E57009F3103 /* SpinningView.swift */; };
+		2BDF7B061F32E820009F3103 /* Constants.swift in Resources */ = {isa = PBXBuildFile; fileRef = 2BDF7B041F32E81A009F3103 /* Constants.swift */; };
 		9411C8797FD720948EC714FA /* Pods_WinkChat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23A12148946307A725361625 /* Pods_WinkChat.framework */; };
 		CE6B0A8A085E5DB7A0E90611 /* Pods_MessagesExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AB6097E52CE0AAD852811F1 /* Pods_MessagesExtension.framework */; };
 /* End PBXBuildFile section */
@@ -82,6 +85,9 @@
 		2BB60BED1E9A040C00AF7E6F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		2BB60BEF1E9A040C00AF7E6F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2BB60BF11E9A040C00AF7E6F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2BDF7B001F326C1A009F3103 /* UIColor+Random.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Random.swift"; sourceTree = "<group>"; };
+		2BDF7B021F328E57009F3103 /* SpinningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpinningView.swift; sourceTree = "<group>"; };
+		2BDF7B041F32E81A009F3103 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		4A23F8C20AFF741749F1769E /* Pods-WinkChat.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WinkChat.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WinkChat/Pods-WinkChat.debug.xcconfig"; sourceTree = "<group>"; };
 		8AB6097E52CE0AAD852811F1 /* Pods_MessagesExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MessagesExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A686F418B249C7E75EF59837 /* Pods-MessagesExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MessagesExtension.release.xcconfig"; path = "Pods/Target Support Files/Pods-MessagesExtension/Pods-MessagesExtension.release.xcconfig"; sourceTree = "<group>"; };
@@ -114,7 +120,7 @@
 			children = (
 				2B4E10211F060F3500B93E89 /* URL+FileURL.swift */,
 				2B1429C41EFF87D500043D08 /* UIImage+Resized.swift */,
-				2BB009821F204A5100CCF89A /* RxReachability.swift */,
+				2BDF7B001F326C1A009F3103 /* UIColor+Random.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -183,6 +189,7 @@
 				2B1429B41EFF832600043D08 /* EmotionAPI */,
 				2B1429B11EFF82A800043D08 /* Extensions */,
 				2BB60BDB1E9A040C00AF7E6F /* Assets.xcassets */,
+				2BDF7B041F32E81A009F3103 /* Constants.swift */,
 				2BB60BDD1E9A040C00AF7E6F /* Info.plist */,
 			);
 			path = WinkChat;
@@ -202,6 +209,7 @@
 			isa = PBXGroup;
 			children = (
 				2B70F5311F08B5B000CD1E17 /* InfoView.swift */,
+				2BB009821F204A5100CCF89A /* RxReachability.swift */,
 				2B70F5331F08B5BA00CD1E17 /* InfoView.xib */,
 				2B8C17251EA2E8910064CD27 /* MessagesExtension.entitlements */,
 				2BB60BEA1E9A040C00AF7E6F /* MessagesViewController.swift */,
@@ -210,6 +218,7 @@
 				2BB60BF11E9A040C00AF7E6F /* Info.plist */,
 				2B1CE3551F2FD11800D5171E /* GifCell.swift */,
 				2B1CE3571F30080C00D5171E /* GifCollectionViewLayout.swift */,
+				2BDF7B021F328E57009F3103 /* SpinningView.swift */,
 			);
 			path = MessagesExtension;
 			sourceTree = "<group>";
@@ -322,6 +331,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2BB60BDC1E9A040C00AF7E6F /* Assets.xcassets in Resources */,
+				2BDF7B061F32E820009F3103 /* Constants.swift in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -434,6 +444,8 @@
 				2BB60BEB1E9A040C00AF7E6F /* MessagesViewController.swift in Sources */,
 				2B1429C51EFF87D500043D08 /* UIImage+Resized.swift in Sources */,
 				2BB009831F204A5100CCF89A /* RxReachability.swift in Sources */,
+				2BDF7B011F326C1A009F3103 /* UIColor+Random.swift in Sources */,
+				2BDF7B031F328E57009F3103 /* SpinningView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

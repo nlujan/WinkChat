@@ -10,7 +10,5 @@ import UIKit
 import SDWebImage
 
 class GifCell: UICollectionViewCell {
-    
-    @IBOutlet var gifImage: FLAnimatedImageView!
-    
+    @IBOutlet var gif: FLAnimatedImageView!
 }

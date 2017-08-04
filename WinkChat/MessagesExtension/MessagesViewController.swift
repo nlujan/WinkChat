@@ -20,7 +20,7 @@ class MessagesViewController: MSMessagesAppViewController {
     fileprivate var captureDevice: AVCaptureDevice!
     fileprivate let queue = DispatchQueue(label: "AV Session Queue", attributes: [], target: nil)
     fileprivate var authorizationStatus: AVAuthorizationStatus {
-        return AVCaptureDevice.authorizationStatus(for: AVMediaType.video)
+        return AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo)
     }
     fileprivate let disposeBag = DisposeBag()
     fileprivate let viewModel = ViewModel()
@@ -80,7 +80,6 @@ class MessagesViewController: MSMessagesAppViewController {
         // Called after the extension transitions to a new presentation style.
     
         // Use this method to finalize any behaviors associated with the change in presentation style.
-          
     }
 }
 
@@ -114,6 +113,7 @@ extension MessagesViewController {
         startSession()
         
         mainCameraControlsView.alpha = 0
+        
 //
 //        view.topAnchor.constraint(equalTo: self.topLayoutGuide.bottomAnchor).isActive = true
     }
@@ -275,10 +275,10 @@ extension MessagesViewController {
     
     func configureViews() {
         
-        let preview = AVCaptureVideoPreviewLayer(session: self.captureSession)
+        guard let preview = AVCaptureVideoPreviewLayer(session: self.captureSession) else { return }
         
         previewLayer = preview
-        previewLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
+        previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
         cameraView.layer.addSublayer(previewLayer)
         previewLayer.frame = cameraView.bounds.insetBy(dx: cameraView.lineWidth, dy: cameraView.lineWidth)
         
@@ -292,7 +292,7 @@ extension MessagesViewController {
     fileprivate func requestAuthorizationIfNeeded() {
         guard .notDetermined == authorizationStatus else { return }
         queue.suspend()
-        AVCaptureDevice.requestAccess(for: AVMediaType.video) { [unowned self] granted in
+        AVCaptureDevice.requestAccess(forMediaType: AVMediaTypeVideo) { [unowned self] granted in
             guard granted else { return }
             self.queue.resume()
         }
@@ -303,13 +303,13 @@ extension MessagesViewController {
             
             guard .authorized == self.authorizationStatus else { return }
             
-            guard let camera: AVCaptureDevice = AVCaptureDevice.DiscoverySession(__deviceTypes: [.builtInWideAngleCamera],
-                 mediaType: AVMediaType.video, position: .front).devices.first else { return }
+            guard let camera: AVCaptureDevice = AVCaptureDevice.defaultDevice(withDeviceType:
+                .builtInWideAngleCamera, mediaType: AVMediaTypeVideo, position: .front) else { return }
             
             defer { self.captureSession.commitConfiguration() }
             
             self.captureSession.beginConfiguration()
-            self.captureSession.sessionPreset = AVCaptureSession.Preset.medium
+            self.captureSession.sessionPreset = AVCaptureSessionPresetMedium
             
             do {
                 let captureDeviceInput = try AVCaptureDeviceInput(device: camera)
@@ -329,7 +329,7 @@ extension MessagesViewController {
     fileprivate func takePhoto() {
         queue.async { [unowned self] in
             let settings = AVCapturePhotoSettings()
-            let previewPixelType = settings.__availablePreviewPhotoPixelFormatTypes.first!
+            let previewPixelType = settings.availablePreviewPhotoPixelFormatTypes.first!
             let previewFormat = [kCVPixelBufferPixelFormatTypeKey as String: previewPixelType,
                                  kCVPixelBufferWidthKey as String: 160,
                                  kCVPixelBufferHeightKey as String: 160,
@@ -359,11 +359,16 @@ extension MessagesViewController {
 // MARK: - AVCapturePhotoCaptureDelegate
 
 extension MessagesViewController: AVCapturePhotoCaptureDelegate {
-    func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
-        guard let dataImage = photo.fileDataRepresentation() else {
+    func capture(_ captureOutput: AVCapturePhotoOutput, didFinishProcessingPhotoSampleBuffer photoSampleBuffer: CMSampleBuffer?, previewPhotoSampleBuffer: CMSampleBuffer?, resolvedSettings: AVCaptureResolvedPhotoSettings, bracketSettings: AVCaptureBracketedStillImageSettings?, error: Error?) {
+        
+        guard let sampleBuffer = photoSampleBuffer,
+            let previewBuffer = previewPhotoSampleBuffer,
+            let dataImage =  AVCapturePhotoOutput.jpegPhotoDataRepresentation(forJPEGSampleBuffer:  sampleBuffer, previewPhotoSampleBuffer: previewBuffer)
+        else {
             print("Error capturing photo: \(String(describing: error))")
             return
         }
+        
         stopSession()
         
         let imageFileURL = URL.cachedFileURL(Constants.ImageFilename)

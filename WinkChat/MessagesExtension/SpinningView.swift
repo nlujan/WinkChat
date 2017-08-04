@@ -78,7 +78,7 @@ class SpinningView: UIView {
     func setup() {
         circleLayer.lineWidth = lineWidth
         circleLayer.fillColor = nil
-        circleLayer.strokeColor = UIColor.green.cgColor
+        circleLayer.strokeColor = UIColor(red:0.00, green:0.57, blue:0.04, alpha:1.0).cgColor
         layer.addSublayer(circleLayer)
         
 

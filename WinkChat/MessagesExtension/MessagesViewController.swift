@@ -80,6 +80,7 @@ class MessagesViewController: MSMessagesAppViewController {
         // Called after the extension transitions to a new presentation style.
     
         // Use this method to finalize any behaviors associated with the change in presentation style.
+          
     }
 }
 
@@ -99,8 +100,6 @@ extension MessagesViewController {
             layout.delegate = self
         }
         
-        
-        
         bindCollectionView()
         
         
@@ -115,6 +114,8 @@ extension MessagesViewController {
         startSession()
         
         mainCameraControlsView.alpha = 0
+//
+//        view.topAnchor.constraint(equalTo: self.topLayoutGuide.bottomAnchor).isActive = true
     }
     
     override func viewDidAppear(_ animated: Bool) {

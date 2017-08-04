@@ -34,7 +34,8 @@
                                         <rect key="frame" x="247.5" y="0.0" width="72.5" height="223"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gLr-kG-lQ2">
-                                                <rect key="frame" x="12.5" y="87" width="48" height="48"/>
+                                                <rect key="frame" x="6.5" y="81" width="60" height="60"/>
+                                                <color key="tintColor" red="0.37156623781796128" green="0.40175557885866753" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                 <state key="normal" image="shutter"/>
                                                 <state key="highlighted" image="shutterPressed"/>
                                             </button>
@@ -45,28 +46,24 @@
                                             <constraint firstItem="gLr-kG-lQ2" firstAttribute="centerY" secondItem="VXH-g6-JZO" secondAttribute="centerY" id="wVU-t0-zB8"/>
                                         </constraints>
                                     </view>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4cT-iH-Ppv" userLabel="Activity Container">
-                                        <rect key="frame" x="0.0" y="0.0" width="72.5" height="223"/>
-                                        <color key="backgroundColor" white="1" alpha="0.0" colorSpace="calibratedWhite"/>
-                                    </view>
                                 </subviews>
+                                <color key="tintColor" red="0.36306566508978932" green="0.41873909852408686" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="VXH-g6-JZO" secondAttribute="trailing" id="39g-Jy-9kP"/>
                                     <constraint firstItem="VXH-g6-JZO" firstAttribute="leading" secondItem="iO2-tb-tZZ" secondAttribute="trailing" id="BAD-gP-lad"/>
-                                    <constraint firstItem="4cT-iH-Ppv" firstAttribute="top" secondItem="3Aq-kc-cNt" secondAttribute="top" id="H6k-DF-1mT"/>
                                     <constraint firstItem="iO2-tb-tZZ" firstAttribute="centerX" secondItem="3Aq-kc-cNt" secondAttribute="centerX" id="JCV-YP-yGv"/>
                                     <constraint firstAttribute="height" constant="223" id="MhX-GG-lji"/>
                                     <constraint firstItem="iO2-tb-tZZ" firstAttribute="centerY" secondItem="3Aq-kc-cNt" secondAttribute="centerY" id="NW7-jb-S7y"/>
                                     <constraint firstItem="VXH-g6-JZO" firstAttribute="top" secondItem="3Aq-kc-cNt" secondAttribute="top" id="SQe-YG-bVl"/>
-                                    <constraint firstItem="4cT-iH-Ppv" firstAttribute="leading" secondItem="3Aq-kc-cNt" secondAttribute="leading" id="Tf5-ht-2dl"/>
-                                    <constraint firstItem="iO2-tb-tZZ" firstAttribute="leading" secondItem="4cT-iH-Ppv" secondAttribute="trailing" id="cVx-06-sFP"/>
                                     <constraint firstAttribute="bottom" secondItem="VXH-g6-JZO" secondAttribute="bottom" id="gL5-Tt-VKx"/>
-                                    <constraint firstAttribute="bottom" secondItem="4cT-iH-Ppv" secondAttribute="bottom" id="iJ6-n2-6Yg"/>
                                 </constraints>
                             </view>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="0ht-eF-YGh">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="305"/>
-                                <color key="backgroundColor" red="0.10955360426558575" green="0.25489803174210768" blue="0.52741812794937371" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <color key="backgroundColor" red="0.0012566797668114305" green="0.085901707410812378" blue="0.25109794735908508" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="305" id="saQ-dY-Fzs"/>
+                                </constraints>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Ko0-fh-lLF">
                                     <size key="itemSize" width="80" height="80"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -86,7 +83,7 @@
                                                 </imageView>
                                             </subviews>
                                         </view>
-                                        <color key="backgroundColor" red="0.0" green="0.68132691062176165" blue="0.16558276619824813" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <color key="backgroundColor" red="0.017373697832226753" green="0.4040432870388031" blue="0.28243324160575867" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         <constraints>
                                             <constraint firstItem="qNN-aJ-B0K" firstAttribute="top" secondItem="6pS-FS-O0H" secondAttribute="top" id="NyX-jc-hIH"/>
                                             <constraint firstAttribute="trailing" secondItem="qNN-aJ-B0K" secondAttribute="trailing" id="p3m-3u-3he"/>
@@ -105,7 +102,7 @@
                                 </cells>
                             </collectionView>
                         </subviews>
-                        <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.0033229044638574123" green="0.13649722933769226" blue="0.40402635931968689" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
                             <constraint firstItem="0ht-eF-YGh" firstAttribute="leading" secondItem="zMn-AG-sqS" secondAttribute="leading" id="5Ek-Lx-vIN"/>
                             <constraint firstItem="3Aq-kc-cNt" firstAttribute="top" secondItem="0ht-eF-YGh" secondAttribute="bottom" id="9uS-Ge-hYu"/>
@@ -119,7 +116,6 @@
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <size key="freeformSize" width="320" height="528"/>
                     <connections>
-                        <outlet property="activityContainer" destination="4cT-iH-Ppv" id="qpY-Xo-IcT"/>
                         <outlet property="cameraButton" destination="gLr-kG-lQ2" id="905-VC-L2V"/>
                         <outlet property="cameraView" destination="iO2-tb-tZZ" id="539-yV-bKS"/>
                         <outlet property="collectionView" destination="0ht-eF-YGh" id="BQd-ym-7pO"/>
@@ -132,7 +128,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="shutter" width="48" height="48"/>
-        <image name="shutterPressed" width="48" height="48"/>
+        <image name="shutter" width="60" height="60"/>
+        <image name="shutterPressed" width="60" height="60"/>
     </resources>
 </document>

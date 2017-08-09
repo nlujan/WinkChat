@@ -24,12 +24,16 @@ struct GiphyAPI: GiphyProtocol {
         return provider
             .request(Giphy.Random(searchText: text))
             .mapObjectOptional(type: Gif.self, keyPath: "data")
+            .timeout(Constants.Timeout, scheduler: MainScheduler.instance)
+            .catchErrorJustReturn(nil)
     }
     
     static func getSearchGifsFrom(text: String) -> Observable<[Gif]?> {
         return provider
             .request(Giphy.Search(searchText: text))
             .mapArrayOptional(type: Gif.self, keyPath: "data")
+            .timeout(Constants.Timeout, scheduler: MainScheduler.instance)
+            .catchErrorJustReturn(nil)
     }
 }
 

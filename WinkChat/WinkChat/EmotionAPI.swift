@@ -29,6 +29,8 @@ struct EmotionAPI: EmotionProtocol {
             .request(EmotionEndpoint.Recognize(imageUrl: imageUrl))
             .mapArrayOptional(type: Emotion.self)
             .replaceNilWith([])
+            .timeout(Constants.Timeout, scheduler: MainScheduler.instance)
+            .catchErrorJustReturn([])
     }
 }
 

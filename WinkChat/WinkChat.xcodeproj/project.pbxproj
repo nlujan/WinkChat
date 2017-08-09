@@ -82,7 +82,7 @@
 		2BB60BDD1E9A040C00AF7E6F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2BB60BE21E9A040C00AF7E6F /* MessagesExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MessagesExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		2BB60BE71E9A040C00AF7E6F /* Messages.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Messages.framework; path = System/Library/Frameworks/Messages.framework; sourceTree = SDKROOT; };
-		2BB60BEA1E9A040C00AF7E6F /* MessagesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesViewController.swift; sourceTree = "<group>"; };
+		2BB60BEA1E9A040C00AF7E6F /* MessagesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MessagesViewController.swift; path = MessagesExtension/MessagesViewController.swift; sourceTree = "<group>"; };
 		2BB60BED1E9A040C00AF7E6F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		2BB60BEF1E9A040C00AF7E6F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2BB60BF11E9A040C00AF7E6F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -166,6 +166,7 @@
 			children = (
 				2BB60BDA1E9A040C00AF7E6F /* WinkChat */,
 				2BB60BE91E9A040C00AF7E6F /* MessagesExtension */,
+				2BB60BEA1E9A040C00AF7E6F /* MessagesViewController.swift */,
 				2BB60BE61E9A040C00AF7E6F /* Frameworks */,
 				2BB60BD91E9A040C00AF7E6F /* Products */,
 				DE49953211AD1636E5004AEA /* Pods */,
@@ -184,14 +185,13 @@
 		2BB60BDA1E9A040C00AF7E6F /* WinkChat */ = {
 			isa = PBXGroup;
 			children = (
+				2BB66C941F3A9F1100450202 /* Utils */,
+				2BB66C931F3A9EEE00450202 /* Assets */,
 				2B1429C61EFF87FC00043D08 /* Data Entities */,
 				2B1429B81EFF85D300043D08 /* View Models */,
 				2B1429B71EFF859B00043D08 /* GiphyAPI */,
 				2B1429B41EFF832600043D08 /* EmotionAPI */,
 				2B1429B11EFF82A800043D08 /* Extensions */,
-				2BB60BDB1E9A040C00AF7E6F /* Assets.xcassets */,
-				2BDF7B041F32E81A009F3103 /* Constants.swift */,
-				2BB60BDD1E9A040C00AF7E6F /* Info.plist */,
 			);
 			path = WinkChat;
 			sourceTree = "<group>";
@@ -209,19 +209,75 @@
 		2BB60BE91E9A040C00AF7E6F /* MessagesExtension */ = {
 			isa = PBXGroup;
 			children = (
-				2B70F5311F08B5B000CD1E17 /* InfoView.swift */,
-				2BB009821F204A5100CCF89A /* RxReachability.swift */,
-				2B70F5331F08B5BA00CD1E17 /* InfoView.xib */,
-				2B8C17251EA2E8910064CD27 /* MessagesExtension.entitlements */,
-				2BB60BEA1E9A040C00AF7E6F /* MessagesViewController.swift */,
-				2BB60BEC1E9A040C00AF7E6F /* MainInterface.storyboard */,
-				2BB60BEF1E9A040C00AF7E6F /* Assets.xcassets */,
-				2BB60BF11E9A040C00AF7E6F /* Info.plist */,
-				2B1CE3551F2FD11800D5171E /* GifCell.swift */,
-				2B1CE3571F30080C00D5171E /* GifCollectionViewLayout.swift */,
-				2BDF7B021F328E57009F3103 /* SpinningView.swift */,
+				2BB66C961F3A9F8D00450202 /* Views */,
+				2BB66C951F3A9F3900450202 /* Assets */,
+				2BB66C921F3A9E8200450202 /* Utils */,
 			);
 			path = MessagesExtension;
+			sourceTree = "<group>";
+		};
+		2BB66C911F3A9E5900450202 /* InfoView */ = {
+			isa = PBXGroup;
+			children = (
+				2B70F5311F08B5B000CD1E17 /* InfoView.swift */,
+				2B70F5331F08B5BA00CD1E17 /* InfoView.xib */,
+			);
+			name = InfoView;
+			sourceTree = "<group>";
+		};
+		2BB66C921F3A9E8200450202 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				2BB009821F204A5100CCF89A /* RxReachability.swift */,
+			);
+			name = Utils;
+			sourceTree = "<group>";
+		};
+		2BB66C931F3A9EEE00450202 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				2BB60BDD1E9A040C00AF7E6F /* Info.plist */,
+				2BB60BDB1E9A040C00AF7E6F /* Assets.xcassets */,
+			);
+			name = Assets;
+			sourceTree = "<group>";
+		};
+		2BB66C941F3A9F1100450202 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				2BDF7B041F32E81A009F3103 /* Constants.swift */,
+			);
+			name = Utils;
+			sourceTree = "<group>";
+		};
+		2BB66C951F3A9F3900450202 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				2BB60BF11E9A040C00AF7E6F /* Info.plist */,
+				2BB60BEF1E9A040C00AF7E6F /* Assets.xcassets */,
+				2BB60BEC1E9A040C00AF7E6F /* MainInterface.storyboard */,
+				2B8C17251EA2E8910064CD27 /* MessagesExtension.entitlements */,
+			);
+			name = Assets;
+			sourceTree = "<group>";
+		};
+		2BB66C961F3A9F8D00450202 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				2BB66C911F3A9E5900450202 /* InfoView */,
+				2BB66C971F3A9FCC00450202 /* Collection View */,
+				2BDF7B021F328E57009F3103 /* SpinningView.swift */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		2BB66C971F3A9FCC00450202 /* Collection View */ = {
+			isa = PBXGroup;
+			children = (
+				2B1CE3571F30080C00D5171E /* GifCollectionViewLayout.swift */,
+				2B1CE3551F2FD11800D5171E /* GifCell.swift */,
+			);
+			name = "Collection View";
 			sourceTree = "<group>";
 		};
 		DE49953211AD1636E5004AEA /* Pods */ = {

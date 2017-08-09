@@ -26,12 +26,13 @@ class MessagesViewController: MSMessagesAppViewController {
     fileprivate let viewModel = ViewModel()
     fileprivate let gifs = Variable<[Gif]>([])
     
+    fileprivate var cameraHeight: CGFloat?
     @IBOutlet var cameraView: SpinningView!
     @IBOutlet var collectionView: UICollectionView!
     @IBOutlet var cameraButton: UIButton!
     @IBOutlet var mainCameraControlsView: UIView!
+    @IBOutlet var cameraControlsHeight: NSLayoutConstraint!
     
-    @IBOutlet var activityContainer: UIView!
     // MARK: - Conversation Handling
     
     override func willBecomeActive(with conversation: MSConversation) {
@@ -74,6 +75,8 @@ class MessagesViewController: MSMessagesAppViewController {
         // Called before the extension transitions to a new presentation style.
     
         // Use this method to prepare for the change in presentation style.
+        
+        removeInfoViewIfPresent()
     }
     
     override func didTransition(to presentationStyle: MSMessagesAppPresentationStyle) {
@@ -93,16 +96,7 @@ extension MessagesViewController {
         }
         
         configureViews()
-        
-        collectionView.setCollectionViewLayout(GifCollectionViewLayout(), animated: false)
-        if let layout = collectionView?.collectionViewLayout as? GifCollectionViewLayout {
-            layout.delegate = self
-        }
-        
         bindCollectionView()
-        
-        
-        
         requestAuthorizationIfNeeded()
         configureSession()
         bindViewModel()
@@ -113,9 +107,6 @@ extension MessagesViewController {
         startSession()
         
         mainCameraControlsView.alpha = 0
-        
-//
-//        view.topAnchor.constraint(equalTo: self.topLayoutGuide.bottomAnchor).isActive = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -124,12 +115,22 @@ extension MessagesViewController {
         UIView.animate(withDuration: 2.0) {
             self.mainCameraControlsView.alpha = 1.0
         }
-        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         stopSession()
         super.viewWillDisappear(animated)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        
+        if inPortraitOrientation() {
+            if let h = cameraHeight {
+                cameraControlsHeight.constant = h
+            }
+        } else {
+            cameraControlsHeight.constant = view.bounds.height - topLayoutGuide.length - bottomLayoutGuide.length
+        }
     }
     
     func bindViewModel() {
@@ -162,7 +163,7 @@ extension MessagesViewController {
                     case .NoFaceDetected:
                         InfoView.showIn(viewController: self, message: "No face detected, please try again")
                     case .NoGifRecieved:
-                        InfoView.showIn(viewController: self, message: "Unable to retreive Gif, please try again")
+                        InfoView.showIn(viewController: self, message: "Network issue, please check connection and try again")
                 }
                 self.startSession()
             })
@@ -171,7 +172,8 @@ extension MessagesViewController {
         cameraButton.rx.tap
             .subscribe(onNext: { _ in
                 self.updateActivityIndicator(isRunning: true)
-                self.takePhoto()
+//                self.takePhoto()
+                self.viewModel.testInput.onNext("happiness")
             })
             .disposed(by: disposeBag)
         
@@ -194,7 +196,7 @@ extension MessagesViewController {
             startSession()
             return
         }
-        if presentationStyle == .compact {
+        if presentationStyle == .compact || !inPortraitOrientation() {
             viewModel.randomUrlSubject.onNext(imageUrl)
             viewModel.searchUrlSubject.onNext(imageUrl)
         } else {
@@ -269,12 +271,32 @@ extension MessagesViewController {
             })
             .disposed(by: disposeBag)
     }
+    
+    func inPortraitOrientation() -> Bool {
+        return UIScreen.main.bounds.size.width < UIScreen.main.bounds.size.height
+    }
+    
+    func removeInfoViewIfPresent() {
+        let infoView = view.subviews.filter{ $0 is InfoView }
+        
+        if let info = infoView.first {
+            info.removeFromSuperview()
+        }
+    }
 }
 
 extension MessagesViewController {
     
     func configureViews() {
         
+        cameraHeight = view.bounds.height / 3
+        
+        // Set collectionview layout delegate
+        if let layout = collectionView?.collectionViewLayout as? GifCollectionViewLayout {
+            layout.delegate = self
+        }
+        
+        // Setup Video Preview Layer
         guard let preview = AVCaptureVideoPreviewLayer(session: self.captureSession) else { return }
         
         previewLayer = preview
@@ -284,9 +306,6 @@ extension MessagesViewController {
         
         cameraView.layer.cornerRadius = cameraView.frame.size.width/2
         previewLayer.cornerRadius = previewLayer.frame.size.width/2
-        
-//        cameraView.layer.borderColor = UIColor.green.cgColor
-//        cameraView.layer.borderWidth = 8.0
     }
     
     fileprivate func requestAuthorizationIfNeeded() {

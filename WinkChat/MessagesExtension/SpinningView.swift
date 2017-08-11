@@ -97,6 +97,7 @@ class SpinningView: UIView {
         
         circleLayer.position = center
         circleLayer.path = path.cgPath
+        
     }
     
     func updateAnimation() {

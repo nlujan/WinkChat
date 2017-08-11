@@ -26,12 +26,14 @@ class MessagesViewController: MSMessagesAppViewController {
     fileprivate let viewModel = ViewModel()
     fileprivate let gifs = Variable<[Gif]>([])
     
-    fileprivate var cameraHeight: CGFloat?
+    fileprivate var isLandscape = false
+    
     @IBOutlet var cameraView: SpinningView!
     @IBOutlet var collectionView: UICollectionView!
     @IBOutlet var cameraButton: UIButton!
     @IBOutlet var mainCameraControlsView: UIView!
-    @IBOutlet var cameraControlsHeight: NSLayoutConstraint!
+    
+    @IBOutlet var selfieImage: UIImageView!
     
     // MARK: - Conversation Handling
     
@@ -106,7 +108,7 @@ extension MessagesViewController {
         super.viewWillAppear(animated)
         startSession()
         
-        mainCameraControlsView.alpha = 0
+//        mainCameraControlsView.alpha = 0
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -124,12 +126,51 @@ extension MessagesViewController {
     
     override func viewDidLayoutSubviews() {
         
+        if let connection = previewLayer.connection {
+            let orientation = UIScreen.main.orientation
+            
+            if connection.isVideoOrientationSupported {
+                
+                switch (orientation) {
+                    case .portrait: connection.videoOrientation = .portrait
+                        break
+                    case .landscapeRight: connection.videoOrientation = .landscapeRight
+                        break
+                    case .landscapeLeft: connection.videoOrientation = .landscapeLeft
+                        break
+                    case .portraitUpsideDown: connection.videoOrientation = .portraitUpsideDown
+                        break
+                    default: connection.videoOrientation = .portrait
+                        break
+                }
+            }
+        }
+        
         if inPortraitOrientation() {
-            if let h = cameraHeight {
-                cameraControlsHeight.constant = h
+            
+            if isLandscape {
+                removeInfoViewIfPresent()
+                refreshCollectionViewLayout()
+                isLandscape = false
             }
         } else {
-            cameraControlsHeight.constant = view.bounds.height - topLayoutGuide.length - bottomLayoutGuide.length
+            if !isLandscape {
+                removeInfoViewIfPresent()
+                refreshCollectionViewLayout()
+            }
+            isLandscape = true
+        }
+    }
+    
+    func refreshCollectionViewLayout() {
+        if let layout = collectionView?.collectionViewLayout as? GifCollectionViewLayout {
+            layout.cache.removeAll()
+            layout.numberOfColumns = inPortraitOrientation() ? 2 : 3
+            layout.invalidateLayout()
+        }
+        
+        if gifs.value.count > 0 {
+            collectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .top, animated: true)
         }
     }
     
@@ -138,8 +179,7 @@ extension MessagesViewController {
         viewModel
             .randomGifSubject
             .map { $0.image_url }
-            .subscribe(onNext: {url in
-                self.updateActivityIndicator(isRunning: false)
+            .subscribe(onNext: { url in
                 self.addGifToInputField(url: url)
                 self.startSession()
             })
@@ -147,9 +187,9 @@ extension MessagesViewController {
         
         viewModel
             .searchGifsSubject
-            .subscribe(onNext: {gifs in
+            .subscribe(onNext: { gifs in
                 self.gifs.value = gifs
-                self.updateActivityIndicator(isRunning: false)
+                self.refreshCollectionViewLayout()
                 self.startSession()
             })
             .disposed(by: disposeBag)
@@ -157,8 +197,6 @@ extension MessagesViewController {
         viewModel
             .errorSubject
             .subscribe(onNext: { error in
-                self.updateActivityIndicator(isRunning: false)
-                
                 switch error as! APIError {
                     case .NoFaceDetected:
                         InfoView.showIn(viewController: self, message: "No face detected, please try again")
@@ -171,32 +209,36 @@ extension MessagesViewController {
         
         cameraButton.rx.tap
             .subscribe(onNext: { _ in
-                self.updateActivityIndicator(isRunning: true)
-//                self.takePhoto()
-                self.viewModel.testInput.onNext("happiness")
+                self.takePhoto()
+//                self.viewModel.testInput.onNext("happiness")
+            })
+            .disposed(by: disposeBag)
+        
+        Observable.from([
+//            viewModel.testInput.map { _ in true },
+            viewModel.randomUrlSubject.map { _ in true },
+            viewModel.searchUrlSubject.map { _ in true },
+            viewModel.randomGifSubject.map { _ in false },
+            viewModel.searchGifsSubject.map { _ in false },
+            viewModel.errorSubject.map { _ in false }
+            ]).merge()
+            .asDriver(onErrorJustReturn: false)
+            .asObservable()
+            .subscribe(onNext: { isRunning in
+                self.cameraView.animating = isRunning
             })
             .disposed(by: disposeBag)
         
     }
     
-    func updateActivityIndicator(isRunning: Bool) {
-        
-        if isRunning {
-            cameraView.animating = true
-        } else {
-            cameraView.animating = false
-        }
-    }
-    
     func notifyViewModelOfImageUrl(imageUrl: URL) {
         
         guard RxReachability.shared.isOnline() else {
-            updateActivityIndicator(isRunning: false)
             InfoView.showIn(viewController: self, message: "No internet connection found, please reconnect and try again")
             startSession()
             return
         }
-        if presentationStyle == .compact || !inPortraitOrientation() {
+        if presentationStyle == .compact {
             viewModel.randomUrlSubject.onNext(imageUrl)
             viewModel.searchUrlSubject.onNext(imageUrl)
         } else {
@@ -288,10 +330,6 @@ extension MessagesViewController {
 extension MessagesViewController {
     
     func configureViews() {
-        
-        cameraHeight = view.bounds.height / 3
-        
-        // Set collectionview layout delegate
         if let layout = collectionView?.collectionViewLayout as? GifCollectionViewLayout {
             layout.delegate = self
         }
@@ -373,6 +411,30 @@ extension MessagesViewController {
             self.captureSession.stopRunning()
         }
     }
+    
+    func setImageOrientation(image: UIImage, deviceOrientation: UIInterfaceOrientation) -> UIImage {
+        
+        var imageOrientation : UIImageOrientation?
+        
+        switch (deviceOrientation) {
+            case .portrait:
+                imageOrientation = .right
+                break
+            case .landscapeRight:
+                imageOrientation = .down
+                break
+            case .landscapeLeft:
+                imageOrientation = .up
+                break
+            case .portraitUpsideDown:
+                imageOrientation = .left
+                break
+            default:
+                imageOrientation = .right
+                break
+        }
+        return UIImage(cgImage: image.cgImage!, scale: 1.0, orientation: imageOrientation!)
+    }
 }
 
 // MARK: - AVCapturePhotoCaptureDelegate
@@ -388,17 +450,45 @@ extension MessagesViewController: AVCapturePhotoCaptureDelegate {
             return
         }
         
-        stopSession()
+//        if UIScreen.main.orientation != .portrait {
+            let image = UIImage(data: dataImage)
+            let orientatedImage = setImageOrientation(image: image!, deviceOrientation: UIScreen.main.orientation)
         
-        let imageFileURL = URL.cachedFileURL(Constants.ImageFilename)
+            print(orientatedImage.size.width)
+            print(orientatedImage.size.height)
+            
+            selfieImage.image = orientatedImage
         
-        do {
-            try dataImage.write(to: imageFileURL)
-            notifyViewModelOfImageUrl(imageUrl: imageFileURL)
-        } catch {
-            print("Error saving captured photo to disk")
-            startSession()
-        }
+//            let dataImage1 = UIImagePNGRepresentation(orientatedImage)!
+            let dataImage1 = UIImageJPEGRepresentation(orientatedImage, 1)!
+            
+            stopSession()
+            
+            let imageFileURL = URL.cachedFileURL(Constants.ImageFilename)
+            
+            do {
+                try dataImage1.write(to: imageFileURL)
+                notifyViewModelOfImageUrl(imageUrl: imageFileURL)
+            } catch {
+                print("Error saving captured photo to disk")
+                startSession()
+            }
+//        } else {
+//            stopSession()
+//            
+//            let imageFileURL = URL.cachedFileURL(Constants.ImageFilename)
+//            
+//            do {
+//                try dataImage.write(to: imageFileURL)
+//                notifyViewModelOfImageUrl(imageUrl: imageFileURL)
+//            } catch {
+//                print("Error saving captured photo to disk")
+//                startSession()
+//            }
+//            
+//        }
+        
+        
     }
 }
 

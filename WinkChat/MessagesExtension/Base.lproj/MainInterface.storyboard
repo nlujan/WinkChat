@@ -50,19 +50,6 @@
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tBA-Rb-IMT">
                                         <rect key="frame" x="0.0" y="0.0" width="87" height="172"/>
-                                        <subviews>
-                                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ngj-eZ-gRj" userLabel="selfieImage">
-                                                <rect key="frame" x="7.5" y="50.5" width="71" height="71"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" secondItem="ngj-eZ-gRj" secondAttribute="height" multiplier="1:1" id="Ler-eO-YSm"/>
-                                                </constraints>
-                                            </imageView>
-                                        </subviews>
-                                        <constraints>
-                                            <constraint firstItem="ngj-eZ-gRj" firstAttribute="centerY" secondItem="tBA-Rb-IMT" secondAttribute="centerY" id="XjZ-LV-rED"/>
-                                            <constraint firstItem="ngj-eZ-gRj" firstAttribute="width" secondItem="tBA-Rb-IMT" secondAttribute="width" multiplier="0.8" constant="1" id="muG-hP-dTa"/>
-                                            <constraint firstItem="ngj-eZ-gRj" firstAttribute="centerX" secondItem="tBA-Rb-IMT" secondAttribute="centerX" id="xYO-Dh-5Lo"/>
-                                        </constraints>
                                     </view>
                                 </subviews>
                                 <color key="tintColor" red="0.36306566508978932" green="0.41873909852408686" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
@@ -135,7 +122,7 @@
                         <outlet property="cameraView" destination="iO2-tb-tZZ" id="539-yV-bKS"/>
                         <outlet property="collectionView" destination="0ht-eF-YGh" id="BQd-ym-7pO"/>
                         <outlet property="mainCameraControlsView" destination="3Aq-kc-cNt" id="bvE-Jo-KfP"/>
-                        <outlet property="selfieImage" destination="ngj-eZ-gRj" id="EN6-QO-qA3"/>
+                        <outlet property="selfieImageContainer" destination="tBA-Rb-IMT" id="v6z-nL-keb"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="X47-rx-isc" userLabel="First Responder" sceneMemberID="firstResponder"/>

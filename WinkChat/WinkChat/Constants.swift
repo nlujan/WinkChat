@@ -21,7 +21,7 @@ struct Constants {
     
     static let GifFilename = "gifFile.gif"
     static let ImageFilename = "image.png"
-    static let Timeout = 5.0
+    static let Timeout = 8.0
     
     struct ErrorMessage {
         static let Url = "www.giphy.com"

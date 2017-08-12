@@ -25,15 +25,14 @@ class MessagesViewController: MSMessagesAppViewController {
     fileprivate let disposeBag = DisposeBag()
     fileprivate let viewModel = ViewModel()
     fileprivate let gifs = Variable<[Gif]>([])
-    
-    fileprivate var isLandscape = false
+    fileprivate var currentOrientation: UIInterfaceOrientation = .portrait
     
     @IBOutlet var cameraView: SpinningView!
     @IBOutlet var collectionView: UICollectionView!
     @IBOutlet var cameraButton: UIButton!
     @IBOutlet var mainCameraControlsView: UIView!
-    
-    @IBOutlet var selfieImage: UIImageView!
+//    @IBOutlet var selfieImage: UIImageView!
+    @IBOutlet var selfieImageContainer: UIView!
     
     // MARK: - Conversation Handling
     
@@ -78,7 +77,7 @@ class MessagesViewController: MSMessagesAppViewController {
     
         // Use this method to prepare for the change in presentation style.
         
-        removeInfoViewIfPresent()
+        layoutInfoView()
     }
     
     override func didTransition(to presentationStyle: MSMessagesAppPresentationStyle) {
@@ -108,7 +107,7 @@ extension MessagesViewController {
         super.viewWillAppear(animated)
         startSession()
         
-//        mainCameraControlsView.alpha = 0
+        mainCameraControlsView.alpha = 0
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -126,51 +125,12 @@ extension MessagesViewController {
     
     override func viewDidLayoutSubviews() {
         
-        if let connection = previewLayer.connection {
-            let orientation = UIScreen.main.orientation
-            
-            if connection.isVideoOrientationSupported {
-                
-                switch (orientation) {
-                    case .portrait: connection.videoOrientation = .portrait
-                        break
-                    case .landscapeRight: connection.videoOrientation = .landscapeRight
-                        break
-                    case .landscapeLeft: connection.videoOrientation = .landscapeLeft
-                        break
-                    case .portraitUpsideDown: connection.videoOrientation = .portraitUpsideDown
-                        break
-                    default: connection.videoOrientation = .portrait
-                        break
-                }
-            }
-        }
-        
-        if inPortraitOrientation() {
-            
-            if isLandscape {
-                removeInfoViewIfPresent()
-                refreshCollectionViewLayout()
-                isLandscape = false
-            }
-        } else {
-            if !isLandscape {
-                removeInfoViewIfPresent()
-                refreshCollectionViewLayout()
-            }
-            isLandscape = true
-        }
-    }
-    
-    func refreshCollectionViewLayout() {
-        if let layout = collectionView?.collectionViewLayout as? GifCollectionViewLayout {
-            layout.cache.removeAll()
-            layout.numberOfColumns = inPortraitOrientation() ? 2 : 3
-            layout.invalidateLayout()
-        }
-        
-        if gifs.value.count > 0 {
-            collectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .top, animated: true)
+        if UIScreen.main.orientation != currentOrientation {
+            adjustPreviewVideoOrientation()
+            layoutSelfieView()
+            layoutInfoView()
+            refreshCollectionViewLayout()
+            currentOrientation = UIScreen.main.orientation
         }
     }
     
@@ -313,18 +273,7 @@ extension MessagesViewController {
             })
             .disposed(by: disposeBag)
     }
-    
-    func inPortraitOrientation() -> Bool {
-        return UIScreen.main.bounds.size.width < UIScreen.main.bounds.size.height
-    }
-    
-    func removeInfoViewIfPresent() {
-        let infoView = view.subviews.filter{ $0 is InfoView }
-        
-        if let info = infoView.first {
-            info.removeFromSuperview()
-        }
-    }
+
 }
 
 extension MessagesViewController {
@@ -341,9 +290,54 @@ extension MessagesViewController {
         previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
         cameraView.layer.addSublayer(previewLayer)
         previewLayer.frame = cameraView.bounds.insetBy(dx: cameraView.lineWidth, dy: cameraView.lineWidth)
+//        previewLayer.backgroundColor = UIColor.white.cgColor
         
         cameraView.layer.cornerRadius = cameraView.frame.size.width/2
         previewLayer.cornerRadius = previewLayer.frame.size.width/2
+    }
+    
+    func adjustPreviewVideoOrientation() {
+        if let connection = previewLayer.connection {
+            let orientation = UIScreen.main.orientation
+            
+            if connection.isVideoOrientationSupported {
+                
+                switch (orientation) {
+                case .portrait: connection.videoOrientation = .portrait
+                    break
+                case .landscapeRight: connection.videoOrientation = .landscapeRight
+                    break
+                case .landscapeLeft: connection.videoOrientation = .landscapeLeft
+                    break
+                case .portraitUpsideDown: connection.videoOrientation = .portraitUpsideDown
+                    break
+                default: connection.videoOrientation = .portrait
+                    break
+                }
+            }
+        }
+    }
+    
+    func refreshCollectionViewLayout() {
+        if let layout = collectionView?.collectionViewLayout as? GifCollectionViewLayout {
+            layout.cache.removeAll()
+            layout.numberOfColumns = UIScreen.main.orientation == .portrait ? 2 : 3
+            layout.invalidateLayout()
+        }
+        
+        if gifs.value.count > 0 {
+            collectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .top, animated: true)
+        }
+    }
+    
+    func layoutInfoView() {
+        let subviews = view.subviews.filter { $0 is InfoView }
+
+        if let infoView = subviews.first {
+            infoView.removeFromSuperview()
+            infoView.frame = CGRect(x: 0, y: 0 + topLayoutGuide.length, width: view.frame.size.width, height: 45)
+        }
+        
     }
     
     fileprivate func requestAuthorizationIfNeeded() {
@@ -418,22 +412,81 @@ extension MessagesViewController {
         
         switch (deviceOrientation) {
             case .portrait:
+                // right
                 imageOrientation = .right
                 break
             case .landscapeRight:
+                // down
                 imageOrientation = .down
                 break
             case .landscapeLeft:
+                // up
                 imageOrientation = .up
                 break
             case .portraitUpsideDown:
+                // left
                 imageOrientation = .left
                 break
             default:
+                // right
                 imageOrientation = .right
                 break
         }
         return UIImage(cgImage: image.cgImage!, scale: 1.0, orientation: imageOrientation!)
+    }
+    
+    func layoutSelfieView() {
+        
+        let subviews = selfieImageContainer.subviews.filter { $0 is UIImageView }
+        
+        if let selfieImageView = subviews.first as? UIImageView {
+            
+            let dims = getSelfieImageDims(image: selfieImageView.image!)
+            selfieImageView.frame = CGRect(x: 0, y: 0, width: dims.width, height: dims.height)
+            selfieImageView.center = CGPoint(x: selfieImageContainer.bounds.midX,
+                                             y: selfieImageContainer.bounds.midY)
+        }
+    }
+    
+    func getSelfieImageDims(image: UIImage) -> (width: CGFloat, height: CGFloat) {
+        
+        let aspectRatio: CGFloat = image.size.width / image.size.height
+        let scale: CGFloat = 0.6
+        
+        var width = selfieImageContainer.frame.width * scale
+        var height = width * (1 / aspectRatio)
+        
+        if width > selfieImageContainer.frame.width * scale || height > selfieImageContainer.frame.height * scale  {
+            height = selfieImageContainer.frame.height * scale
+            width = height * aspectRatio
+        }
+        
+        return (width: width, height: height)
+    }
+    
+    func addImageToView(image: UIImage) {
+       
+        let selfieImageView = UIImageView()
+        
+        selfieImageView.contentMode = .scaleAspectFit
+        selfieImageView.image = image
+        selfieImageView.layer.cornerRadius = 10
+        selfieImageView.clipsToBounds = true
+        selfieImageView.layer.borderWidth = 2
+        selfieImageView.layer.borderColor = UIColor.white.cgColor
+        
+        let dims = getSelfieImageDims(image: image)
+        selfieImageView.frame = CGRect(x: 0, y: 0, width: dims.width, height: dims.height)
+        selfieImageView.center = CGPoint(x: selfieImageContainer.bounds.midX,
+                                        y: selfieImageContainer.bounds.midY)
+        
+        selfieImageView.transform = CGAffineTransform(scaleX: -1, y: 1)
+        
+        for v in selfieImageContainer.subviews {
+            v.removeFromSuperview()
+        }
+        
+        selfieImageContainer.addSubview(selfieImageView)
     }
 }
 
@@ -450,45 +503,24 @@ extension MessagesViewController: AVCapturePhotoCaptureDelegate {
             return
         }
         
-//        if UIScreen.main.orientation != .portrait {
-            let image = UIImage(data: dataImage)
-            let orientatedImage = setImageOrientation(image: image!, deviceOrientation: UIScreen.main.orientation)
+        let image = UIImage(data: dataImage)
+        let orientatedImage = setImageOrientation(image: image!, deviceOrientation: UIScreen.main.orientation)
         
-            print(orientatedImage.size.width)
-            print(orientatedImage.size.height)
-            
-            selfieImage.image = orientatedImage
+        addImageToView(image: orientatedImage)
+    
+        let orientatedImageData = UIImageJPEGRepresentation(orientatedImage, 1)!
         
-//            let dataImage1 = UIImagePNGRepresentation(orientatedImage)!
-            let dataImage1 = UIImageJPEGRepresentation(orientatedImage, 1)!
-            
-            stopSession()
-            
-            let imageFileURL = URL.cachedFileURL(Constants.ImageFilename)
-            
-            do {
-                try dataImage1.write(to: imageFileURL)
-                notifyViewModelOfImageUrl(imageUrl: imageFileURL)
-            } catch {
-                print("Error saving captured photo to disk")
-                startSession()
-            }
-//        } else {
-//            stopSession()
-//            
-//            let imageFileURL = URL.cachedFileURL(Constants.ImageFilename)
-//            
-//            do {
-//                try dataImage.write(to: imageFileURL)
-//                notifyViewModelOfImageUrl(imageUrl: imageFileURL)
-//            } catch {
-//                print("Error saving captured photo to disk")
-//                startSession()
-//            }
-//            
-//        }
+        stopSession()
         
+        let imageFileURL = URL.cachedFileURL(Constants.ImageFilename)
         
+        do {
+            try orientatedImageData.write(to: imageFileURL)
+            notifyViewModelOfImageUrl(imageUrl: imageFileURL)
+        } catch {
+            print("Error saving captured photo to disk")
+            startSession()
+        }
     }
 }
 

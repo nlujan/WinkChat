@@ -29,13 +29,12 @@ class InfoView: UIView {
         sharedView.textLabel.text = message
 
         if sharedView?.superview == nil {
-            sharedView.frame = CGRect(x: 0, y: 0 + displayVC.topLayoutGuide.length, width: displayVC.view.frame.size.width, height: sharedView.frame.size.height)
+            sharedView.frame = CGRect(x: 0, y: 0 + displayVC.topLayoutGuide.length, width: displayVC.view.frame.size.width, height: 45)
             sharedView.alpha = 0.0
 
             displayVC.view.addSubview(sharedView)
             sharedView.fadeIn()
 
-            // this call needs to be counter balanced on fadeOut [1]
             sharedView.perform(#selector(fadeOut), with: nil, afterDelay: 3.0)
         }
         
@@ -55,7 +54,6 @@ class InfoView: UIView {
 
     @objc func fadeOut() {
 
-        // [1] Counter balance previous perfom:with:afterDelay
         NSObject.cancelPreviousPerformRequests(withTarget: self)
 
         UIView.animate(withDuration: 0.33, animations: {

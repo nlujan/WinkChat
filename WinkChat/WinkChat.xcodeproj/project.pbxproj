@@ -30,7 +30,6 @@
 		2BBED2EF1F3DA85F00969548 /* UIImage+Resized.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BBED2EE1F3DA85F00969548 /* UIImage+Resized.swift */; };
 		2BDF7B011F326C1A009F3103 /* UIColor+Random.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BDF7B001F326C1A009F3103 /* UIColor+Random.swift */; };
 		2BDF7B031F328E57009F3103 /* SpinningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BDF7B021F328E57009F3103 /* SpinningView.swift */; };
-		2BDF7B061F32E820009F3103 /* Constants.swift in Resources */ = {isa = PBXBuildFile; fileRef = 2BDF7B041F32E81A009F3103 /* Constants.swift */; };
 		2BDF7B071F33E231009F3103 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BDF7B041F32E81A009F3103 /* Constants.swift */; };
 		9411C8797FD720948EC714FA /* Pods_WinkChat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23A12148946307A725361625 /* Pods_WinkChat.framework */; };
 		CE6B0A8A085E5DB7A0E90611 /* Pods_MessagesExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AB6097E52CE0AAD852811F1 /* Pods_MessagesExtension.framework */; };
@@ -349,13 +348,13 @@
 				TargetAttributes = {
 					2BB60BD71E9A040C00AF7E6F = {
 						CreatedOnToolsVersion = 8.3.1;
-						DevelopmentTeam = X82HTQTSX4;
+						DevelopmentTeam = YMT2BF8Q69;
 						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
 					};
 					2BB60BE11E9A040C00AF7E6F = {
 						CreatedOnToolsVersion = 8.3.1;
-						DevelopmentTeam = X82HTQTSX4;
+						DevelopmentTeam = YMT2BF8Q69;
 						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
@@ -391,7 +390,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				2BB60BDC1E9A040C00AF7E6F /* Assets.xcassets in Resources */,
-				2BDF7B061F32E820009F3103 /* Constants.swift in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -647,11 +645,11 @@
 			baseConfigurationReference = F3E01529958EFCE7035CC632 /* Pods-MessagesExtension.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "iMessage App Icon";
-				DEVELOPMENT_TEAM = X82HTQTSX4;
+				DEVELOPMENT_TEAM = YMT2BF8Q69;
 				INFOPLIST_FILE = MessagesExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.capture.WinkChat.MessagesExtension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.naimlujan.WinkChat.MessagesExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
@@ -664,11 +662,12 @@
 			baseConfigurationReference = A686F418B249C7E75EF59837 /* Pods-MessagesExtension.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "iMessage App Icon";
-				DEVELOPMENT_TEAM = X82HTQTSX4;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = YMT2BF8Q69;
 				INFOPLIST_FILE = MessagesExtension/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.capture.WinkChat.MessagesExtension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.naimlujan.WinkChat.MessagesExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
@@ -682,11 +681,13 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = X82HTQTSX4;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = YMT2BF8Q69;
 				INFOPLIST_FILE = WinkChat/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
-				PRODUCT_BUNDLE_IDENTIFIER = com.capture.WinkChat;
+				PRODUCT_BUNDLE_IDENTIFIER = com.naimlujan.WinkChat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
 				SWIFT_VERSION = 3.0;
 			};
@@ -698,11 +699,14 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = X82HTQTSX4;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = YMT2BF8Q69;
 				INFOPLIST_FILE = WinkChat/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
-				PRODUCT_BUNDLE_IDENTIFIER = com.capture.WinkChat;
+				PRODUCT_BUNDLE_IDENTIFIER = com.naimlujan.WinkChat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_SWIFT3_OBJC_INFERENCE = On;
 				SWIFT_VERSION = 3.0;
 			};

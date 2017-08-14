@@ -31,7 +31,6 @@ class MessagesViewController: MSMessagesAppViewController {
     @IBOutlet var collectionView: UICollectionView!
     @IBOutlet var cameraButton: UIButton!
     @IBOutlet var mainCameraControlsView: UIView!
-//    @IBOutlet var selfieImage: UIImageView!
     @IBOutlet var selfieImageContainer: UIView!
     
     // MARK: - Conversation Handling
@@ -102,7 +101,7 @@ extension MessagesViewController {
         configureSession()
         bindViewModel()
         
-        viewModel.searchTextSubject.onNext("happiness")
+        viewModel.searchTextSubject.onNext(Constants.Emotion.Default)
     }
     
     override func viewWillAppear(_ animated: Bool) {

@@ -101,21 +101,23 @@ extension MessagesViewController {
         requestAuthorizationIfNeeded()
         configureSession()
         bindViewModel()
+        
+        viewModel.searchTextSubject.onNext("happiness")
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         startSession()
         
-        mainCameraControlsView.alpha = 0
+//        mainCameraControlsView.alpha = 0
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        UIView.animate(withDuration: 2.0) {
-            self.mainCameraControlsView.alpha = 1.0
-        }
+//        UIView.animate(withDuration: 2.0) {
+//            self.mainCameraControlsView.alpha = 1.0
+//        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -170,12 +172,10 @@ extension MessagesViewController {
         cameraButton.rx.tap
             .subscribe(onNext: { _ in
                 self.takePhoto()
-//                self.viewModel.testInput.onNext("happiness")
             })
             .disposed(by: disposeBag)
         
         Observable.from([
-//            viewModel.testInput.map { _ in true },
             viewModel.randomUrlSubject.map { _ in true },
             viewModel.searchUrlSubject.map { _ in true },
             viewModel.randomGifSubject.map { _ in false },
@@ -472,8 +472,8 @@ extension MessagesViewController {
         selfieImageView.image = image
         selfieImageView.layer.cornerRadius = 10
         selfieImageView.clipsToBounds = true
-        selfieImageView.layer.borderWidth = 2
-        selfieImageView.layer.borderColor = UIColor.white.cgColor
+        selfieImageView.layer.borderWidth = 3
+        selfieImageView.layer.borderColor = UIColor(red:0.25, green:0.50, blue:0.95, alpha:1.0).cgColor
         
         let dims = getSelfieImageDims(image: image)
         selfieImageView.frame = CGRect(x: 0, y: 0, width: dims.width, height: dims.height)
@@ -482,11 +482,27 @@ extension MessagesViewController {
         
         selfieImageView.transform = CGAffineTransform(scaleX: -1, y: 1)
         
-        for v in selfieImageContainer.subviews {
-            v.removeFromSuperview()
+        if selfieImageContainer.subviews.count > 0 {
+            if let imageView = selfieImageContainer.subviews[0] as? UIImageView {
+//                UIView.transition(with: selfieImageContainer, duration: 0.33, options: [.transitionCrossDissolve],
+//                    animations: {
+//                        imageView.removeFromSuperview()
+//                },
+//                    completion: { finished in
+//                        UIView.transition(with: self.selfieImageContainer, duration: 0.33, options: [.transitionCrossDissolve],
+//                            animations: {
+//                                self.selfieImageContainer.addSubview(selfieImageView)
+//                        },
+//                            completion: nil)
+//                })
+                imageView.removeFromSuperview()
+                selfieImageContainer.addSubview(selfieImageView)
+            }
+        } else {
+            selfieImageContainer.addSubview(selfieImageView)
         }
         
-        selfieImageContainer.addSubview(selfieImageView)
+        
     }
 }
 

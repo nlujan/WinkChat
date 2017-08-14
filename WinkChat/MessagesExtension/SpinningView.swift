@@ -12,7 +12,7 @@ class SpinningView: UIView {
     
     let circleLayer = CAShapeLayer()
     
-    let lineWidth: CGFloat = 6
+    let lineWidth: CGFloat = 5
     
     let strokeEndAnimation: CAAnimation = {
         let animation = CABasicAnimation(keyPath: "strokeEnd")

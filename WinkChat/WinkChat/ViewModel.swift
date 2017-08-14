@@ -14,12 +14,12 @@ class ViewModel {
     
     private let bag = DisposeBag()
     
+    // Inputs
     let randomUrlSubject = PublishSubject<URL>()
     let searchUrlSubject = PublishSubject<URL>()
+    let searchTextSubject = PublishSubject<String>()
     
-//    let testInput = PublishSubject<String>()
-    
-    
+    // Outputs
     let randomGifSubject = PublishSubject<Gif>()
     let searchGifsSubject = PublishSubject<[Gif]>()
     let errorSubject = PublishSubject<Error>()
@@ -30,18 +30,18 @@ class ViewModel {
     
     func bindOutput() {
         
-//        testInput
-//            .flatMap { searchText in
-//                GiphyAPI.getSearchGifsFrom(text: searchText)
-//            }
-//            .subscribe(onNext: { gif in
-//                if let g = gif {
-//                    self.searchGifsSubject.onNext(g)
-//                } else {
-//                    self.errorSubject.onNext(APIError.NoGifRecieved)
-//                }
-//            })
-//            .disposed(by: bag)
+        searchTextSubject
+            .flatMap { searchText in
+                GiphyAPI.getSearchGifsFrom(text: searchText)
+            }
+            .subscribe(onNext: { gif in
+                if let g = gif {
+                    self.searchGifsSubject.onNext(g)
+                } else {
+                    self.errorSubject.onNext(APIError.NoGifRecieved)
+                }
+            })
+            .disposed(by: bag)
         
         randomUrlSubject
             .flatMap { url in

@@ -12,7 +12,7 @@ import RxOptional
 
 class ViewModel {
     
-    private let bag = DisposeBag()
+    private let disposeBag = DisposeBag()
     
     // Inputs
     let randomUrlSubject = PublishSubject<URL>()
@@ -41,7 +41,7 @@ class ViewModel {
                     self.errorSubject.onNext(APIError.NoGifRecieved)
                 }
             })
-            .disposed(by: bag)
+            .disposed(by: disposeBag)
         
         randomUrlSubject
             .flatMap { url in
@@ -57,7 +57,7 @@ class ViewModel {
                     self.errorSubject.onNext(APIError.NoGifRecieved)
                 }
             })
-            .disposed(by: bag)
+            .disposed(by: disposeBag)
         
         searchUrlSubject
             .flatMap { url in
@@ -73,7 +73,7 @@ class ViewModel {
                     self.errorSubject.onNext(APIError.NoGifRecieved)
                 }
             })
-            .disposed(by: bag)
+            .disposed(by: disposeBag)
     }
     
     func getEmotionString(url: URL) -> Observable<String> {

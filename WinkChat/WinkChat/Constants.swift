@@ -25,6 +25,11 @@ struct Constants {
     static let Timeout = 8.0
     
     struct ErrorMessage {
-        static let Url = "www.giphy.com"
+        static let NetworkIssue = "Network issue, please check connection and try again"
+        static let NoFaceDetected = "No face detected, please try again"
     }
+    
+    //"No face detected, please try again"
+    //"Network issue, please check connection and try again"
+    //"No internet connection found, please reconnect and try again"
 }

@@ -27,11 +27,11 @@ class MessagesViewController: MSMessagesAppViewController {
     fileprivate let gifs = Variable<[Gif]>([])
     fileprivate var currentOrientation: UIInterfaceOrientation = .portrait
     
-    @IBOutlet var cameraView: SpinningView!
     @IBOutlet var collectionView: UICollectionView!
-    @IBOutlet var cameraButton: UIButton!
     @IBOutlet var mainCameraControlsView: UIView!
     @IBOutlet var selfieImageContainer: UIView!
+    @IBOutlet var cameraView: SpinningView!
+    @IBOutlet var cameraButton: UIButton!
     
     // MARK: - Conversation Handling
     
@@ -86,6 +86,8 @@ class MessagesViewController: MSMessagesAppViewController {
     }
 }
 
+// MARK: - UIViewController Overload Methods
+
 extension MessagesViewController {
     
     override func viewDidLoad() {
@@ -95,10 +97,15 @@ extension MessagesViewController {
             print("Reachability failed!")
         }
         
-        configureViews()
-        bindCollectionView()
+        if let layout = collectionView?.collectionViewLayout as? GifCollectionViewLayout {
+            layout.delegate = self
+        }
+        
+        configurePreviewLayer()
         requestAuthorizationIfNeeded()
         configureSession()
+        setPreviewVideoOrientation()
+        bindCollectionView()
         bindViewModel()
         
         viewModel.searchTextSubject.onNext(Constants.Emotion.Default)
@@ -107,16 +114,10 @@ extension MessagesViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         startSession()
-        
-//        mainCameraControlsView.alpha = 0
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
-//        UIView.animate(withDuration: 2.0) {
-//            self.mainCameraControlsView.alpha = 1.0
-//        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -127,13 +128,18 @@ extension MessagesViewController {
     override func viewDidLayoutSubviews() {
         
         if UIScreen.main.orientation != currentOrientation {
-            adjustPreviewVideoOrientation()
+            setPreviewVideoOrientation()
             layoutSelfieView()
             layoutInfoView()
-            refreshCollectionViewLayout()
+            layoutCollectionView()
             currentOrientation = UIScreen.main.orientation
         }
     }
+}
+
+// MARK: - ViewModel Binding and Interaction
+
+extension MessagesViewController {
     
     func bindViewModel() {
         
@@ -150,7 +156,7 @@ extension MessagesViewController {
             .searchGifsSubject
             .subscribe(onNext: { gifs in
                 self.gifs.value = gifs
-                self.refreshCollectionViewLayout()
+                self.layoutCollectionView()
                 self.startSession()
             })
             .disposed(by: disposeBag)
@@ -160,9 +166,9 @@ extension MessagesViewController {
             .subscribe(onNext: { error in
                 switch error as! APIError {
                     case .NoFaceDetected:
-                        InfoView.showIn(viewController: self, message: "No face detected, please try again")
+                        InfoView.showIn(viewController: self, message: Constants.ErrorMessage.NoFaceDetected)
                     case .NoGifRecieved:
-                        InfoView.showIn(viewController: self, message: "Network issue, please check connection and try again")
+                        InfoView.showIn(viewController: self, message: Constants.ErrorMessage.NetworkIssue)
                 }
                 self.startSession()
             })
@@ -193,7 +199,7 @@ extension MessagesViewController {
     func notifyViewModelOfImageUrl(imageUrl: URL) {
         
         guard RxReachability.shared.isOnline() else {
-            InfoView.showIn(viewController: self, message: "No internet connection found, please reconnect and try again")
+            InfoView.showIn(viewController: self, message: Constants.ErrorMessage.NetworkIssue)
             startSession()
             return
         }
@@ -204,6 +210,9 @@ extension MessagesViewController {
             viewModel.searchUrlSubject.onNext(imageUrl)
         }
     }
+}
+
+extension MessagesViewController {
     
     func addGifToInputField(url: String) {
         
@@ -239,63 +248,28 @@ extension MessagesViewController {
         
         collectionView.isUserInteractionEnabled = true
     }
-    
-    func bindCollectionView() {
-        
-        gifs.asObservable().bindTo(collectionView.rx.items(cellIdentifier: "gifCell", cellType: GifCell.self))
-        { row, data, cell in
-            cell.backgroundColor = UIColor().getRandom()
-            cell.gif.sd_setImage(with: URL(string: data.image_url))
-            }.addDisposableTo(disposeBag)
-        
-        collectionView.rx
-            .itemSelected
-            .subscribe(onNext: { indexPath in
-                self.collectionView.isUserInteractionEnabled = false
-                
-                let gif = self.gifs.value[indexPath.row]
-                
-                guard let cell = self.collectionView.cellForItem(at: indexPath) else {
-                    return
-                }
-                
-                UIView.animate(withDuration: 0.1, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 5, options: [],
-                   animations: { cell.transform = CGAffineTransform(scaleX: 0.9, y: 0.9) },
-                   completion: { finished in
-                        UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.2, initialSpringVelocity: 5, options: .curveEaseInOut,
-                           animations: { cell.transform = CGAffineTransform(scaleX: 1, y: 1) },
-                           completion: { finished in
-                                self.addGifToInputField(url: gif.image_url)
-                        }) }
-                )
-                
-            })
-            .disposed(by: disposeBag)
-    }
-
 }
 
+
 extension MessagesViewController {
+
     
-    func configureViews() {
-        if let layout = collectionView?.collectionViewLayout as? GifCollectionViewLayout {
-            layout.delegate = self
-        }
+    func configurePreviewLayer() {
         
-        // Setup Video Preview Layer
         guard let preview = AVCaptureVideoPreviewLayer(session: self.captureSession) else { return }
         
         previewLayer = preview
         previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
         cameraView.layer.addSublayer(previewLayer)
         previewLayer.frame = cameraView.bounds.insetBy(dx: cameraView.lineWidth, dy: cameraView.lineWidth)
-//        previewLayer.backgroundColor = UIColor.white.cgColor
         
         cameraView.layer.cornerRadius = cameraView.frame.size.width/2
         previewLayer.cornerRadius = previewLayer.frame.size.width/2
     }
     
-    func adjustPreviewVideoOrientation() {
+    // TODO: Possibly abstract this into extension
+    
+    func setPreviewVideoOrientation() {
         if let connection = previewLayer.connection {
             let orientation = UIScreen.main.orientation
             
@@ -315,28 +289,6 @@ extension MessagesViewController {
                 }
             }
         }
-    }
-    
-    func refreshCollectionViewLayout() {
-        if let layout = collectionView?.collectionViewLayout as? GifCollectionViewLayout {
-            layout.cache.removeAll()
-            layout.numberOfColumns = UIScreen.main.orientation == .portrait ? 2 : 3
-            layout.invalidateLayout()
-        }
-        
-        if gifs.value.count > 0 {
-            collectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .top, animated: true)
-        }
-    }
-    
-    func layoutInfoView() {
-        let subviews = view.subviews.filter { $0 is InfoView }
-
-        if let infoView = subviews.first {
-            infoView.removeFromSuperview()
-            infoView.frame = CGRect(x: 0, y: 0 + topLayoutGuide.length, width: view.frame.size.width, height: 45)
-        }
-        
     }
     
     fileprivate func requestAuthorizationIfNeeded() {
@@ -404,6 +356,22 @@ extension MessagesViewController {
             self.captureSession.stopRunning()
         }
     }
+}
+
+
+extension MessagesViewController {
+    
+    func layoutInfoView() {
+        let subviews = view.subviews.filter { $0 is InfoView }
+        
+        if let infoView = subviews.first {
+            infoView.removeFromSuperview()
+            infoView.frame = CGRect(x: 0, y: 0 + topLayoutGuide.length, width: view.frame.size.width, height: 45)
+        }
+        
+    }
+    
+    // TODO: Can move to UIImage Extension
     
     func setImageOrientation(image: UIImage, deviceOrientation: UIInterfaceOrientation) -> UIImage {
         
@@ -411,23 +379,19 @@ extension MessagesViewController {
         
         switch (deviceOrientation) {
             case .portrait:
-                // right
                 imageOrientation = .right
                 break
             case .landscapeRight:
-                // down
                 imageOrientation = .down
                 break
             case .landscapeLeft:
-                // up
                 imageOrientation = .up
                 break
             case .portraitUpsideDown:
-                // left
+
                 imageOrientation = .left
                 break
             default:
-                // right
                 imageOrientation = .right
                 break
         }
@@ -439,7 +403,6 @@ extension MessagesViewController {
         let subviews = selfieImageContainer.subviews.filter { $0 is UIImageView }
         
         if let selfieImageView = subviews.first as? UIImageView {
-            
             let dims = getSelfieImageDims(image: selfieImageView.image!)
             selfieImageView.frame = CGRect(x: 0, y: 0, width: dims.width, height: dims.height)
             selfieImageView.center = CGPoint(x: selfieImageContainer.bounds.midX,
@@ -447,6 +410,8 @@ extension MessagesViewController {
         }
     }
     
+    
+    // TODO: Can move to UIImage Extension
     func getSelfieImageDims(image: UIImage) -> (width: CGFloat, height: CGFloat) {
         
         let aspectRatio: CGFloat = image.size.width / image.size.height
@@ -463,7 +428,7 @@ extension MessagesViewController {
         return (width: width, height: height)
     }
     
-    func addImageToView(image: UIImage) {
+    func addSelfieImageToView(image: UIImage) {
        
         let selfieImageView = UIImageView()
         
@@ -521,9 +486,12 @@ extension MessagesViewController: AVCapturePhotoCaptureDelegate {
         let image = UIImage(data: dataImage)
         let orientatedImage = setImageOrientation(image: image!, deviceOrientation: UIScreen.main.orientation)
         
-        addImageToView(image: orientatedImage)
+        addSelfieImageToView(image: orientatedImage)
     
-        let orientatedImageData = UIImageJPEGRepresentation(orientatedImage, 1)!
+        guard let orientatedImageData = UIImageJPEGRepresentation(orientatedImage, 1) else {
+            print("Unable to orientate photo: \(String(describing: error))")
+            return
+        }
         
         stopSession()
         
@@ -539,11 +507,61 @@ extension MessagesViewController: AVCapturePhotoCaptureDelegate {
     }
 }
 
+// MARK: - UICollectionView
+
+extension MessagesViewController {
+    
+    func bindCollectionView() {
+        
+        gifs.asObservable().bindTo(collectionView.rx.items(cellIdentifier: "gifCell", cellType: GifCell.self))
+        { row, data, cell in
+            cell.backgroundColor = UIColor().getRandom()
+            cell.gif.sd_setImage(with: URL(string: data.image_url))
+            }.addDisposableTo(disposeBag)
+        
+        collectionView.rx
+            .itemSelected
+            .subscribe(onNext: { indexPath in
+                self.collectionView.isUserInteractionEnabled = false
+                
+                let gif = self.gifs.value[indexPath.row]
+                
+                guard let cell = self.collectionView.cellForItem(at: indexPath) else {
+                    return
+                }
+                
+                UIView.animate(withDuration: 0.1, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 5, options: [],
+                               animations: { cell.transform = CGAffineTransform(scaleX: 0.9, y: 0.9) },
+                               completion: { finished in
+                                UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.2, initialSpringVelocity: 5, options: .curveEaseInOut,
+                                               animations: { cell.transform = CGAffineTransform(scaleX: 1, y: 1) },
+                                               completion: { finished in
+                                                self.addGifToInputField(url: gif.image_url)
+                                }) }
+                )
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    func layoutCollectionView() {
+        if let layout = collectionView?.collectionViewLayout as? GifCollectionViewLayout {
+            layout.cache.removeAll()
+            layout.numberOfColumns = UIScreen.main.orientation == .portrait ? 2 : 3
+            layout.invalidateLayout()
+        }
+        
+        if gifs.value.count > 0 {
+            collectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .top, animated: true)
+        }
+    }
+}
+
 extension MessagesViewController : GifCollectionViewLayoutDelegate {
+    
     func collectionView(collectionView:UICollectionView, heightForPhotoAtIndexPath indexPath: NSIndexPath, withWidth width: CGFloat) -> CGFloat {
         let gif = gifs.value[indexPath.item]
         let boundingRect =  CGRect(x: 0, y: 0, width: width, height: CGFloat(MAXFLOAT))
-        let rect  = AVMakeRect(aspectRatio: CGSize.init(width: Int(gif.width)!, height: Int(gif.height)!), insideRect: boundingRect)
+        let rect  = AVMakeRect(aspectRatio: CGSize.init(width: gif.width, height: gif.height), insideRect: boundingRect)
         return rect.size.height
     }
 }

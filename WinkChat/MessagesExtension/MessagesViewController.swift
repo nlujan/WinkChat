@@ -248,11 +248,11 @@ extension MessagesViewController {
     }
 }
 
+// MARK: - AVCaptureVideoPreviewLayer configuration and layout
 
 extension MessagesViewController {
 
-    
-    func configurePreviewLayer() {
+    fileprivate func configurePreviewLayer() {
         
         guard let preview = AVCaptureVideoPreviewLayer(session: self.captureSession) else { return }
         
@@ -302,19 +302,6 @@ extension MessagesViewController {
         }
     }
     
-    fileprivate func takePhoto() {
-        queue.async { [unowned self] in
-            let settings = AVCapturePhotoSettings()
-            let previewPixelType = settings.availablePreviewPhotoPixelFormatTypes.first!
-            let previewFormat = [kCVPixelBufferPixelFormatTypeKey as String: previewPixelType,
-                                 kCVPixelBufferWidthKey as String: 160,
-                                 kCVPixelBufferHeightKey as String: 160,
-                                 ]
-            settings.previewPhotoFormat = previewFormat
-            self.cameraOutput.capturePhoto(with: settings, delegate: self)
-        }
-    }
-    
     fileprivate func startSession() {
         queue.async {
             guard self.authorizationStatus == .authorized else { return }
@@ -330,19 +317,66 @@ extension MessagesViewController {
             self.captureSession.stopRunning()
         }
     }
+    
+    fileprivate func takePhoto() {
+        queue.async { [unowned self] in
+            let settings = AVCapturePhotoSettings()
+            let previewPixelType = settings.availablePreviewPhotoPixelFormatTypes.first!
+            let previewFormat = [kCVPixelBufferPixelFormatTypeKey as String: previewPixelType,
+                                 kCVPixelBufferWidthKey as String: 160,
+                                 kCVPixelBufferHeightKey as String: 160,
+                                 ]
+            settings.previewPhotoFormat = previewFormat
+            self.cameraOutput.capturePhoto(with: settings, delegate: self)
+        }
+    }
 }
 
-extension MessagesViewController {
-    
-    func layoutInfoView() {
-        let subviews = view.subviews.filter { $0 is InfoView }
+// MARK: - AVCapturePhotoCaptureDelegate
+
+extension MessagesViewController: AVCapturePhotoCaptureDelegate {
+    func capture(_ captureOutput: AVCapturePhotoOutput, didFinishProcessingPhotoSampleBuffer photoSampleBuffer: CMSampleBuffer?, previewPhotoSampleBuffer: CMSampleBuffer?, resolvedSettings: AVCaptureResolvedPhotoSettings, bracketSettings: AVCaptureBracketedStillImageSettings?, error: Error?) {
         
-        if let infoView = subviews.first {
-            infoView.removeFromSuperview()
-            infoView.frame = CGRect(x: 0, y: 0 + topLayoutGuide.length, width: view.frame.size.width, height: 45)
+        guard let sampleBuffer = photoSampleBuffer,
+            let previewBuffer = previewPhotoSampleBuffer,
+            let dataImage =  AVCapturePhotoOutput.jpegPhotoDataRepresentation(forJPEGSampleBuffer:  sampleBuffer, previewPhotoSampleBuffer: previewBuffer)
+            else {
+                print("Error capturing photo: \(String(describing: error))")
+                return
         }
         
+        guard let image = UIImage(data: dataImage) else {
+            print("Error creating image from data: \(String(describing: error))")
+            return
+        }
+        
+        let rotatedImage = image.imageWithAdjustedOrientation(deviceOrientation: UIScreen.main.orientation)
+        
+        
+        addSelfieImageToView(image: rotatedImage)
+        
+        guard let rotatedImageData = UIImageJPEGRepresentation(rotatedImage, 1) else {
+            print("Unable to orientate photo: \(String(describing: error))")
+            return
+        }
+        
+        stopSession()
+        
+        let imageFileURL = URL.cachedFileURL(Constants.ImageFilename)
+        
+        do {
+            try rotatedImageData.write(to: imageFileURL)
+            notifyViewModelOf(imageUrl: imageFileURL)
+        } catch {
+            print("Error saving captured photo to disk")
+            startSession()
+        }
     }
+}
+
+// MARK: - Laying out selfie imageView and Info view
+
+extension MessagesViewController {
     
     func layoutSelfieView() {
         
@@ -386,51 +420,18 @@ extension MessagesViewController {
             selfieImageContainer.addSubview(selfieImageView)
         }
     }
-}
-
-// MARK: - AVCapturePhotoCaptureDelegate
-
-extension MessagesViewController: AVCapturePhotoCaptureDelegate {
-    func capture(_ captureOutput: AVCapturePhotoOutput, didFinishProcessingPhotoSampleBuffer photoSampleBuffer: CMSampleBuffer?, previewPhotoSampleBuffer: CMSampleBuffer?, resolvedSettings: AVCaptureResolvedPhotoSettings, bracketSettings: AVCaptureBracketedStillImageSettings?, error: Error?) {
-        
-        guard let sampleBuffer = photoSampleBuffer,
-            let previewBuffer = previewPhotoSampleBuffer,
-            let dataImage =  AVCapturePhotoOutput.jpegPhotoDataRepresentation(forJPEGSampleBuffer:  sampleBuffer, previewPhotoSampleBuffer: previewBuffer)
-        else {
-            print("Error capturing photo: \(String(describing: error))")
-            return
-        }
-        
-        guard let image = UIImage(data: dataImage) else {
-            print("Error creating image from data: \(String(describing: error))")
-            return
-        }
-
-        let rotatedImage = image.imageWithAdjustedOrientation(deviceOrientation: UIScreen.main.orientation)
-        
-        
-        addSelfieImageToView(image: rotatedImage)
     
-        guard let rotatedImageData = UIImageJPEGRepresentation(rotatedImage, 1) else {
-            print("Unable to orientate photo: \(String(describing: error))")
-            return
-        }
+    func layoutInfoView() {
+        let subviews = view.subviews.filter { $0 is InfoView }
         
-        stopSession()
-        
-        let imageFileURL = URL.cachedFileURL(Constants.ImageFilename)
-        
-        do {
-            try rotatedImageData.write(to: imageFileURL)
-            notifyViewModelOf(imageUrl: imageFileURL)
-        } catch {
-            print("Error saving captured photo to disk")
-            startSession()
+        if let infoView = subviews.first {
+            infoView.removeFromSuperview()
+            infoView.frame = CGRect(x: 0, y: 0 + topLayoutGuide.length, width: view.frame.size.width, height: 45)
         }
     }
 }
 
-// MARK: - UICollectionView
+// MARK: - UICollectionView binding and layout
 
 extension MessagesViewController {
     

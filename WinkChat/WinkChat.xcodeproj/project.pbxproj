@@ -11,22 +11,27 @@
 		2B1429BF1EFF872700043D08 /* EmotionAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1429BE1EFF872700043D08 /* EmotionAPI.swift */; };
 		2B1429C11EFF875E00043D08 /* GiphyEnpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1429C01EFF875E00043D08 /* GiphyEnpoint.swift */; };
 		2B1429C31EFF877E00043D08 /* GiphyAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1429C21EFF877E00043D08 /* GiphyAPI.swift */; };
-		2B1429C51EFF87D500043D08 /* UIImage+Resized.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1429C41EFF87D500043D08 /* UIImage+Resized.swift */; };
 		2B1429C81EFF881400043D08 /* Emotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1429C71EFF881400043D08 /* Emotion.swift */; };
 		2B1429CA1EFF882000043D08 /* Gif.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1429C91EFF882000043D08 /* Gif.swift */; };
 		2B1429CC1EFF884900043D08 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1429CB1EFF884900043D08 /* ViewModel.swift */; };
-		2B1429CE1F004F7B00043D08 /* UIImage+Gif.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1429CD1F004F7B00043D08 /* UIImage+Gif.swift */; };
+		2B1CE3561F2FD11900D5171E /* GifCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1CE3551F2FD11800D5171E /* GifCell.swift */; };
+		2B1CE3581F30080C00D5171E /* GifCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1CE3571F30080C00D5171E /* GifCollectionViewLayout.swift */; };
 		2B42F1671F08B6F700A9FAEF /* InfoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2B70F5331F08B5BA00CD1E17 /* InfoView.xib */; };
 		2B4E10221F060F3500B93E89 /* URL+FileURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B4E10211F060F3500B93E89 /* URL+FileURL.swift */; };
 		2B70F5321F08B5B000CD1E17 /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B70F5311F08B5B000CD1E17 /* InfoView.swift */; };
-		2B8C17191E9DCDE10064CD27 /* CompactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B8C17181E9DCDE10064CD27 /* CompactViewController.swift */; };
-		2B8C171B1E9DCDFA0064CD27 /* ExpandedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B8C171A1E9DCDFA0064CD27 /* ExpandedViewController.swift */; };
+		2BB009831F204A5100CCF89A /* RxReachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BB009821F204A5100CCF89A /* RxReachability.swift */; };
 		2BB60BDC1E9A040C00AF7E6F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2BB60BDB1E9A040C00AF7E6F /* Assets.xcassets */; };
 		2BB60BE31E9A040C00AF7E6F /* MessagesExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 2BB60BE21E9A040C00AF7E6F /* MessagesExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		2BB60BE81E9A040C00AF7E6F /* Messages.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BB60BE71E9A040C00AF7E6F /* Messages.framework */; };
 		2BB60BEB1E9A040C00AF7E6F /* MessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BB60BEA1E9A040C00AF7E6F /* MessagesViewController.swift */; };
 		2BB60BEE1E9A040C00AF7E6F /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2BB60BEC1E9A040C00AF7E6F /* MainInterface.storyboard */; };
 		2BB60BF01E9A040C00AF7E6F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2BB60BEF1E9A040C00AF7E6F /* Assets.xcassets */; };
+		2BBED2ED1F3D821500969548 /* UIScreen+Orientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BBED2EC1F3D821500969548 /* UIScreen+Orientation.swift */; };
+		2BBED2EF1F3DA85F00969548 /* UIImage+Orientation+BestFit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BBED2EE1F3DA85F00969548 /* UIImage+Orientation+BestFit.swift */; };
+		2BD1720D1F46CD6A00E06BF7 /* AVCaptureVideoPreviewLayer+SetOrientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BD1720C1F46CD6A00E06BF7 /* AVCaptureVideoPreviewLayer+SetOrientation.swift */; };
+		2BDF7B011F326C1A009F3103 /* UIColor+Random.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BDF7B001F326C1A009F3103 /* UIColor+Random.swift */; };
+		2BDF7B031F328E57009F3103 /* SpinningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BDF7B021F328E57009F3103 /* SpinningView.swift */; };
+		2BDF7B071F33E231009F3103 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BDF7B041F32E81A009F3103 /* Constants.swift */; };
 		9411C8797FD720948EC714FA /* Pods_WinkChat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23A12148946307A725361625 /* Pods_WinkChat.framework */; };
 		CE6B0A8A085E5DB7A0E90611 /* Pods_MessagesExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AB6097E52CE0AAD852811F1 /* Pods_MessagesExtension.framework */; };
 /* End PBXBuildFile section */
@@ -62,26 +67,31 @@
 		2B1429BE1EFF872700043D08 /* EmotionAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmotionAPI.swift; sourceTree = "<group>"; };
 		2B1429C01EFF875E00043D08 /* GiphyEnpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GiphyEnpoint.swift; sourceTree = "<group>"; };
 		2B1429C21EFF877E00043D08 /* GiphyAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GiphyAPI.swift; sourceTree = "<group>"; };
-		2B1429C41EFF87D500043D08 /* UIImage+Resized.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Resized.swift"; sourceTree = "<group>"; };
 		2B1429C71EFF881400043D08 /* Emotion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Emotion.swift; sourceTree = "<group>"; };
 		2B1429C91EFF882000043D08 /* Gif.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Gif.swift; sourceTree = "<group>"; };
 		2B1429CB1EFF884900043D08 /* ViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
-		2B1429CD1F004F7B00043D08 /* UIImage+Gif.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Gif.swift"; sourceTree = "<group>"; };
+		2B1CE3551F2FD11800D5171E /* GifCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GifCell.swift; sourceTree = "<group>"; };
+		2B1CE3571F30080C00D5171E /* GifCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GifCollectionViewLayout.swift; sourceTree = "<group>"; };
 		2B4E10211F060F3500B93E89 /* URL+FileURL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URL+FileURL.swift"; sourceTree = "<group>"; };
 		2B70F5311F08B5B000CD1E17 /* InfoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InfoView.swift; path = ../WinkChat/InfoView.swift; sourceTree = "<group>"; };
 		2B70F5331F08B5BA00CD1E17 /* InfoView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = InfoView.xib; path = ../WinkChat/InfoView.xib; sourceTree = "<group>"; };
-		2B8C17181E9DCDE10064CD27 /* CompactViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompactViewController.swift; sourceTree = "<group>"; };
-		2B8C171A1E9DCDFA0064CD27 /* ExpandedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpandedViewController.swift; sourceTree = "<group>"; };
 		2B8C17251EA2E8910064CD27 /* MessagesExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MessagesExtension.entitlements; sourceTree = "<group>"; };
+		2BB009821F204A5100CCF89A /* RxReachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxReachability.swift; sourceTree = "<group>"; };
 		2BB60BD81E9A040C00AF7E6F /* WinkChat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WinkChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2BB60BDB1E9A040C00AF7E6F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2BB60BDD1E9A040C00AF7E6F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2BB60BE21E9A040C00AF7E6F /* MessagesExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MessagesExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		2BB60BE71E9A040C00AF7E6F /* Messages.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Messages.framework; path = System/Library/Frameworks/Messages.framework; sourceTree = SDKROOT; };
-		2BB60BEA1E9A040C00AF7E6F /* MessagesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesViewController.swift; sourceTree = "<group>"; };
+		2BB60BEA1E9A040C00AF7E6F /* MessagesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MessagesViewController.swift; path = MessagesExtension/MessagesViewController.swift; sourceTree = "<group>"; };
 		2BB60BED1E9A040C00AF7E6F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		2BB60BEF1E9A040C00AF7E6F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2BB60BF11E9A040C00AF7E6F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2BBED2EC1F3D821500969548 /* UIScreen+Orientation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIScreen+Orientation.swift"; sourceTree = "<group>"; };
+		2BBED2EE1F3DA85F00969548 /* UIImage+Orientation+BestFit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Orientation+BestFit.swift"; sourceTree = "<group>"; };
+		2BD1720C1F46CD6A00E06BF7 /* AVCaptureVideoPreviewLayer+SetOrientation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AVCaptureVideoPreviewLayer+SetOrientation.swift"; sourceTree = "<group>"; };
+		2BDF7B001F326C1A009F3103 /* UIColor+Random.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Random.swift"; sourceTree = "<group>"; };
+		2BDF7B021F328E57009F3103 /* SpinningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpinningView.swift; sourceTree = "<group>"; };
+		2BDF7B041F32E81A009F3103 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		4A23F8C20AFF741749F1769E /* Pods-WinkChat.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WinkChat.debug.xcconfig"; path = "Pods/Target Support Files/Pods-WinkChat/Pods-WinkChat.debug.xcconfig"; sourceTree = "<group>"; };
 		8AB6097E52CE0AAD852811F1 /* Pods_MessagesExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MessagesExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A686F418B249C7E75EF59837 /* Pods-MessagesExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MessagesExtension.release.xcconfig"; path = "Pods/Target Support Files/Pods-MessagesExtension/Pods-MessagesExtension.release.xcconfig"; sourceTree = "<group>"; };
@@ -113,8 +123,10 @@
 			isa = PBXGroup;
 			children = (
 				2B4E10211F060F3500B93E89 /* URL+FileURL.swift */,
-				2B1429C41EFF87D500043D08 /* UIImage+Resized.swift */,
-				2B1429CD1F004F7B00043D08 /* UIImage+Gif.swift */,
+				2BDF7B001F326C1A009F3103 /* UIColor+Random.swift */,
+				2BBED2EC1F3D821500969548 /* UIScreen+Orientation.swift */,
+				2BBED2EE1F3DA85F00969548 /* UIImage+Orientation+BestFit.swift */,
+				2BD1720C1F46CD6A00E06BF7 /* AVCaptureVideoPreviewLayer+SetOrientation.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -159,6 +171,7 @@
 			children = (
 				2BB60BDA1E9A040C00AF7E6F /* WinkChat */,
 				2BB60BE91E9A040C00AF7E6F /* MessagesExtension */,
+				2BB60BEA1E9A040C00AF7E6F /* MessagesViewController.swift */,
 				2BB60BE61E9A040C00AF7E6F /* Frameworks */,
 				2BB60BD91E9A040C00AF7E6F /* Products */,
 				DE49953211AD1636E5004AEA /* Pods */,
@@ -177,13 +190,13 @@
 		2BB60BDA1E9A040C00AF7E6F /* WinkChat */ = {
 			isa = PBXGroup;
 			children = (
+				2BB66C941F3A9F1100450202 /* Utils */,
+				2BB66C931F3A9EEE00450202 /* Assets */,
 				2B1429C61EFF87FC00043D08 /* Data Entities */,
 				2B1429B81EFF85D300043D08 /* View Models */,
 				2B1429B71EFF859B00043D08 /* GiphyAPI */,
 				2B1429B41EFF832600043D08 /* EmotionAPI */,
 				2B1429B11EFF82A800043D08 /* Extensions */,
-				2BB60BDB1E9A040C00AF7E6F /* Assets.xcassets */,
-				2BB60BDD1E9A040C00AF7E6F /* Info.plist */,
 			);
 			path = WinkChat;
 			sourceTree = "<group>";
@@ -201,17 +214,75 @@
 		2BB60BE91E9A040C00AF7E6F /* MessagesExtension */ = {
 			isa = PBXGroup;
 			children = (
-				2B70F5311F08B5B000CD1E17 /* InfoView.swift */,
-				2B70F5331F08B5BA00CD1E17 /* InfoView.xib */,
-				2B8C17251EA2E8910064CD27 /* MessagesExtension.entitlements */,
-				2BB60BEA1E9A040C00AF7E6F /* MessagesViewController.swift */,
-				2B8C17181E9DCDE10064CD27 /* CompactViewController.swift */,
-				2B8C171A1E9DCDFA0064CD27 /* ExpandedViewController.swift */,
-				2BB60BEC1E9A040C00AF7E6F /* MainInterface.storyboard */,
-				2BB60BEF1E9A040C00AF7E6F /* Assets.xcassets */,
-				2BB60BF11E9A040C00AF7E6F /* Info.plist */,
+				2BB66C961F3A9F8D00450202 /* Views */,
+				2BB66C951F3A9F3900450202 /* Assets */,
+				2BB66C921F3A9E8200450202 /* Utils */,
 			);
 			path = MessagesExtension;
+			sourceTree = "<group>";
+		};
+		2BB66C911F3A9E5900450202 /* InfoView */ = {
+			isa = PBXGroup;
+			children = (
+				2B70F5311F08B5B000CD1E17 /* InfoView.swift */,
+				2B70F5331F08B5BA00CD1E17 /* InfoView.xib */,
+			);
+			name = InfoView;
+			sourceTree = "<group>";
+		};
+		2BB66C921F3A9E8200450202 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				2BB009821F204A5100CCF89A /* RxReachability.swift */,
+			);
+			name = Utils;
+			sourceTree = "<group>";
+		};
+		2BB66C931F3A9EEE00450202 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				2BB60BDD1E9A040C00AF7E6F /* Info.plist */,
+				2BB60BDB1E9A040C00AF7E6F /* Assets.xcassets */,
+			);
+			name = Assets;
+			sourceTree = "<group>";
+		};
+		2BB66C941F3A9F1100450202 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				2BDF7B041F32E81A009F3103 /* Constants.swift */,
+			);
+			name = Utils;
+			sourceTree = "<group>";
+		};
+		2BB66C951F3A9F3900450202 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				2BB60BF11E9A040C00AF7E6F /* Info.plist */,
+				2BB60BEF1E9A040C00AF7E6F /* Assets.xcassets */,
+				2BB60BEC1E9A040C00AF7E6F /* MainInterface.storyboard */,
+				2B8C17251EA2E8910064CD27 /* MessagesExtension.entitlements */,
+			);
+			name = Assets;
+			sourceTree = "<group>";
+		};
+		2BB66C961F3A9F8D00450202 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				2BB66C911F3A9E5900450202 /* InfoView */,
+				2BB66C971F3A9FCC00450202 /* Collection View */,
+				2BDF7B021F328E57009F3103 /* SpinningView.swift */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		2BB66C971F3A9FCC00450202 /* Collection View */ = {
+			isa = PBXGroup;
+			children = (
+				2B1CE3571F30080C00D5171E /* GifCollectionViewLayout.swift */,
+				2B1CE3551F2FD11800D5171E /* GifCell.swift */,
+			);
+			name = "Collection View";
 			sourceTree = "<group>";
 		};
 		DE49953211AD1636E5004AEA /* Pods */ = {
@@ -275,17 +346,19 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0830;
-				LastUpgradeCheck = 0830;
+				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = "Naim Lujan";
 				TargetAttributes = {
 					2BB60BD71E9A040C00AF7E6F = {
 						CreatedOnToolsVersion = 8.3.1;
-						DevelopmentTeam = X82HTQTSX4;
+						DevelopmentTeam = YMT2BF8Q69;
+						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
 					};
 					2BB60BE11E9A040C00AF7E6F = {
 						CreatedOnToolsVersion = 8.3.1;
-						DevelopmentTeam = X82HTQTSX4;
+						DevelopmentTeam = YMT2BF8Q69;
+						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
@@ -419,19 +492,24 @@
 			buildActionMask = 2147483647;
 			files = (
 				2B1429BD1EFF86F700043D08 /* EmotionEndpoint.swift in Sources */,
+				2BDF7B071F33E231009F3103 /* Constants.swift in Sources */,
 				2B1429BF1EFF872700043D08 /* EmotionAPI.swift in Sources */,
-				2B8C171B1E9DCDFA0064CD27 /* ExpandedViewController.swift in Sources */,
 				2B1429CC1EFF884900043D08 /* ViewModel.swift in Sources */,
 				2B1429C31EFF877E00043D08 /* GiphyAPI.swift in Sources */,
 				2B4E10221F060F3500B93E89 /* URL+FileURL.swift in Sources */,
 				2B70F5321F08B5B000CD1E17 /* InfoView.swift in Sources */,
+				2BBED2ED1F3D821500969548 /* UIScreen+Orientation.swift in Sources */,
 				2B1429CA1EFF882000043D08 /* Gif.swift in Sources */,
-				2B1429CE1F004F7B00043D08 /* UIImage+Gif.swift in Sources */,
+				2B1CE3581F30080C00D5171E /* GifCollectionViewLayout.swift in Sources */,
 				2B1429C11EFF875E00043D08 /* GiphyEnpoint.swift in Sources */,
 				2B1429C81EFF881400043D08 /* Emotion.swift in Sources */,
-				2B8C17191E9DCDE10064CD27 /* CompactViewController.swift in Sources */,
+				2B1CE3561F2FD11900D5171E /* GifCell.swift in Sources */,
 				2BB60BEB1E9A040C00AF7E6F /* MessagesViewController.swift in Sources */,
-				2B1429C51EFF87D500043D08 /* UIImage+Resized.swift in Sources */,
+				2BD1720D1F46CD6A00E06BF7 /* AVCaptureVideoPreviewLayer+SetOrientation.swift in Sources */,
+				2BB009831F204A5100CCF89A /* RxReachability.swift in Sources */,
+				2BDF7B011F326C1A009F3103 /* UIColor+Random.swift in Sources */,
+				2BBED2EF1F3DA85F00969548 /* UIImage+Orientation+BestFit.swift in Sources */,
+				2BDF7B031F328E57009F3103 /* SpinningView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -467,7 +545,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -475,7 +555,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -519,7 +603,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -527,7 +613,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -559,12 +649,14 @@
 			baseConfigurationReference = F3E01529958EFCE7035CC632 /* Pods-MessagesExtension.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "iMessage App Icon";
-				DEVELOPMENT_TEAM = X82HTQTSX4;
+				DEVELOPMENT_TEAM = YMT2BF8Q69;
 				INFOPLIST_FILE = MessagesExtension/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.capture.WinkChat.MessagesExtension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.naimlujan.WinkChat.MessagesExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -574,12 +666,15 @@
 			baseConfigurationReference = A686F418B249C7E75EF59837 /* Pods-MessagesExtension.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "iMessage App Icon";
-				DEVELOPMENT_TEAM = X82HTQTSX4;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = YMT2BF8Q69;
 				INFOPLIST_FILE = MessagesExtension/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.capture.WinkChat.MessagesExtension;
+				PRODUCT_BUNDLE_IDENTIFIER = com.naimlujan.WinkChat.MessagesExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
@@ -590,10 +685,14 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = X82HTQTSX4;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = YMT2BF8Q69;
 				INFOPLIST_FILE = WinkChat/Info.plist;
-				PRODUCT_BUNDLE_IDENTIFIER = com.capture.WinkChat;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				PRODUCT_BUNDLE_IDENTIFIER = com.naimlujan.WinkChat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -604,10 +703,15 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = X82HTQTSX4;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = YMT2BF8Q69;
 				INFOPLIST_FILE = WinkChat/Info.plist;
-				PRODUCT_BUNDLE_IDENTIFIER = com.capture.WinkChat;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				PRODUCT_BUNDLE_IDENTIFIER = com.naimlujan.WinkChat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_SWIFT3_OBJC_INFERENCE = On;
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;

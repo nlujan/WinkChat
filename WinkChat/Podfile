@@ -9,6 +9,7 @@ target 'MessagesExtension' do
   pod 'RxCocoa'
   pod 'Moya-ModelMapper/RxSwift'
   pod 'RxOptional'
+  pod 'SDWebImage/GIF'
 end
 
 target 'WinkChat' do

@@ -12,17 +12,29 @@ import RxOptional
 import RxSwift
 
 protocol GiphyProtocol {
-    static func getGifFrom(text: String) -> Observable<Gif?>
+    static func getRandomGifFrom(text: String) -> Observable<Gif?>
+    static func getSearchGifsFrom(text: String) -> Observable<[Gif]?>
 }
 
 struct GiphyAPI: GiphyProtocol {
     
-    static let provider: RxMoyaProvider<Giphy> = RxMoyaProvider<Giphy>()
+    private static let provider: RxMoyaProvider<Giphy> = RxMoyaProvider<Giphy>()
     
-    static func getGifFrom(text: String) -> Observable<Gif?> {
+    static func getRandomGifFrom(text: String) -> Observable<Gif?> {
         return provider
             .request(Giphy.Random(searchText: text))
-            .debug()
             .mapObjectOptional(type: Gif.self, keyPath: "data")
+            .timeout(Constants.Timeout, scheduler: MainScheduler.instance)
+            .catchErrorJustReturn(nil)
+    }
+    
+    static func getSearchGifsFrom(text: String) -> Observable<[Gif]?> {
+        return provider
+            .request(Giphy.Search(searchText: text))
+            .mapArrayOptional(type: Gif.self, keyPath: "data")
+            .timeout(Constants.Timeout, scheduler: MainScheduler.instance)
+            .catchErrorJustReturn(nil)
     }
 }
+
+

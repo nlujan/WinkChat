@@ -104,10 +104,9 @@ extension MessagesViewController {
         configurePreviewLayer()
         requestAuthorizationIfNeeded()
         configureSession()
-        setPreviewVideoOrientation()
+        previewLayer.setOrientation(orientation: UIScreen.main.orientation)
         bindCollectionView()
         bindViewModel()
-        
         viewModel.searchTextSubject.onNext(Constants.Emotion.Default)
     }
     
@@ -128,7 +127,7 @@ extension MessagesViewController {
     override func viewDidLayoutSubviews() {
         
         if UIScreen.main.orientation != currentOrientation {
-            setPreviewVideoOrientation()
+            previewLayer.setOrientation(orientation: UIScreen.main.orientation)
             layoutSelfieView()
             layoutInfoView()
             layoutCollectionView()
@@ -196,7 +195,7 @@ extension MessagesViewController {
         
     }
     
-    func notifyViewModelOfImageUrl(imageUrl: URL) {
+    func notifyViewModelOf(imageUrl: URL) {
         
         guard RxReachability.shared.isOnline() else {
             InfoView.showIn(viewController: self, message: Constants.ErrorMessage.NetworkIssue)
@@ -214,7 +213,7 @@ extension MessagesViewController {
 
 extension MessagesViewController {
     
-    func addGifToInputField(url: String) {
+    func addGifToInputField(url: String, closure: (() -> Void)? = nil) {
         
         if presentationStyle == .expanded {
             requestPresentationStyle(.compact)
@@ -244,9 +243,8 @@ extension MessagesViewController {
             if let error = error {
                 print(error)
             }
+            closure?()
         }
-        
-        collectionView.isUserInteractionEnabled = true
     }
 }
 
@@ -265,30 +263,6 @@ extension MessagesViewController {
         
         cameraView.layer.cornerRadius = cameraView.frame.size.width/2
         previewLayer.cornerRadius = previewLayer.frame.size.width/2
-    }
-    
-    // TODO: Possibly abstract this into extension
-    
-    func setPreviewVideoOrientation() {
-        if let connection = previewLayer.connection {
-            let orientation = UIScreen.main.orientation
-            
-            if connection.isVideoOrientationSupported {
-                
-                switch (orientation) {
-                case .portrait: connection.videoOrientation = .portrait
-                    break
-                case .landscapeRight: connection.videoOrientation = .landscapeRight
-                    break
-                case .landscapeLeft: connection.videoOrientation = .landscapeLeft
-                    break
-                case .portraitUpsideDown: connection.videoOrientation = .portraitUpsideDown
-                    break
-                default: connection.videoOrientation = .portrait
-                    break
-                }
-            }
-        }
     }
     
     fileprivate func requestAuthorizationIfNeeded() {
@@ -358,7 +332,6 @@ extension MessagesViewController {
     }
 }
 
-
 extension MessagesViewController {
     
     func layoutInfoView() {
@@ -371,61 +344,19 @@ extension MessagesViewController {
         
     }
     
-    // TODO: Can move to UIImage Extension
-    
-    func setImageOrientation(image: UIImage, deviceOrientation: UIInterfaceOrientation) -> UIImage {
-        
-        var imageOrientation : UIImageOrientation?
-        
-        switch (deviceOrientation) {
-            case .portrait:
-                imageOrientation = .right
-                break
-            case .landscapeRight:
-                imageOrientation = .down
-                break
-            case .landscapeLeft:
-                imageOrientation = .up
-                break
-            case .portraitUpsideDown:
-
-                imageOrientation = .left
-                break
-            default:
-                imageOrientation = .right
-                break
-        }
-        return UIImage(cgImage: image.cgImage!, scale: 1.0, orientation: imageOrientation!)
-    }
-    
     func layoutSelfieView() {
         
         let subviews = selfieImageContainer.subviews.filter { $0 is UIImageView }
         
         if let selfieImageView = subviews.first as? UIImageView {
-            let dims = getSelfieImageDims(image: selfieImageView.image!)
+            guard let image = selfieImageView.image else {
+                return
+            }
+            let dims = image.getBestFitDimsWithin(container: selfieImageContainer, scale: 0.6)
             selfieImageView.frame = CGRect(x: 0, y: 0, width: dims.width, height: dims.height)
             selfieImageView.center = CGPoint(x: selfieImageContainer.bounds.midX,
                                              y: selfieImageContainer.bounds.midY)
         }
-    }
-    
-    
-    // TODO: Can move to UIImage Extension
-    func getSelfieImageDims(image: UIImage) -> (width: CGFloat, height: CGFloat) {
-        
-        let aspectRatio: CGFloat = image.size.width / image.size.height
-        let scale: CGFloat = 0.6
-        
-        var width = selfieImageContainer.frame.width * scale
-        var height = width * (1 / aspectRatio)
-        
-        if width > selfieImageContainer.frame.width * scale || height > selfieImageContainer.frame.height * scale  {
-            height = selfieImageContainer.frame.height * scale
-            width = height * aspectRatio
-        }
-        
-        return (width: width, height: height)
     }
     
     func addSelfieImageToView(image: UIImage) {
@@ -439,7 +370,7 @@ extension MessagesViewController {
         selfieImageView.layer.borderWidth = 3
         selfieImageView.layer.borderColor = UIColor(red:0.25, green:0.50, blue:0.95, alpha:1.0).cgColor
         
-        let dims = getSelfieImageDims(image: image)
+        let dims = image.getBestFitDimsWithin(container: selfieImageContainer, scale: 0.6)
         selfieImageView.frame = CGRect(x: 0, y: 0, width: dims.width, height: dims.height)
         selfieImageView.center = CGPoint(x: selfieImageContainer.bounds.midX,
                                         y: selfieImageContainer.bounds.midY)
@@ -448,25 +379,12 @@ extension MessagesViewController {
         
         if selfieImageContainer.subviews.count > 0 {
             if let imageView = selfieImageContainer.subviews[0] as? UIImageView {
-//                UIView.transition(with: selfieImageContainer, duration: 0.33, options: [.transitionCrossDissolve],
-//                    animations: {
-//                        imageView.removeFromSuperview()
-//                },
-//                    completion: { finished in
-//                        UIView.transition(with: self.selfieImageContainer, duration: 0.33, options: [.transitionCrossDissolve],
-//                            animations: {
-//                                self.selfieImageContainer.addSubview(selfieImageView)
-//                        },
-//                            completion: nil)
-//                })
                 imageView.removeFromSuperview()
                 selfieImageContainer.addSubview(selfieImageView)
             }
         } else {
             selfieImageContainer.addSubview(selfieImageView)
         }
-        
-        
     }
 }
 
@@ -483,12 +401,17 @@ extension MessagesViewController: AVCapturePhotoCaptureDelegate {
             return
         }
         
-        let image = UIImage(data: dataImage)
-        let orientatedImage = setImageOrientation(image: image!, deviceOrientation: UIScreen.main.orientation)
+        guard let image = UIImage(data: dataImage) else {
+            print("Error creating image from data: \(String(describing: error))")
+            return
+        }
+
+        let rotatedImage = image.imageWithAdjustedOrientation(deviceOrientation: UIScreen.main.orientation)
         
-        addSelfieImageToView(image: orientatedImage)
+        
+        addSelfieImageToView(image: rotatedImage)
     
-        guard let orientatedImageData = UIImageJPEGRepresentation(orientatedImage, 1) else {
+        guard let rotatedImageData = UIImageJPEGRepresentation(rotatedImage, 1) else {
             print("Unable to orientate photo: \(String(describing: error))")
             return
         }
@@ -498,8 +421,8 @@ extension MessagesViewController: AVCapturePhotoCaptureDelegate {
         let imageFileURL = URL.cachedFileURL(Constants.ImageFilename)
         
         do {
-            try orientatedImageData.write(to: imageFileURL)
-            notifyViewModelOfImageUrl(imageUrl: imageFileURL)
+            try rotatedImageData.write(to: imageFileURL)
+            notifyViewModelOf(imageUrl: imageFileURL)
         } catch {
             print("Error saving captured photo to disk")
             startSession()
@@ -536,7 +459,9 @@ extension MessagesViewController {
                                 UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.2, initialSpringVelocity: 5, options: .curveEaseInOut,
                                                animations: { cell.transform = CGAffineTransform(scaleX: 1, y: 1) },
                                                completion: { finished in
-                                                self.addGifToInputField(url: gif.image_url)
+                                                self.addGifToInputField(url: gif.image_url) {
+                                                    self.collectionView.isUserInteractionEnabled = true
+                                                }
                                 }) }
                 )
             })

@@ -27,7 +27,8 @@
 		2BB60BEE1E9A040C00AF7E6F /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2BB60BEC1E9A040C00AF7E6F /* MainInterface.storyboard */; };
 		2BB60BF01E9A040C00AF7E6F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2BB60BEF1E9A040C00AF7E6F /* Assets.xcassets */; };
 		2BBED2ED1F3D821500969548 /* UIScreen+Orientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BBED2EC1F3D821500969548 /* UIScreen+Orientation.swift */; };
-		2BBED2EF1F3DA85F00969548 /* UIImage+Resized.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BBED2EE1F3DA85F00969548 /* UIImage+Resized.swift */; };
+		2BBED2EF1F3DA85F00969548 /* UIImage+Orientation+BestFit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BBED2EE1F3DA85F00969548 /* UIImage+Orientation+BestFit.swift */; };
+		2BD1720D1F46CD6A00E06BF7 /* AVCaptureVideoPreviewLayer+SetOrientation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BD1720C1F46CD6A00E06BF7 /* AVCaptureVideoPreviewLayer+SetOrientation.swift */; };
 		2BDF7B011F326C1A009F3103 /* UIColor+Random.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BDF7B001F326C1A009F3103 /* UIColor+Random.swift */; };
 		2BDF7B031F328E57009F3103 /* SpinningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BDF7B021F328E57009F3103 /* SpinningView.swift */; };
 		2BDF7B071F33E231009F3103 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BDF7B041F32E81A009F3103 /* Constants.swift */; };
@@ -86,7 +87,8 @@
 		2BB60BEF1E9A040C00AF7E6F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2BB60BF11E9A040C00AF7E6F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2BBED2EC1F3D821500969548 /* UIScreen+Orientation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIScreen+Orientation.swift"; sourceTree = "<group>"; };
-		2BBED2EE1F3DA85F00969548 /* UIImage+Resized.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Resized.swift"; sourceTree = "<group>"; };
+		2BBED2EE1F3DA85F00969548 /* UIImage+Orientation+BestFit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Orientation+BestFit.swift"; sourceTree = "<group>"; };
+		2BD1720C1F46CD6A00E06BF7 /* AVCaptureVideoPreviewLayer+SetOrientation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "AVCaptureVideoPreviewLayer+SetOrientation.swift"; sourceTree = "<group>"; };
 		2BDF7B001F326C1A009F3103 /* UIColor+Random.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Random.swift"; sourceTree = "<group>"; };
 		2BDF7B021F328E57009F3103 /* SpinningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpinningView.swift; sourceTree = "<group>"; };
 		2BDF7B041F32E81A009F3103 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
@@ -123,7 +125,8 @@
 				2B4E10211F060F3500B93E89 /* URL+FileURL.swift */,
 				2BDF7B001F326C1A009F3103 /* UIColor+Random.swift */,
 				2BBED2EC1F3D821500969548 /* UIScreen+Orientation.swift */,
-				2BBED2EE1F3DA85F00969548 /* UIImage+Resized.swift */,
+				2BBED2EE1F3DA85F00969548 /* UIImage+Orientation+BestFit.swift */,
+				2BD1720C1F46CD6A00E06BF7 /* AVCaptureVideoPreviewLayer+SetOrientation.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -502,9 +505,10 @@
 				2B1429C81EFF881400043D08 /* Emotion.swift in Sources */,
 				2B1CE3561F2FD11900D5171E /* GifCell.swift in Sources */,
 				2BB60BEB1E9A040C00AF7E6F /* MessagesViewController.swift in Sources */,
+				2BD1720D1F46CD6A00E06BF7 /* AVCaptureVideoPreviewLayer+SetOrientation.swift in Sources */,
 				2BB009831F204A5100CCF89A /* RxReachability.swift in Sources */,
 				2BDF7B011F326C1A009F3103 /* UIColor+Random.swift in Sources */,
-				2BBED2EF1F3DA85F00969548 /* UIImage+Resized.swift in Sources */,
+				2BBED2EF1F3DA85F00969548 /* UIImage+Orientation+BestFit.swift in Sources */,
 				2BDF7B031F328E57009F3103 /* SpinningView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

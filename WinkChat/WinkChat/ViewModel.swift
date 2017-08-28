@@ -90,8 +90,15 @@ class ViewModel {
             .map { $0[0] }
             .map { $0.scores }
             .map { scores -> String in
+                print(scores) 
                 let max = scores.values.max()
                 return scores.filter { $0.1 == max }.first!.key
+            }
+            .map { emotion in
+                if emotion == "neutral" {
+                    return "bored"
+                }
+                return emotion
             }
     }
     

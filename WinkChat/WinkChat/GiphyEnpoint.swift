@@ -40,11 +40,11 @@ extension Giphy: TargetType {
     var parameters: [String: Any]? {
         switch self {
         case .Search(let searchText):
-            return ["api_key": Constants.Giphy.Key, "q": searchText, "offset": String(arc4random_uniform(100))]
+            return ["api_key": Constants.Giphy.Key, "q": searchText, "offset": String(arc4random_uniform(100)), "rating": "g"]
         case .Trending:
-            return ["api_key": Constants.Giphy.Key]
+            return ["api_key": Constants.Giphy.Key, "rating": "g"]
         case .Random(let searchText):
-            return ["api_key": Constants.Giphy.Key, "tag": searchText]
+            return ["api_key": Constants.Giphy.Key, "tag": searchText, "rating": "g"]
         }
     }
     

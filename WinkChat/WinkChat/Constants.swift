@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 struct Constants {
     
@@ -27,6 +28,10 @@ struct Constants {
     struct ErrorMessage {
         static let NetworkIssue = "Network issue, please check connection and try again"
         static let NoFaceDetected = "No face detected, please try again"
+    }
+    
+    struct View {
+        static let SelfieImageFill: CGFloat = 0.7
     }
     
     //"No face detected, please try again"

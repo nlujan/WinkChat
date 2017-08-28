@@ -28,7 +28,8 @@ class MessagesViewController: MSMessagesAppViewController {
     fileprivate var currentOrientation: UIInterfaceOrientation = .portrait
     
     @IBOutlet var collectionView: UICollectionView!
-    @IBOutlet var mainCameraControlsView: UIView!
+    @IBOutlet var bottomViewContainer: UIView!
+    @IBOutlet var bottomContainerHeightConstraint: NSLayoutConstraint!
     @IBOutlet var selfieImageContainer: UIView!
     @IBOutlet var cameraView: SpinningView!
     @IBOutlet var cameraButton: UIButton!
@@ -93,6 +94,13 @@ extension MessagesViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if UIScreen.main.bounds.height > 667 {
+            bottomContainerHeightConstraint.constant = 227
+            bottomViewContainer.layoutIfNeeded()
+        }
+        
+        print(UIScreen.main.bounds.height)
+        
         if RxReachability.shared.startMonitor(Constants.Giphy.Url) == false {
             print("Reachability failed!")
         }
@@ -107,7 +115,6 @@ extension MessagesViewController {
         previewLayer.setOrientation(orientation: UIScreen.main.orientation)
         bindCollectionView()
         bindViewModel()
-        viewModel.searchTextSubject.onNext(Constants.Emotion.Default)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -125,6 +132,10 @@ extension MessagesViewController {
     }
     
     override func viewDidLayoutSubviews() {
+        
+        print(view.bounds)
+        print(topLayoutGuide.length)
+        print(bottomLayoutGuide.length)
         
         if UIScreen.main.orientation != currentOrientation {
             previewLayer.setOrientation(orientation: UIScreen.main.orientation)
@@ -261,6 +272,8 @@ extension MessagesViewController {
         cameraView.layer.addSublayer(previewLayer)
         previewLayer.frame = cameraView.bounds.insetBy(dx: cameraView.lineWidth, dy: cameraView.lineWidth)
         
+        
+        
         cameraView.layer.cornerRadius = cameraView.frame.size.width/2
         previewLayer.cornerRadius = previewLayer.frame.size.width/2
     }
@@ -386,7 +399,7 @@ extension MessagesViewController {
             guard let image = selfieImageView.image else {
                 return
             }
-            let dims = image.getBestFitDimsWithin(container: selfieImageContainer, scale: 0.6)
+            let dims = image.getBestFitDimsWithin(container: selfieImageContainer, scale: Constants.View.SelfieImageFill)
             selfieImageView.frame = CGRect(x: 0, y: 0, width: dims.width, height: dims.height)
             selfieImageView.center = CGPoint(x: selfieImageContainer.bounds.midX,
                                              y: selfieImageContainer.bounds.midY)
@@ -401,10 +414,8 @@ extension MessagesViewController {
         selfieImageView.image = image
         selfieImageView.layer.cornerRadius = 10
         selfieImageView.clipsToBounds = true
-        selfieImageView.layer.borderWidth = 3
-        selfieImageView.layer.borderColor = UIColor(red:0.25, green:0.50, blue:0.95, alpha:1.0).cgColor
         
-        let dims = image.getBestFitDimsWithin(container: selfieImageContainer, scale: 0.6)
+        let dims = image.getBestFitDimsWithin(container: selfieImageContainer, scale: Constants.View.SelfieImageFill)
         selfieImageView.frame = CGRect(x: 0, y: 0, width: dims.width, height: dims.height)
         selfieImageView.center = CGPoint(x: selfieImageContainer.bounds.midX,
                                         y: selfieImageContainer.bounds.midY)

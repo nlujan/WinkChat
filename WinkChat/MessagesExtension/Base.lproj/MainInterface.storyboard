@@ -123,10 +123,19 @@
                         <outlet property="cameraButton" destination="gLr-kG-lQ2" id="905-VC-L2V"/>
                         <outlet property="cameraView" destination="iO2-tb-tZZ" id="539-yV-bKS"/>
                         <outlet property="collectionView" destination="0ht-eF-YGh" id="BQd-ym-7pO"/>
+                        <outlet property="placeHolderView" destination="Ie5-to-udn" id="2Mf-2a-mUO"/>
                         <outlet property="selfieImageContainer" destination="tBA-Rb-IMT" id="v6z-nL-keb"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="X47-rx-isc" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <textView clipsSubviews="YES" multipleTouchEnabled="YES" userInteractionEnabled="NO" contentMode="scaleToFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" text="Take a selfie to see gifs based on your emotion!" textAlignment="center" id="Ie5-to-udn">
+                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <inset key="scrollIndicatorInsets" minX="20" minY="20" maxX="20" maxY="20"/>
+                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                </textView>
             </objects>
             <point key="canvasLocation" x="-150.40000000000001" y="76.46176911544228"/>
         </scene>

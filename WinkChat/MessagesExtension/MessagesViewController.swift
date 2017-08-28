@@ -28,6 +28,7 @@ class MessagesViewController: MSMessagesAppViewController {
     fileprivate var currentOrientation: UIInterfaceOrientation = .portrait
     
     @IBOutlet var collectionView: UICollectionView!
+    @IBOutlet var placeHolderView: UITextView!
     @IBOutlet var bottomViewContainer: UIView!
     @IBOutlet var bottomContainerHeightConstraint: NSLayoutConstraint!
     @IBOutlet var selfieImageContainer: UIView!
@@ -99,8 +100,6 @@ extension MessagesViewController {
             bottomViewContainer.layoutIfNeeded()
         }
         
-        print(UIScreen.main.bounds.height)
-        
         if RxReachability.shared.startMonitor(Constants.Giphy.Url) == false {
             print("Reachability failed!")
         }
@@ -113,6 +112,7 @@ extension MessagesViewController {
         requestAuthorizationIfNeeded()
         configureSession()
         previewLayer.setOrientation(orientation: UIScreen.main.orientation)
+        layoutCollectionView()
         bindCollectionView()
         bindViewModel()
     }
@@ -132,10 +132,6 @@ extension MessagesViewController {
     }
     
     override func viewDidLayoutSubviews() {
-        
-        print(view.bounds)
-        print(topLayoutGuide.length)
-        print(bottomLayoutGuide.length)
         
         if UIScreen.main.orientation != currentOrientation {
             previewLayer.setOrientation(orientation: UIScreen.main.orientation)
@@ -271,9 +267,6 @@ extension MessagesViewController {
         previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
         cameraView.layer.addSublayer(previewLayer)
         previewLayer.frame = cameraView.bounds.insetBy(dx: cameraView.lineWidth, dy: cameraView.lineWidth)
-        
-        
-        
         cameraView.layer.cornerRadius = cameraView.frame.size.width/2
         previewLayer.cornerRadius = previewLayer.frame.size.width/2
     }
@@ -485,10 +478,13 @@ extension MessagesViewController {
             layout.cache.removeAll()
             layout.numberOfColumns = UIScreen.main.orientation == .portrait ? 2 : 3
             layout.invalidateLayout()
+            collectionView.backgroundView = nil
         }
         
         if gifs.value.count > 0 {
             collectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .top, animated: true)
+        } else {
+            collectionView.backgroundView = placeHolderView
         }
     }
 }

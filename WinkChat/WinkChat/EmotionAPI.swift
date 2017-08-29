@@ -14,7 +14,7 @@ import RxOptional
 import RxSwift
 
 protocol EmotionProtocol {
-    static func getEmotion(from imageUrl: URL) -> Observable<[Emotion]>
+    static func getEmotion(from imageUrl: URL) -> Observable<[Emotion]?>
 }
 
 struct EmotionAPI: EmotionProtocol {
@@ -24,13 +24,12 @@ struct EmotionAPI: EmotionProtocol {
         return defaultEndpoint.adding(newHTTPHeaderFields: ["Content-Type": "application/octet-stream", "Ocp-Apim-Subscription-Key": Constants.Emotion.Key])
     })
     
-    static func getEmotion(from imageUrl: URL) -> Observable<[Emotion]> {
+    static func getEmotion(from imageUrl: URL) -> Observable<[Emotion]?> {
         return provider
             .request(EmotionEndpoint.Recognize(imageUrl: imageUrl))
             .mapArrayOptional(type: Emotion.self)
-            .replaceNilWith([])
             .timeout(Constants.Timeout, scheduler: MainScheduler.instance)
-            .catchErrorJustReturn([])
+            .catchErrorJustReturn(nil)
     }
 }
 

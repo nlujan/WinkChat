@@ -189,8 +189,9 @@ extension MessagesViewController {
         Observable.from([
             viewModel.randomUrlSubject.map { _ in true },
             viewModel.searchUrlSubject.map { _ in true },
-            viewModel.randomGifSubject.map { _ in false },
-            viewModel.searchGifsSubject.map { _ in false },
+            viewModel.searchGifsSubject.map { _ in false }.filter { _ in
+                self.presentationStyle == .expanded
+            },
             viewModel.errorSubject.map { _ in false }
             ]).merge()
             .asDriver(onErrorJustReturn: false)
@@ -229,11 +230,13 @@ extension MessagesViewController {
         guard let conversation = activeConversation else { fatalError("Expected a conversation") }
         
         guard let bundleURL = URL(string: url) else {
+            viewModel.errorSubject.onNext(APIError.NoGifRecieved)
             print("Error: This image named \"\(url)\" does not exist")
             return
         }
         
         guard let imageData = try? Data(contentsOf: bundleURL) else {
+            viewModel.errorSubject.onNext(APIError.NoGifRecieved)
             print("Error: Cannot turn image named \"\(url)\" into NSData")
             return
         }
@@ -246,8 +249,11 @@ extension MessagesViewController {
             print("Error saving gif to disk")
         }
         
+        self.cameraView.animating = false
+        
         conversation.insertAttachment(gifFileURL, withAlternateFilename: nil) { error in
             if let error = error {
+                self.viewModel.errorSubject.onNext(APIError.NoGifRecieved)
                 print(error)
             }
             closure?()

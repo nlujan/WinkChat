@@ -16,7 +16,7 @@ struct Constants {
         static let Key = "dc6zaTOxFJmzC"
     }
     struct Emotion {
-        static let Key = "aa26cb41fc1c48d29d8d08fabe3a23a7"
+        static let Key = "PLACE MICROSOFT EMOTION API KEY HERE"
         static let Default = "happiness"
     }
     

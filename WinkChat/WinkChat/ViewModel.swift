@@ -30,13 +30,13 @@ class ViewModel {
     func bindOutput() {
         
         randomUrlSubject
-            .flatMap { url in
+            .flatMap { [unowned self] url in
                 self.getEmotionString(url: url)
             }
             .flatMap { searchText in
                 GiphyAPI.getRandomGifFrom(text: searchText)
             }
-            .subscribe(onNext: { gif in
+            .subscribe(onNext: { [unowned self] gif in
                 if let g = gif {
                     self.randomGifSubject.onNext(g)
                 } else {
@@ -46,13 +46,13 @@ class ViewModel {
             .disposed(by: disposeBag)
         
         searchUrlSubject
-            .flatMap { url in
+            .flatMap { [unowned self] url in
                 self.getEmotionString(url: url)
             }
             .flatMap { searchText in
                 GiphyAPI.getSearchGifsFrom(text: searchText)
             }
-            .subscribe(onNext: { gif in
+            .subscribe(onNext: { [unowned self] gif in
                 if let g = gif {
                     self.searchGifsSubject.onNext(g)
                 } else {
@@ -67,7 +67,7 @@ class ViewModel {
             .flatMap { url in
                 EmotionAPI.getEmotion(from: url)
             }
-            .do(onNext: { emotionArray in
+            .do(onNext: { [unowned self] emotionArray in
                 if emotionArray == nil {
                     self.errorSubject.onNext(APIError.NoGifRecieved)
                 } else if emotionArray?.count == 0  {

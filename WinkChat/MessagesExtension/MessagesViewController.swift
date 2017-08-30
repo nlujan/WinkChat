@@ -147,12 +147,12 @@ extension MessagesViewController {
 
 extension MessagesViewController {
     
-    func bindViewModel() {
+    fileprivate func bindViewModel() {
         
         viewModel
             .randomGifSubject
             .map { $0.image_url }
-            .subscribe(onNext: { url in
+            .subscribe(onNext: { [unowned self] url in
                 self.addGifToInputField(url: url)
                 self.startSession()
             })
@@ -160,7 +160,7 @@ extension MessagesViewController {
         
         viewModel
             .searchGifsSubject
-            .subscribe(onNext: { gifs in
+            .subscribe(onNext: { [unowned self] gifs in
                 self.gifs.value = gifs
                 self.layoutCollectionView()
                 self.startSession()
@@ -169,7 +169,7 @@ extension MessagesViewController {
         
         viewModel
             .errorSubject
-            .subscribe(onNext: { error in
+            .subscribe(onNext: { [unowned self] error in
                 switch error as! APIError {
                     case .NoFaceDetected:
                         InfoView.showIn(viewController: self, message: Constants.ErrorMessage.NoFaceDetected)
@@ -181,7 +181,7 @@ extension MessagesViewController {
             .disposed(by: disposeBag)
         
         cameraButton.rx.tap
-            .subscribe(onNext: { _ in
+            .subscribe(onNext: { [unowned self] _ in
                 self.takePhoto()
             })
             .disposed(by: disposeBag)
@@ -189,21 +189,21 @@ extension MessagesViewController {
         Observable.from([
             viewModel.randomUrlSubject.map { _ in true },
             viewModel.searchUrlSubject.map { _ in true },
-            viewModel.searchGifsSubject.map { _ in false }.filter { _ in
+            viewModel.searchGifsSubject.map { _ in false }.filter { [unowned self] _ in
                 self.presentationStyle == .expanded
             },
             viewModel.errorSubject.map { _ in false }
             ]).merge()
             .asDriver(onErrorJustReturn: false)
             .asObservable()
-            .subscribe(onNext: { isRunning in
+            .subscribe(onNext: { [unowned self] isRunning in
                 self.cameraView.animating = isRunning
             })
             .disposed(by: disposeBag)
         
     }
     
-    func notifyViewModelOf(imageUrl: URL) {
+    fileprivate func notifyViewModelOf(imageUrl: URL) {
         
         guard RxReachability.shared.isOnline() else {
             InfoView.showIn(viewController: self, message: Constants.ErrorMessage.NetworkIssue)
@@ -221,7 +221,7 @@ extension MessagesViewController {
 
 extension MessagesViewController {
     
-    func addGifToInputField(url: String, closure: (() -> Void)? = nil) {
+    fileprivate func addGifToInputField(url: String, closure: (() -> Void)? = nil) {
         
         if presentationStyle == .expanded {
             requestPresentationStyle(.compact)
@@ -251,7 +251,7 @@ extension MessagesViewController {
         
         self.cameraView.animating = false
         
-        conversation.insertAttachment(gifFileURL, withAlternateFilename: nil) { error in
+        conversation.insertAttachment(gifFileURL, withAlternateFilename: nil) { [unowned self] error in
             if let error = error {
                 self.viewModel.errorSubject.onNext(APIError.NoGifRecieved)
                 print(error)
@@ -390,7 +390,7 @@ extension MessagesViewController: AVCapturePhotoCaptureDelegate {
 
 extension MessagesViewController {
     
-    func layoutSelfieView() {
+    fileprivate func layoutSelfieView() {
         
         let subviews = selfieImageContainer.subviews.filter { $0 is UIImageView }
         
@@ -405,7 +405,7 @@ extension MessagesViewController {
         }
     }
     
-    func addSelfieImageToView(image: UIImage) {
+    fileprivate func addSelfieImageToView(image: UIImage) {
        
         let selfieImageView = UIImageView()
         
@@ -445,7 +445,7 @@ extension MessagesViewController {
 
 extension MessagesViewController {
     
-    func bindCollectionView() {
+    fileprivate func bindCollectionView() {
         
         gifs.asObservable().bindTo(collectionView.rx.items(cellIdentifier: "gifCell", cellType: GifCell.self))
         { row, data, cell in
@@ -479,7 +479,7 @@ extension MessagesViewController {
             .disposed(by: disposeBag)
     }
     
-    func layoutCollectionView() {
+    fileprivate func layoutCollectionView() {
         if let layout = collectionView?.collectionViewLayout as? GifCollectionViewLayout {
             layout.cache.removeAll()
             layout.numberOfColumns = UIScreen.main.orientation == .portrait ? 2 : 3

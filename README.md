@@ -1,6 +1,6 @@
 # WinkChat #
 
-IMessage extension that generates a gif from your selfie!
+iMessage app that generates a gif from your selfie!
 
 ## How to run:
 

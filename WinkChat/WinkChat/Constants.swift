@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 struct Constants {
     
@@ -15,7 +16,7 @@ struct Constants {
         static let Key = "dc6zaTOxFJmzC"
     }
     struct Emotion {
-        static let Key = "aa26cb41fc1c48d29d8d08fabe3a23a7"
+        static let Key = "PLACE MICROSOFT EMOTION API KEY HERE"
         static let Default = "happiness"
     }
     
@@ -29,7 +30,7 @@ struct Constants {
         static let NoFaceDetected = "No face detected, please try again"
     }
     
-    //"No face detected, please try again"
-    //"Network issue, please check connection and try again"
-    //"No internet connection found, please reconnect and try again"
+    struct View {
+        static let SelfieImageFill: CGFloat = 0.7
+    }
 }

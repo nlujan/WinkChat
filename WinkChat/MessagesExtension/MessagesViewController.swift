@@ -28,7 +28,9 @@ class MessagesViewController: MSMessagesAppViewController {
     fileprivate var currentOrientation: UIInterfaceOrientation = .portrait
     
     @IBOutlet var collectionView: UICollectionView!
-    @IBOutlet var mainCameraControlsView: UIView!
+    @IBOutlet var placeHolderView: UITextView!
+    @IBOutlet var bottomViewContainer: UIView!
+    @IBOutlet var bottomContainerHeightConstraint: NSLayoutConstraint!
     @IBOutlet var selfieImageContainer: UIView!
     @IBOutlet var cameraView: SpinningView!
     @IBOutlet var cameraButton: UIButton!
@@ -93,6 +95,11 @@ extension MessagesViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if UIScreen.main.bounds.height > 667 {
+            bottomContainerHeightConstraint.constant = 227
+            bottomViewContainer.layoutIfNeeded()
+        }
+        
         if RxReachability.shared.startMonitor(Constants.Giphy.Url) == false {
             print("Reachability failed!")
         }
@@ -105,9 +112,9 @@ extension MessagesViewController {
         requestAuthorizationIfNeeded()
         configureSession()
         previewLayer.setOrientation(orientation: UIScreen.main.orientation)
+        layoutCollectionView()
         bindCollectionView()
         bindViewModel()
-        viewModel.searchTextSubject.onNext(Constants.Emotion.Default)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -140,12 +147,12 @@ extension MessagesViewController {
 
 extension MessagesViewController {
     
-    func bindViewModel() {
+    fileprivate func bindViewModel() {
         
         viewModel
             .randomGifSubject
             .map { $0.image_url }
-            .subscribe(onNext: { url in
+            .subscribe(onNext: { [unowned self] url in
                 self.addGifToInputField(url: url)
                 self.startSession()
             })
@@ -153,7 +160,7 @@ extension MessagesViewController {
         
         viewModel
             .searchGifsSubject
-            .subscribe(onNext: { gifs in
+            .subscribe(onNext: { [unowned self] gifs in
                 self.gifs.value = gifs
                 self.layoutCollectionView()
                 self.startSession()
@@ -162,7 +169,7 @@ extension MessagesViewController {
         
         viewModel
             .errorSubject
-            .subscribe(onNext: { error in
+            .subscribe(onNext: { [unowned self] error in
                 switch error as! APIError {
                     case .NoFaceDetected:
                         InfoView.showIn(viewController: self, message: Constants.ErrorMessage.NoFaceDetected)
@@ -174,7 +181,8 @@ extension MessagesViewController {
             .disposed(by: disposeBag)
         
         cameraButton.rx.tap
-            .subscribe(onNext: { _ in
+            .subscribe(onNext: { [unowned self] _ in
+                print("hello")
                 self.takePhoto()
             })
             .disposed(by: disposeBag)
@@ -182,20 +190,31 @@ extension MessagesViewController {
         Observable.from([
             viewModel.randomUrlSubject.map { _ in true },
             viewModel.searchUrlSubject.map { _ in true },
-            viewModel.randomGifSubject.map { _ in false },
-            viewModel.searchGifsSubject.map { _ in false },
+            viewModel.searchGifsSubject.map { _ in false }.filter { [unowned self] _ in
+                self.presentationStyle == .expanded
+            },
             viewModel.errorSubject.map { _ in false }
             ]).merge()
             .asDriver(onErrorJustReturn: false)
             .asObservable()
-            .subscribe(onNext: { isRunning in
+            .subscribe(onNext: { [unowned self] isRunning in
                 self.cameraView.animating = isRunning
             })
             .disposed(by: disposeBag)
         
+        Observable.from([
+            cameraButton.rx.tap.map { _ in false },
+            viewModel.searchGifsSubject.map { _ in true }.filter { [unowned self] _ in
+                self.presentationStyle == .expanded
+            },
+            viewModel.errorSubject.map { _ in true }
+            ]).merge()
+            .asDriver(onErrorJustReturn: true)
+            .drive(cameraButton.rx.isUserInteractionEnabled)
+            .disposed(by: disposeBag)
     }
     
-    func notifyViewModelOf(imageUrl: URL) {
+    fileprivate func notifyViewModelOf(imageUrl: URL) {
         
         guard RxReachability.shared.isOnline() else {
             InfoView.showIn(viewController: self, message: Constants.ErrorMessage.NetworkIssue)
@@ -213,7 +232,7 @@ extension MessagesViewController {
 
 extension MessagesViewController {
     
-    func addGifToInputField(url: String, closure: (() -> Void)? = nil) {
+    fileprivate func addGifToInputField(url: String, closure: (() -> Void)? = nil) {
         
         if presentationStyle == .expanded {
             requestPresentationStyle(.compact)
@@ -222,11 +241,13 @@ extension MessagesViewController {
         guard let conversation = activeConversation else { fatalError("Expected a conversation") }
         
         guard let bundleURL = URL(string: url) else {
+            viewModel.errorSubject.onNext(APIError.NoGifRecieved)
             print("Error: This image named \"\(url)\" does not exist")
             return
         }
         
         guard let imageData = try? Data(contentsOf: bundleURL) else {
+            viewModel.errorSubject.onNext(APIError.NoGifRecieved)
             print("Error: Cannot turn image named \"\(url)\" into NSData")
             return
         }
@@ -239,8 +260,12 @@ extension MessagesViewController {
             print("Error saving gif to disk")
         }
         
-        conversation.insertAttachment(gifFileURL, withAlternateFilename: nil) { error in
+        self.cameraView.animating = false
+        self.cameraButton.isUserInteractionEnabled = true
+        
+        conversation.insertAttachment(gifFileURL, withAlternateFilename: nil) { [unowned self] error in
             if let error = error {
+                self.viewModel.errorSubject.onNext(APIError.NoGifRecieved)
                 print(error)
             }
             closure?()
@@ -260,7 +285,6 @@ extension MessagesViewController {
         previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
         cameraView.layer.addSublayer(previewLayer)
         previewLayer.frame = cameraView.bounds.insetBy(dx: cameraView.lineWidth, dy: cameraView.lineWidth)
-        
         cameraView.layer.cornerRadius = cameraView.frame.size.width/2
         previewLayer.cornerRadius = previewLayer.frame.size.width/2
     }
@@ -378,7 +402,7 @@ extension MessagesViewController: AVCapturePhotoCaptureDelegate {
 
 extension MessagesViewController {
     
-    func layoutSelfieView() {
+    fileprivate func layoutSelfieView() {
         
         let subviews = selfieImageContainer.subviews.filter { $0 is UIImageView }
         
@@ -386,14 +410,14 @@ extension MessagesViewController {
             guard let image = selfieImageView.image else {
                 return
             }
-            let dims = image.getBestFitDimsWithin(container: selfieImageContainer, scale: 0.6)
+            let dims = image.getBestFitDimsWithin(container: selfieImageContainer, scale: Constants.View.SelfieImageFill)
             selfieImageView.frame = CGRect(x: 0, y: 0, width: dims.width, height: dims.height)
             selfieImageView.center = CGPoint(x: selfieImageContainer.bounds.midX,
                                              y: selfieImageContainer.bounds.midY)
         }
     }
     
-    func addSelfieImageToView(image: UIImage) {
+    fileprivate func addSelfieImageToView(image: UIImage) {
        
         let selfieImageView = UIImageView()
         
@@ -401,10 +425,8 @@ extension MessagesViewController {
         selfieImageView.image = image
         selfieImageView.layer.cornerRadius = 10
         selfieImageView.clipsToBounds = true
-        selfieImageView.layer.borderWidth = 3
-        selfieImageView.layer.borderColor = UIColor(red:0.25, green:0.50, blue:0.95, alpha:1.0).cgColor
         
-        let dims = image.getBestFitDimsWithin(container: selfieImageContainer, scale: 0.6)
+        let dims = image.getBestFitDimsWithin(container: selfieImageContainer, scale: Constants.View.SelfieImageFill)
         selfieImageView.frame = CGRect(x: 0, y: 0, width: dims.width, height: dims.height)
         selfieImageView.center = CGPoint(x: selfieImageContainer.bounds.midX,
                                         y: selfieImageContainer.bounds.midY)
@@ -435,7 +457,7 @@ extension MessagesViewController {
 
 extension MessagesViewController {
     
-    func bindCollectionView() {
+    fileprivate func bindCollectionView() {
         
         gifs.asObservable().bindTo(collectionView.rx.items(cellIdentifier: "gifCell", cellType: GifCell.self))
         { row, data, cell in
@@ -469,15 +491,18 @@ extension MessagesViewController {
             .disposed(by: disposeBag)
     }
     
-    func layoutCollectionView() {
+    fileprivate func layoutCollectionView() {
         if let layout = collectionView?.collectionViewLayout as? GifCollectionViewLayout {
             layout.cache.removeAll()
             layout.numberOfColumns = UIScreen.main.orientation == .portrait ? 2 : 3
             layout.invalidateLayout()
+            collectionView.backgroundView = nil
         }
         
         if gifs.value.count > 0 {
             collectionView.scrollToItem(at: IndexPath(item: 0, section: 0), at: .top, animated: true)
+        } else {
+            collectionView.backgroundView = placeHolderView
         }
     }
 }

@@ -78,7 +78,6 @@ class SpinningView: UIView {
     func setup() {
         circleLayer.lineWidth = lineWidth
         circleLayer.fillColor = nil
-        circleLayer.strokeColor = UIColor(red:0.00, green:0.57, blue:0.04, alpha:1.0).cgColor
         layer.addSublayer(circleLayer)
         
 
@@ -102,6 +101,7 @@ class SpinningView: UIView {
     
     func updateAnimation() {
         if animating {
+            circleLayer.strokeColor = UIColor.white.cgColor
             circleLayer.add(strokeEndAnimation, forKey: "strokeEnd")
             circleLayer.add(strokeStartAnimation, forKey: "strokeStart")
             circleLayer.add(rotationAnimation, forKey: "rotation")
@@ -110,6 +110,7 @@ class SpinningView: UIView {
             circleLayer.removeAnimation(forKey: "strokeEnd")
             circleLayer.removeAnimation(forKey: "strokeStart")
             circleLayer.removeAnimation(forKey: "rotation")
+            circleLayer.strokeColor = nil
         }
     }
 }

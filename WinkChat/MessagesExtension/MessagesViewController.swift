@@ -182,6 +182,7 @@ extension MessagesViewController {
         
         cameraButton.rx.tap
             .subscribe(onNext: { [unowned self] _ in
+                print("hello")
                 self.takePhoto()
             })
             .disposed(by: disposeBag)
@@ -201,6 +202,16 @@ extension MessagesViewController {
             })
             .disposed(by: disposeBag)
         
+        Observable.from([
+            cameraButton.rx.tap.map { _ in false },
+            viewModel.searchGifsSubject.map { _ in true }.filter { [unowned self] _ in
+                self.presentationStyle == .expanded
+            },
+            viewModel.errorSubject.map { _ in true }
+            ]).merge()
+            .asDriver(onErrorJustReturn: true)
+            .drive(cameraButton.rx.isUserInteractionEnabled)
+            .disposed(by: disposeBag)
     }
     
     fileprivate func notifyViewModelOf(imageUrl: URL) {
@@ -250,6 +261,7 @@ extension MessagesViewController {
         }
         
         self.cameraView.animating = false
+        self.cameraButton.isUserInteractionEnabled = true
         
         conversation.insertAttachment(gifFileURL, withAlternateFilename: nil) { [unowned self] error in
             if let error = error {

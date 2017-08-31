@@ -27,7 +27,7 @@ class ViewModel {
         bindOutput()
     }
     
-    func bindOutput() {
+    private func bindOutput() {
         
         randomUrlSubject
             .flatMap { [unowned self] url in
@@ -62,7 +62,7 @@ class ViewModel {
             .disposed(by: disposeBag)
     }
     
-    func getEmotionString(url: URL) -> Observable<String> {
+    private func getEmotionString(url: URL) -> Observable<String> {
         return Observable.from(optional: url)
             .flatMap { url in
                 EmotionAPI.getEmotion(from: url)

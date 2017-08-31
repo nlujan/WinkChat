@@ -7,8 +7,8 @@ class InfoView: UIView {
 
     private static var sharedView: InfoView!
 
-    static func loadFromNib() -> InfoView {
-        let nibName = "\(self)".characters.split{$0 == "."}.map(String.init).last!
+    private static func loadFromNib() -> InfoView {
+        let nibName = "\(self)".characters.split{ $0 == "." }.map(String.init).last!
         let nib = UINib(nibName: nibName, bundle: nil)
         return nib.instantiate(withOwner: self, options: nil).first as! InfoView
     }
@@ -44,15 +44,13 @@ class InfoView: UIView {
         fadeOut()
     }
 
-
-  // MARK: Animations
-    func fadeIn() {
+    private func fadeIn() {
         UIView.animate(withDuration: 0.33, animations: {
             self.alpha = 1.0
         })
     }
 
-    @objc func fadeOut() {
+    @objc private func fadeOut() {
 
         NSObject.cancelPreviousPerformRequests(withTarget: self)
 

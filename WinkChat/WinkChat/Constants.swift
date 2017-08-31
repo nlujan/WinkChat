@@ -33,8 +33,4 @@ struct Constants {
     struct View {
         static let SelfieImageFill: CGFloat = 0.7
     }
-    
-    //"No face detected, please try again"
-    //"Network issue, please check connection and try again"
-    //"No internet connection found, please reconnect and try again"
 }

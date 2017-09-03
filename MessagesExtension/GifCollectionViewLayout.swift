@@ -19,7 +19,7 @@ class GifCollectionViewLayout: UICollectionViewLayout {
     var delegate: GifCollectionViewLayoutDelegate!
     
     var numberOfColumns = 2
-    var cellPadding: CGFloat = 2.0
+    let cellPadding: CGFloat = 2.0
     
     var cache = [UICollectionViewLayoutAttributes]()
     
@@ -88,5 +88,5 @@ class GifCollectionViewLayout: UICollectionViewLayout {
     override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
         return cache[indexPath.row]
     }
-
+    
 }

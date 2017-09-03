@@ -283,6 +283,7 @@ extension MessagesViewController {
         
         previewLayer = preview
         previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
+        previewLayer.backgroundColor = UIColor(white: 1, alpha: 0.5).cgColor
         cameraView.layer.addSublayer(previewLayer)
         previewLayer.frame = cameraView.bounds.insetBy(dx: cameraView.lineWidth, dy: cameraView.lineWidth)
         cameraView.layer.cornerRadius = cameraView.frame.size.width/2

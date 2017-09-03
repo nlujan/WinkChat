@@ -12,7 +12,6 @@ import Moya
 
 enum Giphy {
     case Search(searchText: String)
-    case Trending
     case Random(searchText: String)
 }
 
@@ -26,7 +25,6 @@ extension Giphy: TargetType {
     var path: String {
         switch self {
         case .Search: return "/v1/gifs/search"
-        case .Trending: return "/v1/gifs/trending"
         case .Random: return "/v1/gifs/random"
         }
     }
@@ -41,8 +39,6 @@ extension Giphy: TargetType {
         switch self {
         case .Search(let searchText):
             return ["api_key": Constants.Giphy.Key, "q": searchText, "offset": String(arc4random_uniform(100)), "rating": "g"]
-        case .Trending:
-            return ["api_key": Constants.Giphy.Key, "rating": "g"]
         case .Random(let searchText):
             return ["api_key": Constants.Giphy.Key, "tag": searchText, "rating": "g"]
         }

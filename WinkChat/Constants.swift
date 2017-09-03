@@ -13,7 +13,7 @@ struct Constants {
     
     struct Giphy {
         static let Url = "www.giphy.com"
-        static let Key = "dc6zaTOxFJmzC"
+        static let Key = "PLACE GIPHY API KEY HERE"
     }
     struct Emotion {
         static let Key = "PLACE MICROSOFT EMOTION API KEY HERE"

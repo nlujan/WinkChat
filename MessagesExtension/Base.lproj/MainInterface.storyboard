@@ -68,7 +68,7 @@
                                     <constraint firstItem="tBA-Rb-IMT" firstAttribute="leading" secondItem="3Aq-kc-cNt" secondAttribute="leading" id="qHl-Y7-qg3"/>
                                 </constraints>
                             </view>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="0ht-eF-YGh">
+                            <collectionView clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="0ht-eF-YGh">
                                 <rect key="frame" x="0.0" y="20" width="320" height="294"/>
                                 <color key="backgroundColor" red="0.00017797778857330863" green="0.059079137093923609" blue="0.17256815461297115" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <collectionViewLayout key="collectionViewLayout" id="YcQ-2h-9vD" customClass="GifCollectionViewLayout" customModule="MessagesExtension" customModuleProvider="target"/>

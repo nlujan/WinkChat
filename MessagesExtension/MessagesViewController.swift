@@ -115,6 +115,8 @@ extension MessagesViewController {
         layoutCollectionView()
         bindCollectionView()
         bindViewModel()
+        
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -454,17 +456,11 @@ extension MessagesViewController {
     }
 }
 
-// MARK: - UICollectionView binding and layout
+// MARK: - UICollectionView Item selected delegate and layout
 
 extension MessagesViewController {
     
     fileprivate func bindCollectionView() {
-        
-        gifs.asObservable().bindTo(collectionView.rx.items(cellIdentifier: "gifCell", cellType: GifCell.self))
-        { row, data, cell in
-            cell.backgroundColor = UIColor().getRandom()
-            cell.gif.sd_setImage(with: URL(string: data.image_url))
-            }.addDisposableTo(disposeBag)
         
         collectionView.rx
             .itemSelected
@@ -490,6 +486,7 @@ extension MessagesViewController {
                 )
             })
             .disposed(by: disposeBag)
+        
     }
     
     fileprivate func layoutCollectionView() {
@@ -498,6 +495,7 @@ extension MessagesViewController {
             layout.numberOfColumns = UIScreen.main.orientation == .portrait ? 2 : 3
             layout.invalidateLayout()
             collectionView.backgroundView = nil
+            collectionView.reloadData()
         }
         
         if gifs.value.count > 0 {
@@ -508,6 +506,8 @@ extension MessagesViewController {
     }
 }
 
+// MARK: - UICollectionView GifCollectionViewLayoutDelegate
+
 extension MessagesViewController : GifCollectionViewLayoutDelegate {
     
     func collectionView(collectionView:UICollectionView, heightForPhotoAtIndexPath indexPath: NSIndexPath, withWidth width: CGFloat) -> CGFloat {
@@ -516,4 +516,35 @@ extension MessagesViewController : GifCollectionViewLayoutDelegate {
         let rect  = AVMakeRect(aspectRatio: CGSize.init(width: gif.width, height: gif.height), insideRect: boundingRect)
         return rect.size.height
     }
+}
+
+// MARK: - UICollectionView UICollectionViewDataSource
+
+extension MessagesViewController : UICollectionViewDataSource {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return gifs.value.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "gifCell", for: indexPath) as! GifCell
+        cell.backgroundColor = UIColor().getRandom()
+        cell.gif.sd_setImage(with: URL(string: gifs.value[indexPath.row].image_url))
+        
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+    
+        switch kind {
+        case UICollectionElementKindSectionFooter:
+            
+            let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "footer", for: indexPath)
+            return footerView
+            
+        default:
+            return UICollectionReusableView()
+        }
+    }
+    
 }

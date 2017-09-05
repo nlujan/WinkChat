@@ -21,6 +21,8 @@ class GifCollectionViewLayout: UICollectionViewLayout {
     var numberOfColumns = 2
     let cellPadding: CGFloat = 2.0
     
+    let footerHeight: CGFloat = 37
+    
     var cache = [UICollectionViewLayoutAttributes]()
     
     private var contentHeight: CGFloat = 0.0
@@ -62,15 +64,20 @@ class GifCollectionViewLayout: UICollectionViewLayout {
                 
                 column = column >= (numberOfColumns - 1) ? 0 : column + 1
             }
+            
+            if collectionView!.numberOfItems(inSection: 0) > 0 {
+                let footerAtrributes = UICollectionViewLayoutAttributes(forSupplementaryViewOfKind: UICollectionElementKindSectionFooter, with: IndexPath(item: collectionView!.numberOfItems(inSection: 0), section: 0))
+                footerAtrributes.frame = CGRect(x: 0, y: yOffset.max()!, width: self.collectionView!.bounds.size.width, height: footerHeight)
+                cache.append(footerAtrributes)
+            }
         }
     }
     
     override var collectionViewContentSize: CGSize {
-        return CGSize(width: contentWidth, height: contentHeight)
+        return CGSize(width: contentWidth, height: contentHeight + footerHeight)
     }
     
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
-        
         var layoutAttributes = [UICollectionViewLayoutAttributes]()
         
         for attributes in cache {
@@ -78,7 +85,7 @@ class GifCollectionViewLayout: UICollectionViewLayout {
                 layoutAttributes.append(attributes)
             }
         }
-        return layoutAttributes
+        return layoutAttributes 
     }
     
     override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
@@ -88,5 +95,4 @@ class GifCollectionViewLayout: UICollectionViewLayout {
     override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
         return cache[indexPath.row]
     }
-    
 }

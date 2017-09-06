@@ -184,7 +184,6 @@ extension MessagesViewController {
         
         cameraButton.rx.tap
             .subscribe(onNext: { [unowned self] _ in
-                print("hello")
                 self.takePhoto()
             })
             .disposed(by: disposeBag)

@@ -52,9 +52,9 @@ class ViewModel {
             .flatMap { searchText in
                 GiphyAPI.getSearchGifsFrom(text: searchText)
             }
-            .subscribe(onNext: { [unowned self] gif in
-                if let g = gif {
-                    self.searchGifsSubject.onNext(g)
+            .subscribe(onNext: { [unowned self] gifData in
+                if let gifs = gifData, gifs.count > 0 {
+                    self.searchGifsSubject.onNext(gifs)
                 } else {
                     self.errorSubject.onNext(APIError.NoGifRecieved)
                 }
@@ -82,12 +82,7 @@ class ViewModel {
                 let max = scores.values.max()
                 return scores.filter { $0.1 == max }.first!.key
             }
-            .map { emotion in
-                if emotion == "neutral" {
-                    return "bored"
-                }
-                return emotion
-            }
+            .map { $0 == "neutral" ? "bored" : $0 }
     }
     
 }

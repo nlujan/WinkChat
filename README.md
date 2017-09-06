@@ -8,4 +8,4 @@ iMessage app that generates a gif from your selfie!
 2. Get a key for [GIPHY API](https://developers.giphy.com/)
 3. Get a key for [Microsoft Emotion API](https://azure.microsoft.com/en-us/services/cognitive-services/emotion/)
 4. Replace key constants in Constants.swift with the keys you obtained from Giphy and Microsoft
-5. Run and enjoy :)
+5. Run on device(simulator won't allow full functionality) and enjoy :)

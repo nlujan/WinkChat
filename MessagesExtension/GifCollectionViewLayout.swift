@@ -17,14 +17,11 @@ protocol GifCollectionViewLayoutDelegate {
 class GifCollectionViewLayout: UICollectionViewLayout {
     
     var delegate: GifCollectionViewLayoutDelegate!
-    
     var numberOfColumns = 2
-    let cellPadding: CGFloat = 2.0
-    
-    let footerHeight: CGFloat = 37
-    
     var cache = [UICollectionViewLayoutAttributes]()
     
+    private let cellPadding: CGFloat = 2.0
+    private let footerHeight: CGFloat = 37
     private var contentHeight: CGFloat = 0.0
     private var contentWidth: CGFloat {
         let insets = collectionView!.contentInset

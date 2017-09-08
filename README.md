@@ -4,7 +4,7 @@ iMessage app that turns your selfies into GIFs! Make a face, and with one pictur
 
 ![WinkChat - Turn your emotion into GIFs!](images/app.png)
 
-## How to run:
+## Getting Started
 
 1. [Download](https://developer.apple.com/download/) the Xcode 8.3 release.
 2. Clone this repository.

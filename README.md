@@ -13,3 +13,7 @@ iMessage app that turns your selfies into GIFs! Make a face, and with one pictur
 5. Get a key for [Microsoft Emotion API](https://azure.microsoft.com/en-us/services/cognitive-services/emotion/).
 6. Replace key constants in Constants.swift with the keys you obtained from Giphy and Microsoft.
 7. Run on device(simulator won't allow full functionality) and enjoy :)
+
+## License
+
+See the [LICENSE](LICENSE.md) file for license rights and limitations (MIT).

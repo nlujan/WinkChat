@@ -95,19 +95,7 @@ extension MessagesViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if UIScreen.main.bounds.height > 667 {
-            bottomContainerHeightConstraint.constant = 227
-            bottomViewContainer.layoutIfNeeded()
-        }
-        
-        if RxReachability.shared.startMonitor(Constants.Giphy.Url) == false {
-            print("Reachability failed!")
-        }
-        
-        if let layout = collectionView?.collectionViewLayout as? GifCollectionViewLayout {
-            layout.delegate = self
-        }
-        
+        layoutBottomViewContainer()
         configurePreviewLayer()
         requestAuthorizationIfNeeded()
         configureSession()
@@ -116,7 +104,9 @@ extension MessagesViewController {
         bindCollectionView()
         bindViewModel()
         
-        
+        if RxReachability.shared.startMonitor(Constants.Giphy.Url) == false {
+            print("Reachability failed!")
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -230,6 +220,8 @@ extension MessagesViewController {
         }
     }
 }
+
+// MARK: - Conversation Interaction Functions
 
 extension MessagesViewController {
     
@@ -400,9 +392,16 @@ extension MessagesViewController: AVCapturePhotoCaptureDelegate {
     }
 }
 
-// MARK: - Laying out selfie imageView and Info view
+// MARK: - Laying out bottom view container
 
 extension MessagesViewController {
+    
+    fileprivate func layoutBottomViewContainer() {
+        if UIScreen.main.bounds.height > 667 {
+            bottomContainerHeightConstraint.constant = 227
+            bottomViewContainer.layoutIfNeeded()
+        }
+    }
     
     fileprivate func layoutSelfieView() {
         
@@ -445,7 +444,7 @@ extension MessagesViewController {
         }
     }
     
-    func layoutInfoView() {
+    fileprivate func layoutInfoView() {
         let subviews = view.subviews.filter { $0 is InfoView }
         
         if let infoView = subviews.first {
@@ -489,7 +488,11 @@ extension MessagesViewController {
     }
     
     fileprivate func layoutCollectionView() {
+        
         if let layout = collectionView?.collectionViewLayout as? GifCollectionViewLayout {
+            if layout.delegate == nil {
+                layout.delegate = self
+            }
             layout.cache.removeAll()
             layout.numberOfColumns = UIScreen.main.orientation == .portrait ? 2 : 3
             layout.invalidateLayout()

@@ -13,12 +13,13 @@
 		2B1429C31EFF877E00043D08 /* GiphyAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1429C21EFF877E00043D08 /* GiphyAPI.swift */; };
 		2B1429C81EFF881400043D08 /* Emotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1429C71EFF881400043D08 /* Emotion.swift */; };
 		2B1429CA1EFF882000043D08 /* Gif.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1429C91EFF882000043D08 /* Gif.swift */; };
-		2B1429CC1EFF884900043D08 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1429CB1EFF884900043D08 /* ViewModel.swift */; };
+		2B1429CC1EFF884900043D08 /* GifViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1429CB1EFF884900043D08 /* GifViewModel.swift */; };
 		2B1CE3561F2FD11900D5171E /* GifCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1CE3551F2FD11800D5171E /* GifCell.swift */; };
 		2B1CE3581F30080C00D5171E /* GifCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B1CE3571F30080C00D5171E /* GifCollectionViewLayout.swift */; };
 		2B42F1671F08B6F700A9FAEF /* InfoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2B70F5331F08B5BA00CD1E17 /* InfoView.xib */; };
 		2B4E10221F060F3500B93E89 /* URL+FileURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B4E10211F060F3500B93E89 /* URL+FileURL.swift */; };
 		2B70F5321F08B5B000CD1E17 /* InfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B70F5311F08B5B000CD1E17 /* InfoView.swift */; };
+		2BA377291F679FD800C10610 /* PhotoCaptureViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BA377281F679FD800C10610 /* PhotoCaptureViewModel.swift */; };
 		2BB009831F204A5100CCF89A /* RxReachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BB009821F204A5100CCF89A /* RxReachability.swift */; };
 		2BB60BDC1E9A040C00AF7E6F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2BB60BDB1E9A040C00AF7E6F /* Assets.xcassets */; };
 		2BB60BE31E9A040C00AF7E6F /* MessagesExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 2BB60BE21E9A040C00AF7E6F /* MessagesExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -69,20 +70,21 @@
 		2B1429C21EFF877E00043D08 /* GiphyAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GiphyAPI.swift; sourceTree = "<group>"; };
 		2B1429C71EFF881400043D08 /* Emotion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Emotion.swift; sourceTree = "<group>"; };
 		2B1429C91EFF882000043D08 /* Gif.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Gif.swift; sourceTree = "<group>"; };
-		2B1429CB1EFF884900043D08 /* ViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
+		2B1429CB1EFF884900043D08 /* GifViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GifViewModel.swift; sourceTree = "<group>"; };
 		2B1CE3551F2FD11800D5171E /* GifCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GifCell.swift; sourceTree = "<group>"; };
 		2B1CE3571F30080C00D5171E /* GifCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GifCollectionViewLayout.swift; sourceTree = "<group>"; };
 		2B4E10211F060F3500B93E89 /* URL+FileURL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URL+FileURL.swift"; sourceTree = "<group>"; };
 		2B70F5311F08B5B000CD1E17 /* InfoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = InfoView.swift; path = ../WinkChat/InfoView.swift; sourceTree = "<group>"; };
 		2B70F5331F08B5BA00CD1E17 /* InfoView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = InfoView.xib; path = ../WinkChat/InfoView.xib; sourceTree = "<group>"; };
 		2B8C17251EA2E8910064CD27 /* MessagesExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MessagesExtension.entitlements; sourceTree = "<group>"; };
+		2BA377281F679FD800C10610 /* PhotoCaptureViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoCaptureViewModel.swift; sourceTree = "<group>"; };
 		2BB009821F204A5100CCF89A /* RxReachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxReachability.swift; sourceTree = "<group>"; };
 		2BB60BD81E9A040C00AF7E6F /* WinkChat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WinkChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2BB60BDB1E9A040C00AF7E6F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2BB60BDD1E9A040C00AF7E6F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2BB60BE21E9A040C00AF7E6F /* MessagesExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MessagesExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		2BB60BE71E9A040C00AF7E6F /* Messages.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Messages.framework; path = System/Library/Frameworks/Messages.framework; sourceTree = SDKROOT; };
-		2BB60BEA1E9A040C00AF7E6F /* MessagesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MessagesViewController.swift; path = MessagesExtension/MessagesViewController.swift; sourceTree = "<group>"; };
+		2BB60BEA1E9A040C00AF7E6F /* MessagesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesViewController.swift; sourceTree = "<group>"; };
 		2BB60BED1E9A040C00AF7E6F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		2BB60BEF1E9A040C00AF7E6F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2BB60BF11E9A040C00AF7E6F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -152,7 +154,7 @@
 		2B1429B81EFF85D300043D08 /* View Models */ = {
 			isa = PBXGroup;
 			children = (
-				2B1429CB1EFF884900043D08 /* ViewModel.swift */,
+				2B1429CB1EFF884900043D08 /* GifViewModel.swift */,
 			);
 			name = "View Models";
 			sourceTree = "<group>";
@@ -166,12 +168,27 @@
 			name = "Data Entities";
 			sourceTree = "<group>";
 		};
+		2BA3772A1F67B4CC00C10610 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				2BB60BEA1E9A040C00AF7E6F /* MessagesViewController.swift */,
+			);
+			name = ViewControllers;
+			sourceTree = "<group>";
+		};
+		2BA3772B1F67B50700C10610 /* View Models */ = {
+			isa = PBXGroup;
+			children = (
+				2BA377281F679FD800C10610 /* PhotoCaptureViewModel.swift */,
+			);
+			name = "View Models";
+			sourceTree = "<group>";
+		};
 		2BB60BD11E9A040C00AF7E6F = {
 			isa = PBXGroup;
 			children = (
 				2BB60BDA1E9A040C00AF7E6F /* WinkChat */,
 				2BB60BE91E9A040C00AF7E6F /* MessagesExtension */,
-				2BB60BEA1E9A040C00AF7E6F /* MessagesViewController.swift */,
 				2BB60BE61E9A040C00AF7E6F /* Frameworks */,
 				2BB60BD91E9A040C00AF7E6F /* Products */,
 				DE49953211AD1636E5004AEA /* Pods */,
@@ -214,8 +231,8 @@
 		2BB60BE91E9A040C00AF7E6F /* MessagesExtension */ = {
 			isa = PBXGroup;
 			children = (
+				2BA3772B1F67B50700C10610 /* View Models */,
 				2BB66C961F3A9F8D00450202 /* Views */,
-				2BB66C951F3A9F3900450202 /* Assets */,
 				2BB66C921F3A9E8200450202 /* Utils */,
 			);
 			path = MessagesExtension;
@@ -269,6 +286,8 @@
 		2BB66C961F3A9F8D00450202 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				2BB66C951F3A9F3900450202 /* Assets */,
+				2BA3772A1F67B4CC00C10610 /* ViewControllers */,
 				2BB66C911F3A9E5900450202 /* InfoView */,
 				2BB66C971F3A9FCC00450202 /* Collection View */,
 				2BDF7B021F328E57009F3103 /* SpinningView.swift */,
@@ -494,7 +513,7 @@
 				2B1429BD1EFF86F700043D08 /* EmotionEndpoint.swift in Sources */,
 				2BDF7B071F33E231009F3103 /* Constants.swift in Sources */,
 				2B1429BF1EFF872700043D08 /* EmotionAPI.swift in Sources */,
-				2B1429CC1EFF884900043D08 /* ViewModel.swift in Sources */,
+				2B1429CC1EFF884900043D08 /* GifViewModel.swift in Sources */,
 				2B1429C31EFF877E00043D08 /* GiphyAPI.swift in Sources */,
 				2B4E10221F060F3500B93E89 /* URL+FileURL.swift in Sources */,
 				2B70F5321F08B5B000CD1E17 /* InfoView.swift in Sources */,
@@ -502,6 +521,7 @@
 				2B1429CA1EFF882000043D08 /* Gif.swift in Sources */,
 				2B1CE3581F30080C00D5171E /* GifCollectionViewLayout.swift in Sources */,
 				2B1429C11EFF875E00043D08 /* GiphyEnpoint.swift in Sources */,
+				2BA377291F679FD800C10610 /* PhotoCaptureViewModel.swift in Sources */,
 				2B1429C81EFF881400043D08 /* Emotion.swift in Sources */,
 				2B1CE3561F2FD11900D5171E /* GifCell.swift in Sources */,
 				2BB60BEB1E9A040C00AF7E6F /* MessagesViewController.swift in Sources */,

@@ -14,25 +14,20 @@ import RxCocoa
 
 class MessagesViewController: MSMessagesAppViewController {
     
-    fileprivate let captureSession = AVCaptureSession()
-    fileprivate var previewLayer = AVCaptureVideoPreviewLayer()
-    fileprivate var cameraOutput = AVCapturePhotoOutput()
-    fileprivate var captureDevice: AVCaptureDevice!
-    fileprivate let queue = DispatchQueue(label: "AV Session Queue", attributes: [], target: nil)
-    fileprivate var authorizationStatus: AVAuthorizationStatus {
-        return AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo)
-    }
     fileprivate let disposeBag = DisposeBag()
-    fileprivate let viewModel = ViewModel()
+    fileprivate let gifViewModel = GifViewModel()
     fileprivate let gifs = Variable<[Gif]>([])
     fileprivate var currentOrientation: UIInterfaceOrientation = .portrait
+    fileprivate var photoCaptureViewModel = PhotoCaptureViewModel()
+    fileprivate var previewLayer: AVCaptureVideoPreviewLayer!
     
+    @IBOutlet var cameraView: SpinningView!
     @IBOutlet var collectionView: UICollectionView!
     @IBOutlet var placeHolderView: UITextView!
     @IBOutlet var bottomViewContainer: UIView!
     @IBOutlet var bottomContainerHeightConstraint: NSLayoutConstraint!
     @IBOutlet var selfieImageContainer: UIView!
-    @IBOutlet var cameraView: SpinningView!
+    
     @IBOutlet var cameraButton: UIButton!
     
     // MARK: - Conversation Handling
@@ -54,13 +49,10 @@ extension MessagesViewController {
         super.viewDidLoad()
         
         layoutBottomViewContainer()
-        configurePreviewLayer()
-        requestAuthorizationIfNeeded()
-        configureSession()
-        previewLayer.setOrientation(orientation: UIScreen.main.orientation)
+        layoutPreviewLayer()
         layoutCollectionView()
         bindCollectionView()
-        bindViewModel()
+        bindViewModels()
         
         if RxReachability.shared.startMonitor(Constants.Giphy.Url) == false {
             print("Reachability failed!")
@@ -69,7 +61,7 @@ extension MessagesViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        startSession()
+        photoCaptureViewModel.startSession()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -77,7 +69,7 @@ extension MessagesViewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        stopSession()
+        photoCaptureViewModel.stopSession()
         super.viewWillDisappear(animated)
     }
     
@@ -97,27 +89,27 @@ extension MessagesViewController {
 
 extension MessagesViewController {
     
-    fileprivate func bindViewModel() {
+    fileprivate func bindViewModels() {
         
-        viewModel
+        gifViewModel
             .randomGifSubject
             .map { $0.image_url }
             .subscribe(onNext: { [unowned self] url in
                 self.addGifToInputField(url: url)
-                self.startSession()
+                self.photoCaptureViewModel.startSession()
             })
             .disposed(by: disposeBag)
         
-        viewModel
+        gifViewModel
             .searchGifsSubject
             .subscribe(onNext: { [unowned self] gifs in
                 self.gifs.value = gifs
                 self.layoutCollectionView()
-                self.startSession()
+                self.photoCaptureViewModel.startSession()
             })
             .disposed(by: disposeBag)
         
-        viewModel
+        gifViewModel
             .errorSubject
             .subscribe(onNext: { [unowned self] error in
                 switch error as! APIError {
@@ -126,23 +118,30 @@ extension MessagesViewController {
                     case .NoGifRecieved:
                         InfoView.showIn(viewController: self, message: Constants.ErrorMessage.NetworkIssue)
                 }
-                self.startSession()
+                self.photoCaptureViewModel.startSession()
+            })
+            .disposed(by: disposeBag)
+        
+        photoCaptureViewModel
+            .imageDataSubject
+            .subscribe(onNext: { [unowned self] data in
+                self.handleCameraImage(data: data)
             })
             .disposed(by: disposeBag)
         
         cameraButton.rx.tap
             .subscribe(onNext: { [unowned self] _ in
-                self.takePhoto()
+                self.photoCaptureViewModel.takePhoto()
             })
             .disposed(by: disposeBag)
         
         Observable.from([
-            viewModel.randomUrlSubject.map { _ in true },
-            viewModel.searchUrlSubject.map { _ in true },
-            viewModel.searchGifsSubject.map { _ in false }.filter { [unowned self] _ in
+            gifViewModel.randomUrlSubject.map { _ in true },
+            gifViewModel.searchUrlSubject.map { _ in true },
+            gifViewModel.searchGifsSubject.map { _ in false }.filter { [unowned self] _ in
                 self.presentationStyle == .expanded
             },
-            viewModel.errorSubject.map { _ in false }
+            gifViewModel.errorSubject.map { _ in false }
             ]).merge()
             .asDriver(onErrorJustReturn: false)
             .asObservable()
@@ -153,10 +152,10 @@ extension MessagesViewController {
         
         Observable.from([
             cameraButton.rx.tap.map { _ in false },
-            viewModel.searchGifsSubject.map { _ in true }.filter { [unowned self] _ in
+            gifViewModel.searchGifsSubject.map { _ in true }.filter { [unowned self] _ in
                 self.presentationStyle == .expanded
             },
-            viewModel.errorSubject.map { _ in true }
+            gifViewModel.errorSubject.map { _ in true }
             ]).merge()
             .asDriver(onErrorJustReturn: true)
             .drive(cameraButton.rx.isUserInteractionEnabled)
@@ -167,14 +166,14 @@ extension MessagesViewController {
         
         guard RxReachability.shared.isOnline() else {
             InfoView.showIn(viewController: self, message: Constants.ErrorMessage.NetworkIssue)
-            startSession()
+            photoCaptureViewModel.startSession()
             return
         }
         if presentationStyle == .compact {
-            viewModel.randomUrlSubject.onNext(imageUrl)
-            viewModel.searchUrlSubject.onNext(imageUrl)
+            gifViewModel.randomUrlSubject.onNext(imageUrl)
+            gifViewModel.searchUrlSubject.onNext(imageUrl)
         } else {
-            viewModel.searchUrlSubject.onNext(imageUrl)
+            gifViewModel.searchUrlSubject.onNext(imageUrl)
         }
     }
 }
@@ -192,13 +191,13 @@ extension MessagesViewController {
         guard let conversation = activeConversation else { fatalError("Expected a conversation") }
         
         guard let bundleURL = URL(string: url) else {
-            viewModel.errorSubject.onNext(APIError.NoGifRecieved)
+            gifViewModel.errorSubject.onNext(APIError.NoGifRecieved)
             print("Error: This image named \"\(url)\" does not exist")
             return
         }
         
         guard let imageData = try? Data(contentsOf: bundleURL) else {
-            viewModel.errorSubject.onNext(APIError.NoGifRecieved)
+            gifViewModel.errorSubject.onNext(APIError.NoGifRecieved)
             print("Error: Cannot turn image named \"\(url)\" into NSData")
             return
         }
@@ -216,136 +215,10 @@ extension MessagesViewController {
         
         conversation.insertAttachment(gifFileURL, withAlternateFilename: nil) { [unowned self] error in
             if let error = error {
-                self.viewModel.errorSubject.onNext(APIError.NoGifRecieved)
+                self.gifViewModel.errorSubject.onNext(APIError.NoGifRecieved)
                 print(error)
             }
             closure?()
-        }
-    }
-}
-
-// MARK: - AVCaptureVideoPreviewLayer configuration and layout
-
-extension MessagesViewController {
-
-    fileprivate func configurePreviewLayer() {
-        
-        guard let preview = AVCaptureVideoPreviewLayer(session: self.captureSession) else { return }
-        
-        previewLayer = preview
-        previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
-        previewLayer.backgroundColor = UIColor(white: 1, alpha: 0.5).cgColor
-        cameraView.layer.addSublayer(previewLayer)
-        previewLayer.frame = cameraView.bounds.insetBy(dx: cameraView.lineWidth, dy: cameraView.lineWidth)
-        cameraView.layer.cornerRadius = cameraView.frame.size.width/2
-        previewLayer.cornerRadius = previewLayer.frame.size.width/2
-    }
-    
-    fileprivate func requestAuthorizationIfNeeded() {
-        guard .notDetermined == authorizationStatus else { return }
-        queue.suspend()
-        AVCaptureDevice.requestAccess(forMediaType: AVMediaTypeVideo) { [unowned self] granted in
-            guard granted else { return }
-            self.queue.resume()
-        }
-    }
-    
-    fileprivate func configureSession() {
-        queue.async {
-            
-            guard .authorized == self.authorizationStatus else { return }
-            
-            guard let camera: AVCaptureDevice = AVCaptureDevice.defaultDevice(withDeviceType:
-                .builtInWideAngleCamera, mediaType: AVMediaTypeVideo, position: .front) else { return }
-            
-            defer { self.captureSession.commitConfiguration() }
-            
-            self.captureSession.beginConfiguration()
-            self.captureSession.sessionPreset = AVCaptureSessionPresetMedium
-            
-            do {
-                let captureDeviceInput = try AVCaptureDeviceInput(device: camera)
-                self.captureSession.addInput(captureDeviceInput)
-                
-            } catch {
-                print(error.localizedDescription)
-                return
-            }
-            
-            guard self.captureSession.canAddOutput(self.cameraOutput) else { return }
-            self.captureSession.addOutput(self.cameraOutput)
-            
-        }
-    }
-    
-    fileprivate func startSession() {
-        queue.async {
-            guard self.authorizationStatus == .authorized else { return }
-            guard !self.captureSession.isRunning else { return }
-            self.captureSession.startRunning()
-        }
-    }
-    
-    fileprivate func stopSession() {
-        queue.async {
-            guard self.authorizationStatus == .authorized else { return }
-            guard self.captureSession.isRunning else { return }
-            self.captureSession.stopRunning()
-        }
-    }
-    
-    fileprivate func takePhoto() {
-        queue.async { [unowned self] in
-            let settings = AVCapturePhotoSettings()
-            let previewPixelType = settings.availablePreviewPhotoPixelFormatTypes.first!
-            let previewFormat = [kCVPixelBufferPixelFormatTypeKey as String: previewPixelType,
-                                 kCVPixelBufferWidthKey as String: 160,
-                                 kCVPixelBufferHeightKey as String: 160,
-                                 ]
-            settings.previewPhotoFormat = previewFormat
-            self.cameraOutput.capturePhoto(with: settings, delegate: self)
-        }
-    }
-}
-
-// MARK: - AVCapturePhotoCaptureDelegate
-
-extension MessagesViewController: AVCapturePhotoCaptureDelegate {
-    func capture(_ captureOutput: AVCapturePhotoOutput, didFinishProcessingPhotoSampleBuffer photoSampleBuffer: CMSampleBuffer?, previewPhotoSampleBuffer: CMSampleBuffer?, resolvedSettings: AVCaptureResolvedPhotoSettings, bracketSettings: AVCaptureBracketedStillImageSettings?, error: Error?) {
-        
-        guard let sampleBuffer = photoSampleBuffer,
-            let previewBuffer = previewPhotoSampleBuffer,
-            let dataImage =  AVCapturePhotoOutput.jpegPhotoDataRepresentation(forJPEGSampleBuffer:  sampleBuffer, previewPhotoSampleBuffer: previewBuffer)
-            else {
-                print("Error capturing photo: \(String(describing: error))")
-                return
-        }
-        
-        guard let image = UIImage(data: dataImage) else {
-            print("Error creating image from data: \(String(describing: error))")
-            return
-        }
-        
-        let rotatedImage = image.imageWithAdjustedOrientation(deviceOrientation: UIScreen.main.orientation)
-        
-        
-        addSelfieImageToView(image: rotatedImage)
-        
-        guard let rotatedImageData = UIImageJPEGRepresentation(rotatedImage, 1) else {
-            print("Unable to orientate photo: \(String(describing: error))")
-            return
-        }
-        
-        stopSession()
-        
-        let imageFileURL = URL.cachedFileURL(Constants.ImageFilename)
-        
-        do {
-            try rotatedImageData.write(to: imageFileURL)
-            notifyViewModelOf(imageUrl: imageFileURL)
-        } catch {
-            print("Error saving captured photo to disk")
-            startSession()
         }
     }
 }
@@ -359,6 +232,16 @@ extension MessagesViewController {
             bottomContainerHeightConstraint.constant = 227
             bottomViewContainer.layoutIfNeeded()
         }
+    }
+    
+    fileprivate func layoutPreviewLayer() {
+        previewLayer = photoCaptureViewModel.previewLayer
+        previewLayer.backgroundColor = UIColor(white: 1, alpha: 0.5).cgColor
+        cameraView.layer.addSublayer(previewLayer)
+        previewLayer.frame = cameraView.bounds.insetBy(dx: cameraView.lineWidth, dy: cameraView.lineWidth)
+        cameraView.layer.cornerRadius = cameraView.frame.size.width/2
+        previewLayer.cornerRadius = previewLayer.frame.size.width/2
+        previewLayer.setOrientation(orientation: UIScreen.main.orientation)
     }
     
     fileprivate func layoutSelfieView() {
@@ -408,6 +291,35 @@ extension MessagesViewController {
         if let infoView = subviews.first {
             infoView.removeFromSuperview()
             infoView.frame = CGRect(x: 0, y: 0 + topLayoutGuide.length, width: view.frame.size.width, height: 45)
+        }
+    }
+    
+    func handleCameraImage(data: Data) {
+        guard let image = UIImage(data: data) else {
+            print("Error creating image from data")
+            return
+        }
+
+        let rotatedImage = image.imageWithAdjustedOrientation(deviceOrientation: UIScreen.main.orientation)
+
+
+        addSelfieImageToView(image: rotatedImage)
+
+        guard let rotatedImageData = UIImageJPEGRepresentation(rotatedImage, 1) else {
+            print("Unable to orientate photo")
+            return
+        }
+
+        photoCaptureViewModel.stopSession()
+
+        let imageFileURL = URL.cachedFileURL(Constants.ImageFilename)
+
+        do {
+            try rotatedImageData.write(to: imageFileURL)
+            notifyViewModelOf(imageUrl: imageFileURL)
+        } catch {
+            print("Error saving captured photo to disk")
+            photoCaptureViewModel.startSession()
         }
     }
 }
@@ -506,5 +418,6 @@ extension MessagesViewController : UICollectionViewDataSource {
             return UICollectionReusableView()
         }
     }
-    
 }
+
+

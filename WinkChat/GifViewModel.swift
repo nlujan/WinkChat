@@ -10,7 +10,7 @@ import Foundation
 import RxSwift
 import RxOptional
 
-class ViewModel {
+class GifViewModel {
     
     private let disposeBag = DisposeBag()
     

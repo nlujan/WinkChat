@@ -11,18 +11,18 @@ import UIKit
 
 struct Constants {
     
+    static let GifFilename = "gifFile.gif"
+    static let ImageFilename = "image.png"
+    static let Timeout = 8.0
+    
     struct Giphy {
         static let Url = "www.giphy.com"
         static let Key = "PLACE GIPHY API KEY HERE"
     }
+    
     struct Emotion {
         static let Key = "PLACE MICROSOFT EMOTION API KEY HERE"
     }
-    
-    
-    static let GifFilename = "gifFile.gif"
-    static let ImageFilename = "image.png"
-    static let Timeout = 8.0
     
     struct ErrorMessage {
         static let NetworkIssue = "Network issue, please check connection and try again"

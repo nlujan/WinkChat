@@ -33,7 +33,7 @@ extension EmotionEndpoint: TargetType {
     }
     
     /// The parameters to be incoded in the request.
-    var parameters: [String: Any]? {
+    var headers: [String: String]? {
         switch self {
         case .Recognize(_):
             return [:]
@@ -54,7 +54,7 @@ extension EmotionEndpoint: TargetType {
     var task : Task {
         switch self {
         case .Recognize(let imageUrl):
-            return .upload(UploadType.file(imageUrl))
+            return .uploadFile(imageUrl)
         }
     }
     

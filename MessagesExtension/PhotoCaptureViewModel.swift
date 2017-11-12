@@ -17,7 +17,7 @@ class PhotoCaptureViewModel: NSObject {
     fileprivate var captureDevice: AVCaptureDevice!
     fileprivate let queue = DispatchQueue(label: "AV Session Queue", attributes: [], target: nil)
     fileprivate var authorizationStatus: AVAuthorizationStatus {
-        return AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo)
+        return AVCaptureDevice.authorizationStatus(for: AVMediaType.video)
     }
     let imageDataSubject = PublishSubject<Data>()
     
@@ -29,15 +29,15 @@ class PhotoCaptureViewModel: NSObject {
     }
     
     fileprivate func configurePreviewLayer() {
-        guard let preview = AVCaptureVideoPreviewLayer(session: self.captureSession) else { return }
+        let preview = AVCaptureVideoPreviewLayer(session: self.captureSession)
         previewLayer = preview
-        previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
+        previewLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
     }
     
     fileprivate func requestAuthorizationIfNeeded() {
         guard .notDetermined == authorizationStatus else { return }
         queue.suspend()
-        AVCaptureDevice.requestAccess(forMediaType: AVMediaTypeVideo) { [unowned self] granted in
+        AVCaptureDevice.requestAccess(for: AVMediaType.video) { [unowned self] granted in
             guard granted else { return }
             self.queue.resume()
         }
@@ -48,13 +48,12 @@ class PhotoCaptureViewModel: NSObject {
             
             guard .authorized == self.authorizationStatus else { return }
             
-            guard let camera: AVCaptureDevice = AVCaptureDevice.defaultDevice(withDeviceType:
-                .builtInWideAngleCamera, mediaType: AVMediaTypeVideo, position: .front) else { return }
+            guard let camera: AVCaptureDevice = AVCaptureDevice.default(AVCaptureDevice.DeviceType.builtInWideAngleCamera, for: AVMediaType.video, position: .front) else { return }
             
             defer { self.captureSession.commitConfiguration() }
             
             self.captureSession.beginConfiguration()
-            self.captureSession.sessionPreset = AVCaptureSessionPresetMedium
+            self.captureSession.sessionPreset = AVCaptureSession.Preset.medium
             
             do {
                 let captureDeviceInput = try AVCaptureDeviceInput(device: camera)
@@ -104,7 +103,7 @@ class PhotoCaptureViewModel: NSObject {
 // MARK: - AVCapturePhotoCaptureDelegate
 
 extension PhotoCaptureViewModel: AVCapturePhotoCaptureDelegate {
-    func capture(_ captureOutput: AVCapturePhotoOutput, didFinishProcessingPhotoSampleBuffer photoSampleBuffer: CMSampleBuffer?, previewPhotoSampleBuffer: CMSampleBuffer?, resolvedSettings: AVCaptureResolvedPhotoSettings, bracketSettings: AVCaptureBracketedStillImageSettings?, error: Error?) {
+    func photoOutput(_ captureOutput: AVCapturePhotoOutput, didFinishProcessingPhoto photoSampleBuffer: CMSampleBuffer?, previewPhoto previewPhotoSampleBuffer: CMSampleBuffer?, resolvedSettings: AVCaptureResolvedPhotoSettings, bracketSettings: AVCaptureBracketedStillImageSettings?, error: Error?) {
         
         guard let sampleBuffer = photoSampleBuffer,
             let previewBuffer = previewPhotoSampleBuffer,

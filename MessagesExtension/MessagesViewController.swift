@@ -248,15 +248,19 @@ extension MessagesViewController {
         
         let subviews = selfieImageContainer.subviews.filter { $0 is UIImageView }
         
-        if let selfieImageView = subviews.first as? UIImageView {
-            guard let image = selfieImageView.image else {
-                return
-            }
-            let dims = image.getBestFitDimsWithin(container: selfieImageContainer, scale: Constants.View.SelfieImageFill)
-            selfieImageView.frame = CGRect(x: 0, y: 0, width: dims.width, height: dims.height)
-            selfieImageView.center = CGPoint(x: selfieImageContainer.bounds.midX,
-                                             y: selfieImageContainer.bounds.midY)
+        guard let selfieImageView = subviews.first as? UIImageView else {
+            return
         }
+        
+        guard let image = selfieImageView.image else {
+            return
+        }
+        
+        let dims = image.getBestFitDimsWithin(container: selfieImageContainer, scale: Constants.View.SelfieImageFill)
+        
+        selfieImageView.frame = CGRect(x: 0, y: 0, width: dims.width, height: dims.height)
+        selfieImageView.center = CGPoint(x: selfieImageContainer.bounds.midX,
+                                         y: selfieImageContainer.bounds.midY)
     }
     
     fileprivate func addSelfieImageToView(image: UIImage) {
@@ -330,30 +334,30 @@ extension MessagesViewController {
     
     fileprivate func bindCollectionView() {
         
-        collectionView.rx
-            .itemSelected
-            .subscribe(onNext: { indexPath in
-                self.collectionView.isUserInteractionEnabled = false
-                
-                let gif = self.gifs.value[indexPath.row]
-                
-                guard let cell = self.collectionView.cellForItem(at: indexPath) else {
-                    return
-                }
-                
-                UIView.animate(withDuration: 0.1, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 5, options: [],
-                               animations: { cell.transform = CGAffineTransform(scaleX: 0.9, y: 0.9) },
-                               completion: { finished in
-                                UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.2, initialSpringVelocity: 5, options: .curveEaseInOut,
-                                               animations: { cell.transform = CGAffineTransform(scaleX: 1, y: 1) },
-                                               completion: { finished in
-                                                self.addGifToInputField(url: gif.image_url) {
-                                                    self.collectionView.isUserInteractionEnabled = true
-                                                }
-                                }) }
-                )
-            })
-            .disposed(by: disposeBag)
+//        collectionView.rx
+//            .itemSelected
+//            .subscribe(onNext: { indexPath in
+//                self.collectionView.isUserInteractionEnabled = false
+//
+//                let gif = self.gifs.value[indexPath.row]
+//
+//                guard let cell = self.collectionView.cellForItem(at: indexPath) else {
+//                    return
+//                }
+//
+//                UIView.animate(withDuration: 0.1, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 5, options: [],
+//                               animations: { cell.transform = CGAffineTransform(scaleX: 0.9, y: 0.9) },
+//                               completion: { finished in
+//                                UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.2, initialSpringVelocity: 5, options: .curveEaseInOut,
+//                                               animations: { cell.transform = CGAffineTransform(scaleX: 1, y: 1) },
+//                                               completion: { finished in
+//                                                self.addGifToInputField(url: gif.image_url) {
+//                                                    self.collectionView.isUserInteractionEnabled = true
+//                                                }
+//                                }) }
+//                )
+//            })
+//            .disposed(by: disposeBag)
         
     }
     

@@ -18,23 +18,21 @@ protocol GiphyProtocol {
 
 struct GiphyAPI: GiphyProtocol {
     
-    private static let provider: RxMoyaProvider<Giphy> = RxMoyaProvider<Giphy>()
+    private static let provider = MoyaProvider<Giphy>()
     
     static func getRandomGifFrom(text: String) -> Observable<Gif?> {
-        return provider
-            .request(Giphy.Random(searchText: text))
-            .mapObjectOptional(type: Gif.self, keyPath: "data")
+        return provider.rx
+            .request(.Random(searchText: text)).asObservable()
+            .mapOptional(to: Gif.self, keyPath: "data")
             .timeout(Constants.Timeout, scheduler: MainScheduler.instance)
             .catchErrorJustReturn(nil)
     }
     
     static func getSearchGifsFrom(text: String) -> Observable<[Gif]?> {
-        return provider
-            .request(Giphy.Search(searchText: text))
-            .mapArrayOptional(type: Gif.self, keyPath: "data")
+        return provider.rx
+            .request(.Search(searchText: text)).asObservable()
+            .mapOptional(to: [Gif].self, keyPath: "data")
             .timeout(Constants.Timeout, scheduler: MainScheduler.instance)
             .catchErrorJustReturn(nil)
     }
 }
-
-

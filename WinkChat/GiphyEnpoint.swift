@@ -16,7 +16,6 @@ enum Giphy {
 }
 
 extension Giphy: TargetType {
-    
     var baseURL: URL {
         return URL(string: "https://api.giphy.com")!
     }
@@ -35,7 +34,7 @@ extension Giphy: TargetType {
     }
     
     /// The parameters to be incoded in the request.
-    var parameters: [String: Any]? {
+    var headers: [String: String]? {
         switch self {
         case .Search(let searchText):
             return ["api_key": Constants.Giphy.Key, "q": searchText, "offset": String(arc4random_uniform(100)), "rating": "g"]
@@ -56,7 +55,7 @@ extension Giphy: TargetType {
     
     /// The type of HTTP task to be performed.
     var task: Task {
-        return .request
+        return .requestParameters(parameters: headers!, encoding: parameterEncoding)
     }
     
 }

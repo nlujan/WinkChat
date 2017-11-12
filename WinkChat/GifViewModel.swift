@@ -51,7 +51,7 @@ class GifViewModel {
             }
             .flatMap { searchText in
                 GiphyAPI.getSearchGifsFrom(text: searchText)
-            }
+            }        
             .subscribe(onNext: { [unowned self] gifData in
                 if let gifs = gifData, gifs.count > 0 {
                     self.searchGifsSubject.onNext(gifs)

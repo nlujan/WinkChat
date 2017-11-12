@@ -19,17 +19,19 @@ protocol EmotionProtocol {
 
 struct EmotionAPI: EmotionProtocol {
     
-    private static let provider: RxMoyaProvider<EmotionEndpoint> = RxMoyaProvider<EmotionEndpoint>(endpointClosure: { (target: EmotionEndpoint) -> Endpoint<EmotionEndpoint> in
+    private static let provider: MoyaProvider<EmotionEndpoint> = MoyaProvider<EmotionEndpoint>(endpointClosure: { (target: EmotionEndpoint) -> Endpoint<EmotionEndpoint> in
         let defaultEndpoint = MoyaProvider.defaultEndpointMapping(for: target)
         return defaultEndpoint.adding(newHTTPHeaderFields: ["Content-Type": "application/octet-stream", "Ocp-Apim-Subscription-Key": Constants.Emotion.Key])
     })
     
     static func getEmotion(from imageUrl: URL) -> Observable<[Emotion]?> {
-        return provider
-            .request(EmotionEndpoint.Recognize(imageUrl: imageUrl))
-            .mapArrayOptional(type: Emotion.self)
+        return provider.rx
+            .request(.Recognize(imageUrl: imageUrl)).asObservable()
+            .mapOptional(to: [Emotion].self)
             .timeout(Constants.Timeout, scheduler: MainScheduler.instance)
-            .catchErrorJustReturn(nil)
+            .catchError { error in
+                Observable.just(nil)
+        }
     }
 }
 

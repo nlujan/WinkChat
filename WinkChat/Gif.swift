@@ -48,4 +48,3 @@ private func convertToInt(object: Any?) throws -> Int {
     
     return intRep
 }
-

@@ -1,31 +1,31 @@
 PODS:
-  - Alamofire (4.4.0)
+  - Alamofire (4.5.1)
   - FLAnimatedImage (1.0.12)
-  - ModelMapper (6.0.0)
-  - Moya (8.0.3):
-    - Moya/Core (= 8.0.3)
-  - Moya-ModelMapper/Core (4.1.0):
+  - ModelMapper (7.3.0)
+  - Moya (10.0.0):
+    - Moya/Core (= 10.0.0)
+  - Moya-ModelMapper/Core (6.0.0):
     - ModelMapper
-    - Moya (~> 8.0.0)
-  - Moya-ModelMapper/RxSwift (4.1.0):
+    - Moya (~> 10.0)
+  - Moya-ModelMapper/RxSwift (6.0.0):
     - Moya-ModelMapper/Core
-    - Moya/RxSwift (~> 8.0.0)
+    - Moya/RxSwift (~> 10.0)
     - RxSwift
-  - Moya/Core (8.0.3):
+  - Moya/Core (10.0.0):
     - Alamofire (~> 4.1)
     - Result (~> 3.0)
-  - Moya/RxSwift (8.0.3):
+  - Moya/RxSwift (10.0.0):
     - Moya/Core
-    - RxSwift (~> 3.0)
-  - Result (3.2.1)
-  - RxCocoa (3.3.1):
-    - RxSwift (~> 3.3)
-  - RxOptional (3.1.3):
-    - RxCocoa
-    - RxSwift
-  - RxSwift (3.5.0)
-  - SDWebImage/Core (4.0.0)
-  - SDWebImage/GIF (4.0.0):
+    - RxSwift (~> 4.0)
+  - Result (3.2.4)
+  - RxCocoa (4.0.0):
+    - RxSwift (~> 4.0)
+  - RxOptional (3.3.0):
+    - RxCocoa (~> 4.0)
+    - RxSwift (~> 4.0)
+  - RxSwift (4.0.0)
+  - SDWebImage/Core (4.2.2)
+  - SDWebImage/GIF (4.2.2):
     - FLAnimatedImage (~> 1.0)
     - SDWebImage/Core
 
@@ -36,17 +36,17 @@ DEPENDENCIES:
   - SDWebImage/GIF
 
 SPEC CHECKSUMS:
-  Alamofire: dc44b1600b800eb63da6a19039a0083d62a6a62d
+  Alamofire: 2d95912bf4c34f164fdfc335872e8c312acaea4a
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
-  ModelMapper: 3596a82f26c43491f6a8d3a00bcdba6ba0e62a93
-  Moya: d3721622e3cc0cc2f038d69a258686f0b66e7252
-  Moya-ModelMapper: 7084396138e6f9359881db654ee6a4d826a64f14
-  Result: 2453a22e5c5b11c0c3a478736e82cd02f763b781
-  RxCocoa: 7dcb7a1860fc9cd0e23dae67ab105fc2916670b6
-  RxOptional: b97b59183af80d1e729ac9e51d09a10be668d6a8
-  RxSwift: 18ee9d78b45edb3b0b7e79916b47a116e6dbc842
-  SDWebImage: 76a6348bdc74eb5a55dd08a091ef298e56b55e41
+  ModelMapper: b70d373f224fc8cfc4da67b483db163a6cd05fe6
+  Moya: adb58b0f4e58430db43cc6e2f6ebab1836501186
+  Moya-ModelMapper: c59c0bbd042cf9d1d9b0acf38c5f930956bebed8
+  Result: d2d07204ce72856f1fd9130bbe42c35a7b0fea10
+  RxCocoa: d62846ca96495d862fa4c59ea7d87e5031d7340e
+  RxOptional: e5448d3e21024489e07c31f6a262f2b50c975367
+  RxSwift: fd680d75283beb5e2559486f3c0ff852f0d35334
+  SDWebImage: 89a9d32cd520bbb46eb14e541d5109b3564af198
 
 PODFILE CHECKSUM: 6209a016978351b63c128b3776470a81b6582bbc
 
-COCOAPODS: 1.2.0
+COCOAPODS: 1.3.1
